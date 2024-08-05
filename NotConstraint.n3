@@ -1,0 +1,26 @@
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <http://example.org/> .
+@prefix s: <http://example.org/shapes> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsi: <http://www.w3.org/2001/XMLSchema-instance> .
+
+
+#---not
+{?shape a sh:NodeShape; sh:property ?pShape. ?pShape sh:path ?prop; sh:not ?vshape} =>
+	{{?shape :targets ?i. ("Value does have shape " ?vshape) string:concatenation ?message. ?i ?prop ?toTest. _:b log:notIncludes {?violation a sh:ValidationResult; sh:focusNode ?toTest; sh:sourceShape ?vshape}}=>
+		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:NotConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.
+	 {?shape :targets ?i. ?i ?prop ?toTest} =>
+	 	{?vshape :targets ?toTest}
+		}.
+{?shape a sh:NodeShape; sh:property ?pShape. ?pShape sh:path ?prop; sh:not ?vshape} =>
+	{{?shape :targets ?i. ("Value does have shape " ?vshape) string:concatenation ?message. ?i ?prop ?toTest. _:b log:notIncludes {?violation a sh:ValidationResult; sh:focusNode ?toTest; sh:sourceShape ?vshape}}=>
+		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:NotConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.
+	 {?shape :targets ?i. ?i ?prop ?toTest} =>
+	 	{?vshape :targets ?toTest}
+		}.
