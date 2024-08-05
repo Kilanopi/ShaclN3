@@ -145,14 +145,16 @@
 
 #---node
 {?shape a sh:NodeShape; sh:node ?vshape} =>
-	{#{?shape :targets ?i. ("Value does not have shape " ?vshape) string:concatenation ?message. ?valResult sh:focusNode ?i; sh:sourceShape ?vshape}=>
-#		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:sourceConstraintComponent sh:NodeConstraintComponent; sh:sourceShape ?shape ;sh:value ?i; sh:detail ?valResult]}.
-	{?shape :targets ?i}=>
+	{{?shape :targets ?i}=>
 		{?vshape :targets ?i}.
-	{?shape :targets ?i. (?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. ?list list:iterate (?index ?value). (?violation {?violation sh:sourceShape ?value} ?vlist) log:collectAllIn ?vscope. ?vlist log:notEqualTo ()}=>
-		{?i :cv ?vlist.}.
-#	{?shape :targets ?i. ("Value does not have shape " ?vshape) string:concatenation ?message. }=>
-#		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:sourceConstraintComponent sh:NodeConstraintComponent; sh:sourceShape ?shape ;sh:value ?i; sh:detail ?vlist]}.
+	{?shape :targets ?i. (?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. ?list list:iterate (?index ?value). ?violation sh:sourceShape ?value}=>
+		{?i :cv ?violation}.
+	#{?shape :targets ?i. ?violation sh:sourceShape ?vshape}=>
+	#	{?i :cv ?violation}.
+	{?shape :targets ?i. (?objects {?i :cv ?objects} ?list) log:collectAllIn ?scope.}=>
+		{?i :hv ?list}.
+	{?shape :targets ?i. ("Value does not have shape " ?vshape) string:concatenation ?message. ?i :hv ?vlist}=>
+		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:sourceConstraintComponent sh:NodeConstraintComponent; sh:sourceShape ?shape ;sh:value ?i; sh:detail ?vlist]}.
 		}.	
 
 #---property
