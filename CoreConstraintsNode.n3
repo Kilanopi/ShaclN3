@@ -151,8 +151,6 @@
 		{?i :cv ?violation}.
 	{?shape :targets ?i. ?violation sh:sourceShape ?vshape; sh:focusNode ?i}=>
 		{?i :cv ?violation}.
-	#{?shape :targets ?i. (?objects {?i :cv ?objects} ?list) log:collectAllIn ?scope.}=>
-	#	{?i :hv ?list}.
 	{?shape :targets ?i. ("Value does not have shape " ?vshape) string:concatenation ?message. ?i :cv ?anyViolation}=>
 		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:sourceConstraintComponent sh:NodeConstraintComponent; sh:sourceShape ?shape ;sh:value ?i]}.
 	{?shape :targets ?i. ("Value does not have shape " ?vshape) string:concatenation ?message. ?result a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message. ?i :cv ?violation}=>
