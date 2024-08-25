@@ -149,6 +149,8 @@
 		{?vshape :targets ?toTest}.
 	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. (?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. ?list list:iterate (?index ?value). ?violation sh:sourceShape ?value; sh:focusNode ?toTest}=>
 		{?toTest ?vshape ?violation}.
+	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. (?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. ?list list:iterate (?index ?value). ?toTest ?value ?violation}=>
+		{?toTest ?vshape ?violation}.
 	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ?violation sh:sourceShape ?vshape; sh:focusNode ?toTest}=>
 		{?toTest ?vshape ?violation}.
 	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ("Value does not have shape " ?vshape) string:concatenation ?message. ?toTest ?vshape ?anyViolation}=>
@@ -156,6 +158,21 @@
 	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ("Value does not have shape " ?vshape) string:concatenation ?message. ?result a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message. ?toTest ?vshape ?violation}=>
 		{?result sh:detail ?violation}
 	}.
+
+
+
+#---property
+{?shape a sh:PropertyShape; sh:path ?prop; sh:property ?pShape} =>
+	{{?shape :targets ?i; sh:path ?prop; sh:property ?pShape. ?i ?prop ?toTest}=>
+		{?pShape a sh:PropertyShape; :targets ?toTest}.
+	{?shape :targets ?i; sh:path ?prop; sh:property ?pShape. ?i ?prop ?toTest. ?violation sh:sourceShape ?pShape; sh:focusNode ?toTest}=>
+		{?i ?pShape ?violation}.
+	{?shape :targets ?i; sh:path ?prop; sh:property ?pShape. ?i ?prop ?toTest. ?pShape sh:property ?vShape. ?i ?vShape ?violation}=>
+		{?i ?pShape ?violation}}.
+
+
+
+
 
 #---qualified min/maxcount... need to look into this
 
