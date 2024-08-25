@@ -44,10 +44,10 @@
 	{{?shape :targets ?i. ?i log:rawType log:Literal}=>												
 		{?i :testPos :lit}.
 	{?shape :targets ?i. ?i log:rawType log:Other. ?i log:uri _:exists}=>												
-		{?i :testPos :iri}. 																		#i think at least
+		{?i :testPos :iri}. 																		
 	{?shape :targets ?i. ?i log:rawType log:UnlabeledBlankNode}=>												
 		{?i :testPos :bn}.
-	{?shape :targets ?i. ?i log:rawType log:ForAll}=>												#idk if this is right								
+	{?shape :targets ?i. ?i log:rawType log:ForAll}=>																			
 		{?i :testPos :bn}.
 
 	{?shape :targets ?i. ?kind list:in (sh:Literal sh:BlankNodeOrLiteral sh:IRIOrLiteral). ?i :testPos :lit}=>
@@ -107,9 +107,7 @@
 {?shape a sh:NodeShape; sh:disjoint ?value} =>
 	{{?shape :targets ?i. ("Value node must not also be one of the values of " ?value) string:concatenation ?message. ?i ?value ?i}=>
 		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:sourceConstraintComponent sh:DisjointConstraintComponent; sh:sourceShape ?shape ;sh:value ?i]}}.	#?i :violatesDisjoint ?prop
-
-
-
+#------Shape-based Constraints
 #---node
 {?shape a sh:NodeShape; sh:node ?vshape} =>
 	{{?shape :targets ?i}=>
@@ -124,12 +122,7 @@
 		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:sourceConstraintComponent sh:NodeConstraintComponent; sh:sourceShape ?shape ;sh:value ?i]}.
 	{?shape :targets ?i. ("Value does not have shape " ?vshape) string:concatenation ?message. ?result a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message. ?i ?vshape ?violation}=>
 		{?result sh:detail ?violation}
-	
 	}.
-		
-
-
-
 #---property
 {?shape a sh:NodeShape; sh:property ?pShape} =>
 	{{?shape :targets ?i; sh:property ?pShape}=>
@@ -137,15 +130,7 @@
 	{?shape :targets ?i; sh:property ?pShape. ?violation sh:sourceShape ?pShape; sh:focusNode ?i}=>
 		{?i ?pShape ?violation}.
 	{?shape :targets ?i; sh:property ?pShape. ?pShape sh:property ?vShape. ?i ?vShape ?violation}=>
-		{?i ?pShape ?violation}
-		}.
-
-
-
-
-
-
-
+		{?i ?pShape ?violation}}.
 
 #---qualified min/maxcount... need to look into this (valueshape not for NodeShapes per docs)
 
