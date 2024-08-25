@@ -207,10 +207,10 @@
 } => {
 	{	?shape 	:targets ?i; 
 				sh:path  ?prop. 
-	("More than " ?amount " values") string:concatenation ?message. 
-	(?smth {?i ?prop ?smth} ?list) log:collectAllIn ?scope. 
-	?list list:length ?llength. 
-	?llength math:greaterThan ?amount
+		("More than " ?amount " values") string:concatenation ?message. 
+		(?smth {?i ?prop ?smth} ?list) log:collectAllIn ?scope. 
+		?list list:length ?llength. 
+		?llength math:greaterThan ?amount
 	} => {
 		[ 	a 								sh:ValidationResult;
 			sh:resultSeverity 				sh:Violation;  
@@ -224,96 +224,492 @@
 
 #------Value Range Constraints
 #---minInclusive
-{?shape a sh:PropertyShape; sh:path ?prop; sh:minInclusive ?value} => 
-	{{?shape :targets ?i; sh:path ?prop. ("Value is not >= " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?toTest math:lessThan ?value}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:MinInclusiveConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesMinInclusive ?prop
+{	?shape a 				sh:PropertyShape; 
+		   sh:path 			?prop; 
+		   sh:minInclusive 	?value
+} => {
+	{	?shape :targets ?i; 
+			   sh:path ?prop. 
+		("Value is not >= " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		?toTest math:lessThan ?value
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
 #---maxInclusive
-{?shape a sh:PropertyShape; sh:path ?prop; sh:maxInclusive ?value} => 
-	{{?shape :targets ?i; sh:path ?prop. ("Value is not <= " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?toTest math:greaterThan ?value}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:MaxInclusiveConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesMaxInclusive ?prop
+{	?shape a 				sh:PropertyShape; 
+		   sh:path 			?prop; 
+		   sh:maxInclusive 	?value
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not <= " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		?toTest math:greaterThan ?value
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxInclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.
 #---minExclusive
-{?shape a sh:PropertyShape; sh:path ?prop; sh:minExclusive ?value. (?value -1) math:sum ?result} => 
-	{{?shape :targets ?i; sh:path ?prop. ("Value is not > " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?toTest math:lessThan ?result}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:MinExclusiveConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesMinExclusive ?prop
+{	?shape 	a 				sh:PropertyShape; 
+			sh:path 		?prop; 
+			sh:minExclusive ?value. 
+	(?value -1) math:sum ?result
+} => {
+	{	?shape :targets ?i; 
+			   sh:path 	?prop. 
+		("Value is not > " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest math:lessThan ?result
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinExclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.
 #---maxExclusive
-{?shape a sh:PropertyShape; sh:path ?prop; sh:maxExclusive ?value. (?value -1) math:sum ?result} => 
-	{{?shape :targets ?i; sh:path ?prop. ("Value is not < " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?toTest math:greaterThan ?result}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:MaxExclusiveConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesMaxExclusive ?prop
+{	?shape 	a 				sh:PropertyShape; 
+			sh:path 		?prop; 
+			sh:maxExclusive ?value. 
+	(?value -1) math:sum ?result
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest math:greaterThan ?result
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:MaxExclusiveConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
+
 #------String-based Constraints
-#---minLength
-{?shape a sh:PropertyShape; sh:path ?prop; sh:minLength ?value. (?value -1) math:sum ?acValue. ("^.{0," ?acValue "}$") string:concatenation ?regex} =>  # "^.{0,?acValue}$"
-	{{?shape :targets ?i; sh:path ?prop. ("Value has less than " ?value " characters") string:concatenation ?message. ?i ?prop ?toTest. ?toTest string:matches ?regex}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:MinLengthConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesMinLength ?prop  		 #when ?value is 0, it just never gives a violation
+#---minLength													#when ?value is 0, it just never gives a violation
+{	?shape 	a 				sh:PropertyShape; 
+			sh:path 		?prop; 
+			sh:minLength 	?value. 
+	(?value -1) math:sum ?acValue. 
+	("^.{0," ?acValue "}$") string:concatenation ?regex			# "^.{0,?acValue}$"
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Value has less than " ?value " characters") string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest string:matches ?regex
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:MinLengthConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
 #---maxLength
-{?shape a sh:PropertyShape; sh:path ?prop; sh:maxLength ?value. (?value 1) math:sum ?acValue. ("^.{" ?acValue ",}$") string:concatenation ?regex} =>  # "^.{?acValue,}$"
-	{{?shape :targets ?i; sh:path ?prop. ("Value has more than " ?value " characters") string:concatenation ?message. ?i ?prop ?toTest. ?toTest string:matches ?regex}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:MaxLengthConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesMaxLength ?prop 
+{	?shape  a 				sh:PropertyShape; 
+			sh:path 		?prop; 
+			sh:maxLength 	?value. 
+	(?value 1) math:sum ?acValue. 
+	("^.{" ?acValue ",}$") string:concatenation ?regex				# "^.{?acValue,}$"
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value has more than " ?value " characters") string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest string:matches ?regex
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:MaxLengthConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}. 
 #---pattern
-{?shape a sh:PropertyShape; sh:path ?prop; sh:pattern ?regex} =>  
-	{{?shape :targets ?i; sh:path ?prop. ("Value does not match pattern " ?regex) string:concatenation ?message. ?i ?prop ?toTest. ?toTest string:notMatches ?regex}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:PatternConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesPattern ?prop
-#---languageIn
-{?shape a sh:PropertyShape; sh:path ?prop; sh:languageIn ?list} => 
-	{{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. (?egal ?tag) log:langlit ?toTest.  ?list list:iterate (?index ?value). ("^(" ?value "-+.*)|(" ?value ")$") string:concatenation ?regex. ?tag string:matches ?regex}=>		# ^(?value-+.*)|(?value)$
-		{?toTest :langPos ?list}.																#i am of the impression that SHACL does this wrong/not as specified?
-	{?shape :targets ?i; sh:path ?prop. ("Language does not match any of " ?list) string:concatenation ?message. ?i ?prop ?toTest. _:b log:notIncludes {?toTest :langPos ?list}}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LanguageInConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]} #?i :violatesLanguageIn ?prop
-		}.	
+{	?shape  a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:pattern  ?regex
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value does not match pattern " ?regex) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest string:notMatches ?regex
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:PatternConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.
+#---languageIn																			#i am of the impression that SHACL does this wrong/not as specified?
+{	?shape 	a 				sh:PropertyShape; 
+			sh:path 		?prop; 
+			sh:languageIn 	?list
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		(?egal ?tag) log:langlit ?toTest. 
+		?list list:iterate (?index ?value). 
+		("^(" ?value "-+.*)|(" ?value ")$") string:concatenation ?regex. 					# ^(?value-+.*)|(?value)$ 
+		?tag string:matches ?regex
+	} => {
+		?toTest :langPos ?list
+	}.
+	##########																
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Language does not match any of " ?list) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :langPos ?list}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:LanguageInConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
 #---uniqueLang
-{?shape a sh:PropertyShape; sh:path ?prop; sh:uniqueLang true} => 
-	{{?shape :targets ?i; sh:path ?prop. ("Language " ?tag1 " has been used more than once") string:concatenation ?message. ?i ?prop ?toTest, ?otherTest. ?toTest log:notEqualTo ?otherTest.  (?egal1 ?tag1) log:langlit ?toTest. (?egal2 ?tag2) log:langlit ?otherTest. ?tag1 string:equalIgnoringCase ?tag2}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:UniqueLangConstraintComponent; sh:sourceShape ?shape]}}.	#?i :violatesUniqueLang ?prop    hier gibt es 2 Messages, eins ist broken?
+{	?shape  a 				sh:PropertyShape; 
+			sh:path 		?prop; 
+			sh:uniqueLang 	true
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Language " ?tag1 " has been used more than once") string:concatenation ?message. 
+		?i ?prop ?toTest, 
+			 	 ?otherTest. 
+		?toTest log:notEqualTo ?otherTest.  
+		(?egal1 ?tag1) log:langlit ?toTest. 
+		(?egal2 ?tag2) log:langlit ?otherTest. 
+		?tag1 string:equalIgnoringCase ?tag2
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:UniqueLangConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}
+}.	# hier gibt es 2 Messages, eins ist broken?
 #------Property Pair Constraints
 #---equals
-{?shape a sh:PropertyShape; sh:path ?prop; sh:equals ?value} =>
-	{{?shape :targets ?i; sh:path ?prop. ("Must have the same values as " ?value) string:concatenation ?message. ?i ?prop ?toTest. _:b log:notIncludes {?i ?value ?toTest}}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:EqualsConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.	
-	{?shape :targets ?i; sh:path ?prop. ("Must have the same values as " ?value) string:concatenation ?message. ?i ?value ?toTest. _:b log:notIncludes {?i ?prop ?toTest}}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:EqualsConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesEquals ?prop
+{	?shape 	a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:equals 	?value
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Must have the same values as " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?i ?value ?toTest}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:EqualsConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode				 	?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.	
+	####################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Must have the same values as " ?value) string:concatenation ?message. 
+		?i ?value ?toTest. 
+		_:b log:notIncludes {?i ?prop ?toTest}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:EqualsConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode				 	?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
 #---disjoint
-{?shape a sh:PropertyShape; sh:path ?prop; sh:disjoint ?value} =>
-	{{?shape :targets ?i; sh:path ?prop. ("Property must not share any values with " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?toTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:DisjointConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesDisjoint ?prop
-#---lessThan
-{?shape a sh:PropertyShape; sh:path ?prop; sh:lessThan ?value} =>
-	{{?shape :targets ?i; sh:path ?prop. ("Value is not < value of " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?otherTest. ?toTest math:greaterThan ?otherTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LessThanConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.	#?i :violatesLessThan ?prop
-	{?shape :targets ?i; sh:path ?prop. ("Value is not < value of " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?otherTest. ?toTest math:equalTo ?otherTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LessThanConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.
-	{?shape :targets ?i; sh:path ?prop. ("Value is not < value of " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?otherTest. ?toTest string:greaterThan ?otherTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LessThanConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.
-	{?shape :targets ?i; sh:path ?prop. ("Value is not < value of " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?otherTest. ?toTest string:matches ?otherTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LessThanConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}. #i neeed to look over this again, for now its just this
+{	?shape	a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:disjoint ?value
+} => {
+	{	?shape :targets ?i; 
+			sh:path  ?prop. 
+		("Property must not share any values with " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?toTest
+	} => {
+		[	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:DisjointConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
+#---lessThan															#need to add language length comparisons
+{	?shape 	a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:lessThan ?value
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < value of " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?otherTest. 
+		?toTest math:greaterThan ?otherTest
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:LessThanConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	#########################	
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < value of " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?otherTest. 
+		?toTest math:equalTo ?otherTest
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:LessThanConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < value of " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?otherTest. 
+		?toTest string:greaterThan ?otherTest
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:LessThanConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	####################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < value of " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?otherTest. 
+		?toTest string:matches ?otherTest
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:LessThanConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.
 #---lessThanOrEquals
-{?shape a sh:PropertyShape; sh:path ?prop; sh:lessThanOrEquals ?value} =>
-	{{?shape :targets ?i; sh:path ?prop. ("Value is not <= value of " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?otherTest. ?toTest math:greaterThan ?otherTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LessThanOrEqualsConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.
-	{?shape :targets ?i; sh:path ?prop. ("Value is not <= value of " ?value) string:concatenation ?message. ?i ?prop ?toTest. ?i ?value ?otherTest. ?toTest string:greaterThan ?otherTest}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:LessThanOrEqualsConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.	#?i :violatesLessThanOrEquals ?prop
+{	?shape  a 					sh:PropertyShape; 
+			sh:path 			?prop; 
+			sh:lessThanOrEquals ?value
+} => {
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not <= to the value of " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?otherTest. 
+		?toTest math:greaterThan ?otherTest
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:LessThanOrEqualsConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	######################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not <= to the value of " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?i ?value ?otherTest. 
+		?toTest string:greaterThan ?otherTest
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:LessThanOrEqualsConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.
 #------Shape-based Constraints
 #---node
-{?shape a sh:PropertyShape; sh:path ?prop; sh:node ?vshape} =>
-	{{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest}=>
-		{?vshape :targets ?toTest}.
-	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. (?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. ?list list:iterate (?index ?value). ?violation sh:sourceShape ?value; sh:focusNode ?toTest}=>
-		{?toTest ?vshape ?violation}.
-	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. (?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. ?list list:iterate (?index ?value). ?toTest ?value ?violation}=>
-		{?toTest ?vshape ?violation}.
-	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ?violation sh:sourceShape ?vshape; sh:focusNode ?toTest}=>
-		{?toTest ?vshape ?violation}.
-	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ("Value does not have shape " ?vshape) string:concatenation ?message. ?toTest ?vshape ?anyViolation}=>
-		{[ a sh:ValidationResult; sh:resultSeverity sh:Violation; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:NodeConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}.
-	{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ("Value does not have shape " ?vshape) string:concatenation ?message. ?result a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message. ?toTest ?vshape ?violation}=>
-		{?result sh:detail ?violation}
+{	?shape 	a 		sh:PropertyShape; 
+			sh:path ?prop; 
+			sh:node ?vshape
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest
+	} => {
+		?vshape :targets ?toTest
 	}.
+	##################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		(?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. 
+		?list list:iterate (?index ?value). 
+		?violation sh:sourceShape ?value; 
+				   sh:focusNode   ?toTest
+	} => {
+		?toTest ?vshape ?violation
+	}.
+	####################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		(?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. 
+		?list list:iterate (?index ?value). 
+		?toTest ?value ?violation
+	} => {
+		?toTest ?vshape ?violation
+	}.
+	#####################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		?violation sh:sourceShape ?vshape; 
+				   sh:focusNode  ?toTest
+	} => {
+		?toTest ?vshape ?violation
+	}.
+	######################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		("Value does not have shape " ?vshape) string:concatenation ?message. 
+		?toTest ?vshape ?anyViolation
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:NodeConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	#######################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		("Value does not have shape " ?vshape) string:concatenation ?message. 
+		?result a 					sh:ValidationResult; 
+				sh:focusNode 		?i; 
+				sh:resultMessage 	?message. 
+		?toTest ?vshape ?violation
+	} => {
+		?result sh:detail ?violation
+	}
+}.
 #---property
-{?shape a sh:PropertyShape; sh:path ?prop; sh:property ?pShape} =>
-	{{?shape :targets ?i; sh:path ?prop; sh:property ?pShape. ?i ?prop ?toTest}=>
-		{?pShape a sh:PropertyShape; :targets ?toTest}.
-	{?shape :targets ?i; sh:path ?prop; sh:property ?pShape. ?i ?prop ?toTest. ?violation sh:sourceShape ?pShape; sh:focusNode ?toTest}=>
-		{?i ?pShape ?violation}.
-	{?shape :targets ?i; sh:path ?prop; sh:property ?pShape. ?i ?prop ?toTest. ?pShape sh:property ?vShape. ?i ?vShape ?violation}=>
-		{?i ?pShape ?violation}}.
+{	?shape 	a 			sh:PropertyShape; 
+			sh:path 	?prop;
+			sh:property ?pShape
+} => {
+	{	?shape 	:targets 	?i; 
+				sh:path 	?prop; 
+				sh:property ?pShape. 
+		?i ?prop ?toTest
+	} => {
+		?pShape a 		 sh:PropertyShape; 
+				:targets ?toTest
+	}.
+	############################################
+	{	?shape 	:targets 	?i; 
+				sh:path 	?prop; 
+				sh:property ?pShape. 
+		?i ?prop ?toTest. 
+		?violation 	sh:sourceShape 	?pShape; 
+					sh:focusNode 	?toTest
+	} => {
+		?i ?pShape ?violation
+	}.
+	###########################################
+	{	?shape 	:targets 	?i; 
+				sh:path 	?prop; 
+				sh:property ?pShape. 
+		?i ?prop ?toTest. 
+		?pShape sh:property ?vShape. 
+		?i ?vShape ?violation
+	} => {
+		?i ?pShape ?violation
+	}
+}.
 
 #---qualified min/maxcount... need to look into this
 
@@ -324,24 +720,84 @@
 #--- ignored properties (?)
 
 #---hasValue
-{?shape a sh:PropertyShape; sh:path ?prop; sh:hasValue ?value} =>
-	{{?shape :targets ?i; sh:path ?prop. ?i ?prop ?value}=>
-		{?i :hasV ?value}.
-	{?shape :targets ?i; sh:path ?prop. ("Missing expected value " ?value) string:concatenation ?message. _:b log:notIncludes {?i :hasV ?value}}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:HasValueConstraintComponent; sh:sourceShape ?shape]}}.	#?i :violatesHasValue ?prop
+{	?shape 	a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:hasValue ?value
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?value
+	} => {
+		?i :hasV ?value
+	}.
+	###############################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Missing expected value " ?value) string:concatenation ?message. 
+		_:b log:notIncludes {?i :hasV ?value}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:HasValueConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}
+}.	
 #---in
-{?shape a sh:PropertyShape; sh:path ?prop; sh:in ?list} =>
-	{{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ?toTest list:in ?list}=>
-		{?toTest :lPos ?list}.
-	 {?shape :targets ?i; sh:path ?prop. ("Value is not in " ?list) string:concatenation ?message. ?i ?prop ?toTest. _:b log:notIncludes {?toTest :lPos ?list}}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultMessage ?message; sh:resultPath ?prop; sh:sourceConstraintComponent sh:InConstraintComponent; sh:sourceShape ?shape; sh:value ?toTest]}}.	#?i :violatesIn ?prop
+{	?shape 	a 		sh:PropertyShape; 
+			sh:path ?prop; 
+			sh:in 	?list
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		?toTest list:in ?list
+	} => {
+		?toTest :lPos ?list
+	}.
+	###############################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		("Value is not in " ?list) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :lPos ?list}
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:InConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}
+}.	
 
 #------Logical Constraints
 
 #---and
-{?shape a sh:PropertyShape; sh:path ?prop; sh:and ?list} =>
-	{{?shape :targets ?i; sh:path ?prop. ?i ?prop ?toTest. ?list list:iterate (?index ?value). ?violation sh:focusNode ?toTest; sh:sourceShape ?value}=>
-		{[ a sh:ValidationResult; sh:focusNode ?i; sh:resultPath ?prop; sh:sourceConstraintComponent sh:AndConstraintComponent; sh:sourceShape ?shape ;sh:value ?toTest]}}.
+{	?shape 	a 		sh:PropertyShape; 
+			sh:path ?prop; 
+			sh:and 	?list
+} => {
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest. 
+		?list list:iterate (?index ?value). 
+		?violation 	sh:focusNode   ?toTest; 
+					sh:sourceShape ?value 
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
+			sh:sourceShape 					?shape; 		
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest]
+	}
+}.
 #---or
 #{?shape a sh:PropertyShape; sh:or ?list} =>
 #	{{?shape :targets ?i.   iterate over list, if one log:notIncludes {violation}, raise flag triple, if log:notIncludes {flagtriple}, violation  }=>
