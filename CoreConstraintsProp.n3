@@ -799,9 +799,40 @@
 	}
 }.
 #---or
-#{?shape a sh:PropertyShape; sh:or ?list} =>
-#	{{?shape :targets ?i.   iterate over list, if one log:notIncludes {violation}, raise flag triple, if log:notIncludes {flagtriple}, violation  }=>
-#		{?i :violatesOr ?list}}.
+{	?shape 	a 		sh:NodeShape; 
+			sh:path ?prop; 
+			sh:or 	?list
+} => {
+	{	?shape :targets ?i;
+			   sh:path  ?prop.    
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).		 
+		(?violation {?violation  sh:sourceShape ?value;
+                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist :orcomp ?list.
+	}.
+    #################################
+    {   ?shape :targets ?i;
+			   sh:path  ?prop.
+		?i ?prop ?toTest.
+        (?flist {?nlist :orcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?list list:length ?llength.
+        ?vlength math:equalTo ?llength
+    } => {
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:OrConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest]
+    }
+}.
+
+
+
 #---xone
 #{?shape a sh:PropertyShape; sh:xone ?list} =>
 #	{{?shape :targets ?i.     ehhhhhhhb }=>
