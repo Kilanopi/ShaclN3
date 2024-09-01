@@ -151,7 +151,41 @@
 } => {
 	{	?shape :targets ?i. 
 		("Node is not >= " ?value) string:concatenation ?message. 
-		?i math:lessThan ?value
+		?i math:lessThan ?value.
+		?i :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
+			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		?i log:rawType log:Literal
+	} => {
+		?i :testDPos :lit
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		("Node is not >= " ?value) string:concatenation ?message. 
+		?i string:lessThan ?value.
+		?i :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
+			sh:resultMessage 				?message]
+	}.
+	#########################
+	{	?shape :targets ?i. 
+		("Node is not >= " ?value) string:concatenation ?message. 
+		_:b log:notIncludes {?i :testDPos :lit}
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -168,7 +202,8 @@
 } => {
 	{	?shape :targets ?i. 
 		("Value is not <= " ?value) string:concatenation ?message. 
-		?toTest math:greaterThan ?value
+		?toTest math:greaterThan ?value.
+		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -176,6 +211,39 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	###########################
+	{	?shape :targets ?i. 
+		("Value is not <= " ?value) string:concatenation ?message. 
+		?toTest string:greaterThan ?value.
+		?i :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		?i log:rawType log:Literal
+	} => {
+		?i :testDPos :lit
+	}.
+	#########################
+	{	?shape :targets ?i. 
+		("Node is not <= " ?value) string:concatenation ?message. 
+		_:b log:notIncludes {?i :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
 			sh:resultMessage 				?message]
 	}
 }.	
@@ -186,7 +254,8 @@
 } => {
 	{	?shape :targets ?i. 
 		("Value is not > " ?value) string:concatenation ?message. 
-		?toTest math:lessThan ?result
+		?toTest math:lessThan ?result.
+		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation;  
@@ -194,6 +263,39 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	#######################
+	{	?shape :targets ?i. 
+		("Value is not > " ?value) string:concatenation ?message. 
+		?toTest string:lessThan ?result.
+		?i :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:MinExclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		?i log:rawType log:Literal
+	} => {
+		?i :testDPos :lit
+	}.
+	#########################
+	{	?shape :targets ?i. 
+		("Node is not > " ?value) string:concatenation ?message. 
+		_:b log:notIncludes {?i :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
 			sh:resultMessage 				?message]
 	}
 }.	
@@ -204,7 +306,8 @@
 } => {
 	{	?shape :targets ?i. 
 		("Value is not < " ?value) string:concatenation ?message. 
-		?toTest math:greaterThan ?result
+		?toTest math:greaterThan ?result.
+		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -212,6 +315,39 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	###########################
+	{	?shape :targets ?i. 
+		("Value is not < " ?value) string:concatenation ?message. 
+		?toTest string:greaterThan ?result.
+		?i :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxExclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		?i log:rawType log:Literal
+	} => {
+		?i :testDPos :lit
+	}.
+	#########################
+	{	?shape :targets ?i. 
+		("Node is not < " ?value) string:concatenation ?message. 
+		_:b log:notIncludes {?i :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
 			sh:resultMessage 				?message]
 	}
 }.
@@ -234,7 +370,7 @@
 			sh:value 						?i;
 			sh:resultMessage 				?message]
 	}
-}.	 #when ?value is 0, it just never gives a violation
+}.	 
 #---maxLength
 {	?shape 	a 				sh:NodeShape; 
 			sh:maxLength 	?value. 
@@ -480,6 +616,12 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i]
+	}.
+	#####################
+	{	?shape :targets ?i.
+		?list list:iterate (?index ?value) 
+	} => {
+		?value :targets ?i
 	}
 }.
 
@@ -508,7 +650,13 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i]
-    }
+    }.
+	#####################
+	{	?shape :targets ?i.
+		?list list:iterate (?index ?value) 
+	} => {
+		?value :targets ?i
+	}
 }.
 
 

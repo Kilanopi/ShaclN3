@@ -221,7 +221,6 @@
 			sh:resultMessage 				?message]
 	}
 }.
-
 #------Value Range Constraints
 #---minInclusive
 {	?shape a 				sh:PropertyShape; 
@@ -232,7 +231,8 @@
 			   sh:path ?prop. 
 		("Value is not >= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
-		?toTest math:lessThan ?value
+		?toTest math:lessThan ?value.
+		?toTest :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult;
 			sh:resultSeverity 				sh:Violation;  
@@ -242,7 +242,48 @@
 			sh:resultPath 					?prop; 
 			sh:value 						?toTest;
 			sh:resultMessage 				?message]
-	}
+	}.
+	#########################
+	{	?shape :targets ?i; 
+			   sh:path ?prop. 
+		("Value is not >= " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		?toTest string:lessThan ?value.
+		?toTest :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	###############
+ 	{	?shape 	:targets 	?i; 
+  		 		sh:path 	?prop. 
+  		?i ?prop ?toTest. 
+  		?toTest log:rawType log:Literal
+ 	} => {
+		?toTest :testDPos :lit
+	}.
+	####################################
+	{	?shape :targets ?i; 
+			   sh:path ?prop. 
+		("Value is not >= " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
 }.	
 #---maxInclusive
 {	?shape a 				sh:PropertyShape; 
@@ -253,7 +294,8 @@
 				sh:path  ?prop. 
 		("Value is not <= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
-		?toTest math:greaterThan ?value
+		?toTest math:greaterThan ?value.
+		?toTest :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -263,7 +305,48 @@
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
 			sh:resultMessage 				?message]
-	}
+	}.
+	###########################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not <= " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		?toTest string:greaterThan ?value.
+		?toTest :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxInclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	###############
+ 	{	?shape 	:targets 	?i; 
+  		 		sh:path 	?prop. 
+  		?i ?prop ?toTest. 
+  		?toTest log:rawType log:Literal
+ 	} => {
+		?toTest :testDPos :lit
+	}.
+	##############################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not <= " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxInclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
 }.
 #---minExclusive
 {	?shape 	a 				sh:PropertyShape; 
@@ -275,7 +358,8 @@
 			   sh:path 	?prop. 
 		("Value is not > " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
-		?toTest math:lessThan ?result
+		?toTest math:lessThan ?result.
+		?toTest :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -285,7 +369,48 @@
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
 			sh:resultMessage 				?message]
-	}
+	}.
+	##########################
+	{	?shape :targets ?i; 
+			   sh:path 	?prop. 
+		("Value is not > " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest string:lessThan ?result.
+		?toTest :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinExclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	###############
+ 	{	?shape 	:targets 	?i; 
+  		 		sh:path 	?prop. 
+  		?i ?prop ?toTest. 
+  		?toTest log:rawType log:Literal
+ 	} => {
+		?toTest :testDPos :lit
+	}.
+	###########################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not > " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxInclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
 }.
 #---maxExclusive
 {	?shape 	a 				sh:PropertyShape; 
@@ -297,7 +422,8 @@
 				sh:path  ?prop. 
 		("Value is not < " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
-		?toTest math:greaterThan ?result
+		?toTest math:greaterThan ?result.
+		?toTest :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult;
 			sh:resultSeverity 				sh:Violation;  
@@ -307,7 +433,48 @@
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
 			sh:resultMessage 				?message]
-	}
+	}.
+	#############################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < " ?value) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		?toTest string:greaterThan ?result.
+		?toTest :testDPos :lit
+	} => {
+		[ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;  
+			sh:sourceConstraintComponent 	sh:MaxExclusiveConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	###############
+ 	{	?shape 	:targets 	?i; 
+  		 		sh:path 	?prop. 
+  		?i ?prop ?toTest. 
+  		?toTest log:rawType log:Literal
+ 	} => {
+		?toTest :testDPos :lit
+	}.
+	###########################
+	{	?shape  :targets ?i; 
+				sh:path  ?prop. 
+		("Value is not < " ?value) string:concatenation ?message.
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxInclusiveConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
 }.	
 
 #------String-based Constraints
@@ -796,7 +963,15 @@
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop; 
 			sh:value 						?toTest]
-	}
+	}.
+	###############################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value) 
+	} => {
+		?value :targets ?toTest
+	}.
 }.
 #---or
 {	?shape 	a 		sh:NodeShape; 
@@ -828,7 +1003,15 @@
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop; 
 			sh:value 						?toTest]
-    }
+    }.
+	#################################
+	{	?shape 	:targets ?i; 
+				sh:path  ?prop. 
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value) 
+	} => {
+		?value :targets ?toTest
+	}.
 }.
 
 
