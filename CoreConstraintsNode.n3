@@ -658,9 +658,103 @@
 		?value :targets ?i
 	}
 }.
-
-
 #---xone
-#{?shape a sh:NodeShape; sh:xone ?list} =>
-#	{{?shape :targets ?i.     ehhhhhhhb }=>
-#		{?i :violatesXone ?list}}.
+{	?shape 	a 		sh:NodeShape; 
+			sh:xone 	?list
+} => {
+	{	?shape :targets ?i.   
+		?list list:iterate (?index ?value).		 
+		(?violation {?violation  sh:sourceShape ?value;
+                                 sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist :xcomp ?list.
+	}.
+    #################################
+    {   ?shape :targets ?i.   
+        (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?list list:length ?llength.
+        ?vlength math:equalTo ?llength
+    } => {
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:XoneConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i]
+    }.
+	#################################
+    {   ?shape :targets ?i.   
+        (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?list list:length ?llength.
+        (?llength -1) math:sum ?mllength.
+        ?vlength math:lessThan ?mllength
+    } => {
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:XoneConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i]
+    }.
+	#####################
+	{	?shape :targets ?i.
+		?list list:iterate (?index ?value) 
+	} => {
+		?value :targets ?i
+	}
+}.
+#---closed
+{	?shape 	a 				sh:NodeShape; 
+			sh:closed true.
+    _:b log:notIncludes {?shape sh:ignoredProperties ?list}.
+    (?props {?shape	sh:property ?value.
+             ?value	sh:path   	?props      } ?plist) log:collectAllIn ?scope.
+} => {
+	{	?shape :targets ?i.
+    	?i ?tprop _:egal.
+    	?plist list:member ?tprop.
+    }=>{
+      	?i ?plist ?tprop
+    }.
+  ########################
+  	{	?shape :targets ?i.
+    	?i ?tprop _:egal.
+    	_:b log:notIncludes {?i ?plist ?tprop}
+    }=>{
+      	[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:ClosedConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i]
+   	}
+}.
+        
+{	?shape 	a 				sh:NodeShape; 
+			sh:closed true;
+    		sh:ignoredProperties ?list.
+    (?props {?shape	sh:property ?value.
+             ?value	sh:path   	?props      } ?vplist) log:collectAllIn ?scope.
+    (?vplist ?list) list:append ?plist.
+} => {
+	{	?shape :targets ?i.
+    	?i ?tprop _:egal.
+    	?plist list:member ?tprop.
+    }=>{
+      	?i ?plist ?tprop
+    }.
+  ########################
+  	{	?shape :targets ?i.
+    	?i ?tprop _:egal.
+    	_:b log:notIncludes {?i ?plist ?tprop}
+    }=>{
+      	[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:ClosedConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i]
+   	} 
+}.
