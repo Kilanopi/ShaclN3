@@ -731,63 +731,79 @@
 #---node
 {	?shape 	a 		sh:PropertyShape; 
 			sh:path ?prop; 
-			sh:node ?vshape
+			sh:node ?vshape.
+	?vshape a sh:NodeShape.
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
-		?i ?prop ?toTest
+	{	?shape :targets ?i.
+		?i ?prop ?toTest. 
 	} => {
 		?vshape :targets ?toTest
 	}.
-	##################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
-		?i ?prop ?toTest. 
-		(?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. 
-		?list list:iterate (?index ?value). 
-		?violation sh:sourceShape ?value; 
-				   sh:focusNode   ?toTest
+	####################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.  
+		?vshape sh:property ?pShape.
+		?pShape a sh:PropertyShape.
+		?violation 	sh:sourceShape 	?pShape; 
+					sh:focusNode 	?toTest
 	} => {
 		?toTest ?vshape ?violation
 	}.
-	####################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
-		?i ?prop ?toTest. 
-		(?pShape {?vshape sh:property ?pShape} ?list) log:collectAllIn ?scope. 
-		?list list:iterate (?index ?value). 
-		?toTest ?value ?violation
+	####################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.   
+		?vshape sh:property ?pShape.
+		?pShape a sh:PropertyShape.
+		?toTest ?pShape ?violation
 	} => {
 		?toTest ?vshape ?violation
 	}.
-	#####################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
-		?i ?prop ?toTest. 
-		?violation sh:sourceShape ?vshape; 
-				   sh:focusNode  ?toTest
+	####################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.  
+		?vshape sh:property ?pShape.
+		_:b log:notIncludes {?pShape a sh:PropertyShape}.
+		?sk :sameAs ?pShape.
+		?violation 	sh:sourceShape 	?sk; 
+					sh:focusNode 	?toTest
 	} => {
 		?toTest ?vshape ?violation
 	}.
-	######################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	####################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		?vshape sh:property ?pShape.
+		_:b log:notIncludes {?pShape a sh:PropertyShape}.
+		?sk :sameAs ?pShape.
+		?toTest ?sk ?violation
+	} => {
+		?toTest ?vshape ?violation
+	}.
+	####################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		?violation 	sh:sourceShape 	?vshape; 
+					sh:focusNode 	?toTest
+	} => {
+		?toTest ?vshape ?violation
+	}.
+	###################################
+	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		("Value does not have shape " ?vshape) string:concatenation ?message. 
 		?toTest ?vshape ?anyViolation
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
-			sh:sourceConstraintComponent 	sh:NodeConstraintComponent; 
+			sh:sourceConstraintComponent	sh:NodeConstraintComponent; 
 			sh:sourceShape 					?shape; 
-			sh:focusNode 					?i; 
-			sh:resultPath 					?prop; 
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
+			sh:focusNode					?i;
+			sh:resultPath					?prop; 
+			sh:value						?toTest;
+			sh:resultMessage				?message]
 	}.
-	#######################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	##################################
+	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		("Value does not have shape " ?vshape) string:concatenation ?message. 
 		?result a 					sh:ValidationResult; 
@@ -798,48 +814,181 @@
 		?result sh:detail ?violation
 	}
 }.
-#---property
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop;
-			sh:property ?pShape
+#################################################
+{	?shape 	a 		sh:PropertyShape; 
+			sh:path ?prop; 
+			sh:node ?vshape.
+	_:b log:notIncludes {?vshape a sh:NodeShape}.
+	(?vshape) log:skolem ?sk.
+	?vshape ?subj ?obj
 } => {
-	{	?shape 	:targets 	?i; 
-				sh:path 	?prop; 
-				sh:property ?pShape. 
-		?i ?prop ?toTest
-	} => {
-		?pShape a 		 sh:PropertyShape; 
-				:targets ?toTest
-	}.
-	############################################
-	{	?shape 	:targets 	?i; 
-				sh:path 	?prop; 
-				sh:property ?pShape. 
+	?sk :sameAs ?vshape.
+	?sk a sh:NodeShape.
+	?sk ?subj ?obj.
+	{	?shape :targets ?i.
 		?i ?prop ?toTest. 
+	} => {
+		?sk :targets ?toTest
+	}.
+	####################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		?sk sh:property ?pShape.
+		?pShape a sh:PropertyShape.
 		?violation 	sh:sourceShape 	?pShape; 
 					sh:focusNode 	?toTest
 	} => {
-		?i ?pShape ?violation
+		?toTest ?sk ?violation
 	}.
-	###########################################
-	{	?shape 	:targets 	?i; 
-				sh:path 	?prop; 
-				sh:property ?pShape. 
+	####################################
+	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
-		?pShape sh:property ?vShape. 
-		?i ?vShape ?violation
+		?sk sh:property ?pShape.
+		?pShape a sh:PropertyShape.
+		?toTest ?pShape ?violation
 	} => {
-		?i ?pShape ?violation
+		?toTest ?sk ?violation
+	}.
+	####################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		?sk sh:property ?pShape.
+		_:b log:notIncludes {?pShape a sh:PropertyShape}.
+		?sk :sameAs ?pShape.
+		?violation 	sh:sourceShape 	?sk; 
+					sh:focusNode 	?toTest
+	} => {
+		?toTest ?sk ?violation
+	}.
+	####################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		?sk sh:property ?pShape.
+		_:b log:notIncludes {?pShape a sh:PropertyShape}.
+		?sk :sameAs ?pShape.
+		?toTest ?sk ?violation
+	} => {
+		?toTest ?sk ?violation
+	}.
+	####################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		?violation 	sh:sourceShape 	?sk; 
+					sh:focusNode 	?toTest
+	} => {
+		?toTest ?sk ?violation
+	}.
+	###################################
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest.
+		("Value does not have shape " ?sk) string:concatenation ?message. 
+		?toTest ?sk ?anyViolation
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:NodeConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	##################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		("Value does not have shape " ?sk) string:concatenation ?message. 
+		?result a 					sh:ValidationResult; 
+				sh:focusNode 		?i; 
+				sh:resultMessage 	?message. 
+		?toTest ?sk ?violation
+	} => {
+		?result sh:detail ?violation
+	}
+}.
+#---property
+{	?shape 	a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:property ?pShape.
+	_:b log:notIncludes {?pShape a sh:PropertyShape}.
+	(?pShape) log:skolem ?sk.
+	?pShape ?subj ?obj
+} => {
+	?sk :sameAs ?pShape.
+	?sk a sh:PropertyShape.
+	?sk ?subj ?obj.
+	{	?shape 	:targets 	?i.
+		?i ?prop ?toTest.
+	} => {
+		?sk :targets ?toTest
+	}.
+	############################
+	{	?shape 	:targets 	?i. 
+		?i ?prop ?toTest.
+		?violation 	sh:sourceShape 	?sk; 
+					sh:focusNode 	?toTest
+	} => {
+		?toTest ?sk ?violation
+	}.
+	#############################
+	{	?shape 	:targets 	?i.
+		?i ?prop ?toTest.
+		?pShape sh:property ?vShape. 
+		?vShape a sh:PropertyShape.
+		?toTest ?vShape ?violation
+	} => {
+		?toTest ?sk ?violation
+	}.
+	#############################
+	{	?shape 	:targets 	?i.
+		?i ?prop ?toTest.
+		?pShape sh:property ?vShape. 
+		_:b log:notIncludes {?vShape a sh:PropertyShape}.
+		?osk :sameAs ?vShape.
+		?toTest ?osk ?violation
+	} => {
+		?toTest ?sk ?violation
+	}
+}.
+#######################################
+{	?shape 	a 			sh:PropertyShape; 
+			sh:path 	?prop; 
+			sh:property ?pShape.
+	?pShape a sh:PropertyShape.
+} => {
+	{	?shape 	:targets 	?i.
+		?i ?prop ?toTest.
+	} => {
+		?pShape :targets 	?toTest
+	}.
+	############################
+	{	?shape 	:targets 	?i. 
+		?i ?prop ?toTest.
+		?violation 	sh:sourceShape 	?pShape; 
+					sh:focusNode 	?toTest
+	} => {
+		?toTest ?pShape ?violation
+	}.
+	#############################
+	{	?shape 	:targets 	?i.
+		?i ?prop ?toTest.
+		?pShape sh:property ?vShape. 
+		?vShape a sh:PropertyShape.
+		?toTest ?vShape ?violation
+	} => {
+		?toTest ?pShape ?violation
+	}.
+	#############################
+	{	?shape 	:targets 	?i.
+		?i ?prop ?toTest.
+		?pShape sh:property ?vShape. 
+		_:b log:notIncludes {?vShape a sh:PropertyShape}.
+		?sk :sameAs ?vShape.
+		?toTest ?sk ?violation
+	} => {
+		?toTest ?pShape ?violation
 	}
 }.
 
 #---qualified min/maxcount... need to look into this
-
-#------Other Constraints
-#---closed
-#probably get list of all shacl specified properties and all existing properties of target and compare
-
-#--- ignored properties (?)
 
 #---hasValue
 {	?shape 	a 			sh:PropertyShape; 
