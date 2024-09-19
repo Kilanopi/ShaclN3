@@ -36,8 +36,7 @@
  	 	   sh:path  ?prop; 
            sh:class ?class
 } => {
-	{	?shape :targets ?i; 
- 	 		   sh:path  ?prop. 
+	{	?shape :targets ?i.
   	 	?i ?prop ?toTest. 
   		_:b log:notIncludes {?toTest rdf:type ?class}
  	} => {
@@ -55,8 +54,7 @@
 			sh:path 	?prop; 
 			sh:datatype ?type
 } => {
-	{	?shape  :targets 	?i;
-  		 		sh:path 	?prop. 
+	{	?shape  :targets 	?i.
   		("Value does not have datatype " ?type) string:concatenation ?message. 
   		?i ?prop ?toTest. 
   		(?egal ?testType) log:dtlit ?toTest. 
@@ -72,16 +70,14 @@
 			sh:resultMessage 				?message]
  	}.
 	###############
- 	{	?shape 	:targets 	?i; 
-  		 		sh:path 	?prop. 
+ 	{	?shape 	:targets 	?i.
   		?i ?prop ?toTest. 
   		?toTest log:rawType log:Literal
  	} => {
 		?toTest :testDPos :lit
 	}.
 	###############
-	{	?shape 	:targets ?i; 
-				sh:path ?prop. 
+	{	?shape 	:targets ?i.
 		("Value does not have datatype " ?type) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :testDPos :lit}
@@ -101,16 +97,14 @@
 			sh:path 	?prop; 
 			sh:nodeKind ?kind
 } => {
-	{	?shape	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape	:targets ?i.
 		?i ?prop ?toTest. 
 		?toTest log:rawType log:Literal
 	} => {
 		?toTest :testPos :lit
 	}.
 	#################
-	{	?shape :targets ?i; 
-			   sh:path  ?prop. 
+	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		?toTest log:rawType log:Other. 
 		?toTest log:uri _:exists
@@ -118,24 +112,21 @@
 		?toTest :testPos :iri
 	}. 	
 	#################																
-	{	?shape :targets ?i;
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		?i ?prop ?toTest. 
 		?toTest log:rawType log:UnlabeledBlankNode
 	} => {
 		?toTest :testPos :bn
 	}.
 	#################
-	{	?shape :targets ?i; 
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		?i ?prop ?toTest. 
 		?toTest log:rawType log:ForAll
 	} => {
 		?toTest :testPos :bn
 	}.
 	######################################
-	{	?shape :targets ?i; 
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		?i ?prop ?toTest. 
 		?kind list:in (sh:Literal sh:BlankNodeOrLiteral sh:IRIOrLiteral). 
 		?toTest :testPos :lit
@@ -143,8 +134,7 @@
 		?toTest :testPos ?kind
 	}.
 	#################
-	{	?shape :targets ?i;
-	 		   sh:path 	?prop.
+	{	?shape :targets ?i.
 	  	?i ?prop ?toTest. 
 		?kind list:in (sh:IRI sh:BlankNodeOrIRI sh:IRIOrLiteral). 
 		?toTest :testPos :iri
@@ -152,8 +142,7 @@
 		?toTest :testPos ?kind
 	}.
 	#################
-	{	?shape :targets ?i; 
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		?i ?prop ?toTest. 
 		?kind list:in (sh:BlankNode sh:BlankNodeOrIRI sh:BlankNodeOrLiteral). 
 		?toTest :testPos :bn
@@ -161,8 +150,7 @@
 		?toTest :testPos ?kind
 	}.
 	#######################################
-	{	?shape :targets ?i;
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		("Value does not have node kind " ?kind) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :testPos ?kind}
@@ -184,8 +172,7 @@
 			sh:path 	?prop; 
 			sh:minCount ?amount
 } => {
-	{	?shape :targets ?i; 
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		("Less than " ?amount " values") string:concatenation ?message. 
 		(?smth {?i ?prop ?smth} ?list) log:collectAllIn ?scope. 
 		?list list:length ?llength. 
@@ -205,8 +192,7 @@
 			sh:path 	?prop; 
 			sh:maxCount ?amount
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		("More than " ?amount " values") string:concatenation ?message. 
 		(?smth {?i ?prop ?smth} ?list) log:collectAllIn ?scope. 
 		?list list:length ?llength. 
@@ -227,8 +213,7 @@
 		   sh:path 			?prop; 
 		   sh:minInclusive 	?value
 } => {
-	{	?shape :targets ?i; 
-			   sh:path ?prop. 
+	{	?shape :targets ?i.
 		("Value is not >= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		?toTest math:lessThan ?value.
@@ -244,8 +229,7 @@
 			sh:resultMessage 				?message]
 	}.
 	#########################
-	{	?shape :targets ?i; 
-			   sh:path ?prop. 
+	{	?shape :targets ?i. 
 		("Value is not >= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		?toTest string:lessThan ?value.
@@ -261,16 +245,14 @@
 			sh:resultMessage 				?message]
 	}.
 	###############
- 	{	?shape 	:targets 	?i; 
-  		 		sh:path 	?prop. 
+ 	{	?shape 	:targets 	?i.
   		?i ?prop ?toTest. 
   		?toTest log:rawType log:Literal
  	} => {
 		?toTest :testDPos :lit
 	}.
 	####################################
-	{	?shape :targets ?i; 
-			   sh:path ?prop. 
+	{	?shape :targets ?i.
 		("Value is not >= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :testDPos :lit}
@@ -290,8 +272,7 @@
 		   sh:path 			?prop; 
 		   sh:maxInclusive 	?value
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i.
 		("Value is not <= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		?toTest math:greaterThan ?value.
@@ -307,8 +288,7 @@
 			sh:resultMessage 				?message]
 	}.
 	###########################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i.
 		("Value is not <= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		?toTest string:greaterThan ?value.
@@ -324,16 +304,14 @@
 			sh:resultMessage 				?message]
 	}.
 	###############
- 	{	?shape 	:targets 	?i; 
-  		 		sh:path 	?prop. 
+ 	{	?shape 	:targets 	?i.
   		?i ?prop ?toTest. 
   		?toTest log:rawType log:Literal
  	} => {
 		?toTest :testDPos :lit
 	}.
 	##############################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i.
 		("Value is not <= " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :testDPos :lit}
@@ -354,8 +332,7 @@
 			sh:minExclusive ?value. 
 	(?value -1) math:sum ?result
 } => {
-	{	?shape :targets ?i; 
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		("Value is not > " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest math:lessThan ?result.
@@ -371,8 +348,7 @@
 			sh:resultMessage 				?message]
 	}.
 	##########################
-	{	?shape :targets ?i; 
-			   sh:path 	?prop. 
+	{	?shape :targets ?i.
 		("Value is not > " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest string:lessThan ?result.
@@ -388,16 +364,14 @@
 			sh:resultMessage 				?message]
 	}.
 	###############
- 	{	?shape 	:targets 	?i; 
-  		 		sh:path 	?prop. 
+ 	{	?shape 	:targets 	?i.
   		?i ?prop ?toTest. 
   		?toTest log:rawType log:Literal
  	} => {
 		?toTest :testDPos :lit
 	}.
 	###########################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value is not > " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :testDPos :lit}
@@ -418,8 +392,7 @@
 			sh:maxExclusive ?value. 
 	(?value -1) math:sum ?result
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i.
 		("Value is not < " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest math:greaterThan ?result.
@@ -435,8 +408,7 @@
 			sh:resultMessage 				?message]
 	}.
 	#############################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value is not < " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest string:greaterThan ?result.
@@ -452,16 +424,14 @@
 			sh:resultMessage 				?message]
 	}.
 	###############
- 	{	?shape 	:targets 	?i; 
-  		 		sh:path 	?prop. 
+ 	{	?shape 	:targets 	?i. 
   		?i ?prop ?toTest. 
   		?toTest log:rawType log:Literal
  	} => {
 		?toTest :testDPos :lit
 	}.
 	###########################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i.
 		("Value is not < " ?value) string:concatenation ?message.
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :testDPos :lit}
@@ -485,8 +455,7 @@
 	(?value -1) math:sum ?acValue. 
 	("^.{0," ?acValue "}$") string:concatenation ?regex			# "^.{0,?acValue}$"
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i. 
 		("Value has less than " ?value " characters") string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest string:matches ?regex
@@ -508,8 +477,7 @@
 	(?value 1) math:sum ?acValue. 
 	("^.{" ?acValue ",}$") string:concatenation ?regex				# "^.{?acValue,}$"
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value has more than " ?value " characters") string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest string:matches ?regex
@@ -529,8 +497,7 @@
 			sh:path 	?prop; 
 			sh:pattern  ?regex
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value does not match pattern " ?regex) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?toTest string:notMatches ?regex
@@ -550,8 +517,7 @@
 			sh:path 		?prop; 
 			sh:languageIn 	?list
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		?i ?prop ?toTest. 
 		(?egal ?tag) log:langlit ?toTest. 
 		?list list:iterate (?index ?value). 
@@ -561,8 +527,7 @@
 		?toTest :langPos ?list
 	}.
 	##########																
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Language does not match any of " ?list) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :langPos ?list}
@@ -582,8 +547,7 @@
 			sh:path 		?prop; 
 			sh:uniqueLang 	true
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		("Language " ?tag1 " has been used more than once") string:concatenation ?message. 
 		?i ?prop ?toTest, 
 			 	 ?otherTest. 
@@ -607,8 +571,7 @@
 			sh:path 	?prop; 
 			sh:equals 	?value
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		("Must have the same values as " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?i ?value ?toTest}
@@ -623,8 +586,7 @@
 			sh:resultMessage 				?message]
 	}.	
 	####################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		("Must have the same values as " ?value) string:concatenation ?message. 
 		?i ?value ?toTest. 
 		_:b log:notIncludes {?i ?prop ?toTest}
@@ -644,8 +606,7 @@
 			sh:path 	?prop; 
 			sh:disjoint ?value
 } => {
-	{	?shape :targets ?i; 
-			sh:path  ?prop. 
+	{	?shape :targets ?i.
 		("Property must not share any values with " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?toTest
@@ -665,8 +626,7 @@
 			sh:path 	?prop; 
 			sh:lessThan ?value
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i.
 		("Value is not < value of " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?otherTest. 
@@ -682,8 +642,7 @@
 			sh:resultMessage 				?message]
 	}.
 	#########################	
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i. 
 		("Value is not < value of " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?otherTest. 
@@ -699,8 +658,7 @@
 			sh:resultMessage 				?message]
 	}.
 	##########################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value is not < value of " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?otherTest. 
@@ -716,8 +674,7 @@
 			sh:resultMessage 				?message]
 	}.
 	####################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value is not < value of " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?otherTest. 
@@ -738,8 +695,7 @@
 			sh:path 			?prop; 
 			sh:lessThanOrEquals ?value
 } => {
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value is not <= to the value of " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?otherTest. 
@@ -755,8 +711,7 @@
 			sh:resultMessage 				?message]
 	}.
 	######################
-	{	?shape  :targets ?i; 
-				sh:path  ?prop. 
+	{	?shape  :targets ?i. 
 		("Value is not <= to the value of " ?value) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		?i ?value ?otherTest. 
@@ -891,15 +846,13 @@
 			sh:path 	?prop; 
 			sh:hasValue ?value
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i. 
 		?i ?prop ?value
 	} => {
 		?i :hasV ?value
 	}.
 	###############################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		("Missing expected value " ?value) string:concatenation ?message. 
 		_:b log:notIncludes {?i :hasV ?value}
 	} => {
@@ -917,16 +870,14 @@
 			sh:path ?prop; 
 			sh:in 	?list
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i. 
 		?i ?prop ?toTest. 
 		?toTest list:in ?list
 	} => {
 		?toTest :lPos ?list
 	}.
 	###############################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		("Value is not in " ?list) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :lPos ?list}
@@ -949,8 +900,7 @@
 			sh:path ?prop; 
 			sh:and 	?list
 } => {
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i.
 		?i ?prop ?toTest. 
 		?list list:iterate (?index ?value). 
 		?violation 	sh:focusNode   ?toTest; 
@@ -965,8 +915,7 @@
 			sh:value 						?toTest]
 	}.
 	###############################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i. 
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value) 
 	} => {
@@ -978,8 +927,7 @@
 			sh:path ?prop; 
 			sh:or 	?list
 } => {
-	{	?shape :targets ?i;
-			   sh:path  ?prop.    
+	{	?shape :targets ?i.   
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
 		(?violation {?violation  sh:sourceShape ?value;
@@ -988,8 +936,7 @@
 		?nlist :orcomp ?list.
 	}.
     #################################
-    {   ?shape :targets ?i;
-			   sh:path  ?prop.
+    {   ?shape :targets ?i.
 		?i ?prop ?toTest.
         (?flist {?nlist :orcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
@@ -1005,8 +952,7 @@
 			sh:value 						?toTest]
     }.
 	#################################
-	{	?shape 	:targets ?i; 
-				sh:path  ?prop. 
+	{	?shape 	:targets ?i. 
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value) 
 	} => {
@@ -1018,8 +964,7 @@
 			sh:path		?prop;
 			sh:xone 	?list
 } => {
-	{	?shape :targets ?i;
-			   sh:path  ?prop.
+	{	?shape :targets ?i.
 		?i ?prop ?toTest.    
 		?list list:iterate (?index ?value).		 
 		(?violation {?violation  sh:sourceShape ?value;
@@ -1028,8 +973,7 @@
 		?nlist :xcomp ?list.
 	}.
     #################################
-    {   ?shape :targets ?i;
-			   sh:path  ?prop.
+    {   ?shape :targets ?i.
 		?i ?prop ?toTest.    
         (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
@@ -1044,8 +988,7 @@
 			sh:value 						?toTest]
     }.
 	#################################
-    {   ?shape :targets ?i;
-			   sh:path  ?prop.
+    {   ?shape :targets ?i.
 		?i ?prop ?toTest.    
         (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
@@ -1061,8 +1004,7 @@
 			sh:value 						?toTest]
     }.
 	#####################
-	{	?shape :targets ?i;
-			   sh:path  ?prop. 
+	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value) 
 	} => {
@@ -1077,8 +1019,7 @@
     (?props {?shape	sh:property ?value.
              ?value	sh:path   	?props      } ?plist) log:collectAllIn ?scope.
 } => {
-	{	?shape :targets ?i;
-			   sh:path  ?prop. 
+	{	?shape :targets ?i.
 		?i ?prop ?toTest.
     	?toTest ?tprop _:egal.
     	?plist list:member ?tprop.
@@ -1086,8 +1027,7 @@
       	?toTest ?plist ?tprop
     }.
   ########################
-  	{	?shape :targets ?i;
-			   sh:path  ?prop. 
+  	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
     	?toTest ?tprop _:egal.
     	_:b log:notIncludes {?toTest ?plist ?tprop}
@@ -1109,8 +1049,7 @@
              ?value	sh:path   	?props      } ?vplist) log:collectAllIn ?scope.
     (?vplist ?list) list:append ?plist.
 } => {
-	{	?shape :targets ?i;
-			   sh:path  ?prop. 
+	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
     	?toTest ?tprop _:egal.
     	?plist list:member ?tprop.
@@ -1118,8 +1057,7 @@
       	?toTest ?plist ?tprop
     }.
   ########################
-  	{	?shape :targets ?i;
-			   sh:path  ?prop. 
+  	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
     	?toTest ?tprop _:egal.
     	_:b log:notIncludes {?toTest ?plist ?tprop}
