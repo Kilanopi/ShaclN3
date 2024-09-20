@@ -555,6 +555,7 @@
 	?sk :sameAs ?vshape.
 	?sk a sh:NodeShape.
 	?sk ?subj ?obj.
+	?sk :wasNodeConnectedtoShape ?shape.
 	{	?shape :targets ?i
 	} => {
 		?sk :targets ?i
@@ -636,6 +637,7 @@
 	?sk :sameAs ?pShape.
 	?sk a sh:PropertyShape.
 	?sk ?subj ?obj.
+	?sk :wasPropertyConnectedtoShape ?shape.
 	{	?shape 	:targets 	?i
 	} => {
 		?sk :targets 	?i
