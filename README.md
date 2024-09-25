@@ -14,12 +14,12 @@ Example:
 
 IMPORTANT NOTES:
 
--I will make the output more readable asap
--In case anyone looks at the code itself: change your tab size to 4 for readability
--some functionality is still WIP and may currently not work correctly or at all, this includes but is not limited to:
-    -(self-)recursive Shapes
-    -Shapes with multiple logical constraints
-    -resultSeverity
-    -minor scope violations for multiple constraints (e.g sh:languageIn demanding literals)
-    -all cardinality constraints (i.e all "qualified" shapes)
-    -interaction with most propertypath types (e.g alternative path)
+-I will make the output more readable asap < br / >
+-In case anyone looks at the code itself: change your tab size to 4 for readability < br / >
+-some functionality is still WIP and may currently not work correctly or at all, this includes but is not limited to: < br / >
+    -(self-)recursive Shapes < br / >
+    -Shapes with multiple logical constraints < br / >
+    -resultSeverity < br / >
+    -minor scope violations for multiple constraints (e.g sh:languageIn demanding literals) < br / >
+    -all cardinality constraints (i.e all "qualified" shapes) < br / > 
+    -interaction with most propertypath types (e.g alternative path) < br / >
