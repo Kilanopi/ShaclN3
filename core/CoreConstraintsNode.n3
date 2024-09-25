@@ -10,8 +10,6 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsi: <http://www.w3.org/2001/XMLSchema-instance> .
 
-#eye CoreConstraintsNode.n3 CoreConstraintsProp.n3 targeting.n3 NotConstraint.n3 data.n3 shacl.n3 --pass-only-new --nope --quiet
-
 #TODO
 #languageIn needs check for literal
 
@@ -26,59 +24,59 @@
 #--------Core Constraint Components
 #------Value Type Constraints
 #---class
-{	?shape 	sh:class 	?class.
+{	?shape	sh:class	?class.
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
-	{	?shape :targets ?i. 
-		("Node does not have class " ?class) string:concatenation ?message. 
+	{	?shape :targets ?i.
+		("Node does not have class " ?class) string:concatenation ?message.
 		_:b log:notIncludes {?i rdf:type ?class}
 	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation;
-			sh:sourceConstraintComponent 	sh:ClassConstraintComponent; 
-			sh:sourceShape 					?shape ; 
-			sh:focusNode 					?i; 
-			sh:value 						?i;
-			sh:resultMessage 				?message]
+		[	a								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:ClassConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:value						?i;
+			sh:resultMessage				?message]
 	}
-}.	
+}.
 #---datatype 
-{	?shape 	sh:datatype ?type.
+{	?shape sh:datatype ?type.
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
-	{	?shape :targets ?i. 
-		("Node does not have datatype " ?type) string:concatenation ?message. 
-		(?egal ?testType) log:dtlit ?i. 
+	{	?shape :targets ?i.
+		("Node does not have datatype " ?type) string:concatenation ?message.
+		(?egal ?testType) log:dtlit ?i.
 		?testType log:notEqualTo ?type
 	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation;
-			sh:sourceConstraintComponent 	sh:DatatypeConstraintComponent;
-			sh:sourceShape 					?shape; 
-			sh:focusNode 					?i; 
-			sh:value 						?i;
-			sh:resultMessage 				?message]
+		[	a								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:value						?i;
+			sh:resultMessage				?message]
 	}.
 	###########################################
-    {	?shape :targets ?i. 
+	{	?shape :targets ?i.
 		?i log:rawType log:Literal
 	} => {
 		?i :testDPos :lit
 	}.
 	##########################################
-    {	?shape :targets ?i. 
-		("Node does not have datatype " ?type) string:concatenation ?message. 
+	{	?shape :targets ?i.
+		("Node does not have datatype " ?type) string:concatenation ?message.
 		_:b log:notIncludes {?i :testDPos :lit}
 	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation;
-			sh:sourceConstraintComponent 	sh:DatatypeConstraintComponent;
-			sh:sourceShape 					?shape; 
-			sh:focusNode 					?i; 
-			sh:value 						?i;
-			sh:resultMessage 				?message]
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:value						?i;
+			sh:resultMessage				?message]
 	}
-}.	
+}.
 #---nodeKind
 {	?shape 	sh:nodeKind ?kind.
 	_:b log:notIncludes {?shape sh:path _:egal}
