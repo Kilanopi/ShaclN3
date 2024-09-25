@@ -393,7 +393,7 @@
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
-		("Value does not match pattern " ?regex) string:concatenation ?message. 
+		("Node does not match pattern " ?regex) string:concatenation ?message. 
 		?i string:notMatches ?regex
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -468,9 +468,8 @@
 }.	
 #------Shape-based Constraints
 #---node
-{	?shape 	a 		sh:NodeShape; 
-			sh:node ?vshape.
-	?vshape a sh:NodeShape.
+{	?shape 	sh:node ?vshape.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i
 	} => {
@@ -479,7 +478,6 @@
 	####################################
 	{	?shape :targets ?i. 
 		?vshape sh:property ?pShape.
-		?pShape a sh:PropertyShape.
 		?violation 	sh:sourceShape 	?pShape; 
 					sh:focusNode 	?i
 	} => {
@@ -488,27 +486,7 @@
 	####################################
 	{	?shape :targets ?i. 
 		?vshape sh:property ?pShape.
-		?pShape a sh:PropertyShape.
 		?i ?pShape ?violation
-	} => {
-		?i ?vshape ?violation
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?vshape sh:property ?pShape.
-		_:b log:notIncludes {?pShape a sh:PropertyShape}.
-		?sk :sameAs ?pShape.
-		?violation 	sh:sourceShape 	?sk; 
-					sh:focusNode 	?i
-	} => {
-		?i ?vshape ?violation
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?vshape sh:property ?pShape.
-		_:b log:notIncludes {?pShape a sh:PropertyShape}.
-		?sk :sameAs ?pShape.
-		?i ?sk ?violation
 	} => {
 		?i ?vshape ?violation
 	}.
@@ -521,7 +499,7 @@
 	}.
 	###################################
 	{	?shape :targets ?i. 
-		("Value does not have shape " ?vshape) string:concatenation ?message. 
+		("Node does not have shape " ?vshape) string:concatenation ?message. 
 		?i ?vshape ?anyViolation
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -534,7 +512,7 @@
 	}.
 	##################################
 	{	?shape :targets ?i. 
-		("Value does not have shape " ?vshape) string:concatenation ?message. 
+		("Node does not have shape " ?vshape) string:concatenation ?message. 
 		?result a 					sh:ValidationResult; 
 				sh:focusNode 		?i; 
 				sh:resultMessage 	?message. 
@@ -543,132 +521,9 @@
 		?result sh:detail ?violation
 	}
 }.
-#################################################
-{	?shape 	a 		sh:NodeShape; 
-			sh:node ?vshape.
-	_:b log:notIncludes {?vshape a sh:NodeShape}.
-	(?vshape) log:skolem ?sk.
-	?vshape ?subj ?obj
-} => {
-	?sk :sameAs ?vshape.
-	?sk a sh:NodeShape.
-	?sk ?subj ?obj.
-	?sk :wasNodeConnectedtoShape ?shape.
-	{	?shape :targets ?i
-	} => {
-		?sk :targets ?i
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?sk sh:property ?pShape.
-		?pShape a sh:PropertyShape.
-		?violation 	sh:sourceShape 	?pShape; 
-					sh:focusNode 	?i
-	} => {
-		?i ?sk ?violation
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?sk sh:property ?pShape.
-		?pShape a sh:PropertyShape.
-		?i ?pShape ?violation
-	} => {
-		?i ?sk ?violation
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?sk sh:property ?pShape.
-		_:b log:notIncludes {?pShape a sh:PropertyShape}.
-		?sk :sameAs ?pShape.
-		?violation 	sh:sourceShape 	?sk; 
-					sh:focusNode 	?i
-	} => {
-		?i ?sk ?violation
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?sk sh:property ?pShape.
-		_:b log:notIncludes {?pShape a sh:PropertyShape}.
-		?sk :sameAs ?pShape.
-		?i ?sk ?violation
-	} => {
-		?i ?sk ?violation
-	}.
-	####################################
-	{	?shape :targets ?i. 
-		?violation 	sh:sourceShape 	?sk; 
-					sh:focusNode 	?i
-	} => {
-		?i ?sk ?violation
-	}.
-	###################################
-	{	?shape :targets ?i. 
-		("Value does not have shape " ?sk) string:concatenation ?message. 
-		?i ?sk ?anyViolation
-	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation; 
-			sh:sourceConstraintComponent 	sh:NodeConstraintComponent; 
-			sh:sourceShape 					?shape; 
-			sh:focusNode 					?i;
-			sh:value 						?i;
-			sh:resultMessage 				?message]
-	}.
-	##################################
-	{	?shape :targets ?i. 
-		("Value does not have shape " ?sk) string:concatenation ?message. 
-		?result a 					sh:ValidationResult; 
-				sh:focusNode 		?i; 
-				sh:resultMessage 	?message. 
-		?i ?sk ?violation
-	} => {
-		?result sh:detail ?violation
-	}
-}.
 #---property
-{	?shape 	a 			sh:NodeShape; 
-			sh:property ?pShape.
-	_:b log:notIncludes {?pShape a sh:PropertyShape}.
-	(?pShape) log:skolem ?sk.
-	?pShape ?subj ?obj
-} => {
-	?sk :sameAs ?pShape.
-	?sk a sh:PropertyShape.
-	?sk ?subj ?obj.
-	?sk :wasPropertyConnectedtoShape ?shape.
-	{	?shape 	:targets 	?i
-	} => {
-		?sk :targets 	?i
-	}.
-	############################
-	{	?shape 	:targets 	?i. 
-		?violation 	sh:sourceShape 	?sk; 
-					sh:focusNode 	?i
-	} => {
-		?i ?sk ?violation
-	}.
-	#############################
-	{	?shape 	:targets 	?i.
-		?pShape sh:property ?vShape. 
-		?vShape a sh:PropertyShape.
-		?i ?vShape ?violation
-	} => {
-		?i ?sk ?violation
-	}.
-	#############################
-	{	?shape 	:targets 	?i.
-		?pShape sh:property ?vShape. 
-		_:b log:notIncludes {?vShape a sh:PropertyShape}.
-		?osk :sameAs ?vShape.
-		?i ?osk ?violation
-	} => {
-		?i ?sk ?violation
-	}
-}.
-#######################################
-{	?shape 	a 			sh:NodeShape; 
-			sh:property ?pShape.
-	?pShape a sh:PropertyShape.
+{	?shape 	sh:property ?pShape.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape 	:targets 	?i
 	} => {
@@ -683,21 +538,11 @@
 	}.
 	#############################
 	{	?shape 	:targets 	?i.
-		?pShape sh:property ?vShape. 
-		?vShape a sh:PropertyShape.
+		?pShape sh:property ?vShape.
 		?i ?vShape ?violation
 	} => {
 		?i ?pShape ?violation
 	}.
-	#############################
-	{	?shape 	:targets 	?i.
-		?pShape sh:property ?vShape. 
-		_:b log:notIncludes {?vShape a sh:PropertyShape}.
-		?sk :sameAs ?vShape.
-		?i ?sk ?violation
-	} => {
-		?i ?pShape ?violation
-	}
 }.
 
 #---qualified min/maxcount... need to look into this (valueshape not for NodeShapes per docs)
