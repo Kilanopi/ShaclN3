@@ -1,0 +1,70 @@
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <http://example.org/> .
+@prefix s: <http://example.org/shapes> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsi: <http://www.w3.org/2001/XMLSchema-instance> .
+
+
+#---not
+{	?shape 	a 			sh:NodeShape;  
+			sh:not 		?vshape
+} => {
+	{	?shape 	:targets 	?i;
+				sh:not 		?vshape. 
+		("Value does have shape " ?vshape) string:concatenation ?message.  
+		_:b log:notIncludes {?violation a 				sh:ValidationResult; 			#THIS DOESNT WORK; CHANGE TO WORK SIMMILAR TO AND notIncludes ASAP
+										sh:focusNode 	?i; 
+										sh:sourceShape 	?vshape}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	#####################
+	{	?shape 	:targets 	?i;
+				sh:not 		?vshape.
+	} => {
+		?vshape :targets ?i;
+	}
+}.
+
+{	?shape 	a 			sh:PropertyShape;  
+			sh:path 	?prop; 
+			sh:not 		?vshape
+} => {
+	{	?shape :targets ?i;
+			   sh:not 	?vshape.  
+		("Value does have shape " ?vshape) string:concatenation ?message. 
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?violation a 				sh:ValidationResult; 
+										sh:focusNode 	?toTest; 
+										sh:sourceShape 	?vshape}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
+			sh:sourceShape 					?shape ;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+	######################
+	{	?shape :targets 	?i;
+			   sh:not 		?vshape.  
+		?i ?prop ?toTest
+	} => {
+		?vshape :targets ?toTest
+	}
+}.

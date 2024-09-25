@@ -1,0 +1,120 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://example.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+#---targetNode
+{   ?shape a sh:NodeShape.
+    ?shape sh:targetNode ?node
+} => {
+    ?shape :targets ?node. 
+    ?shape :Otargets ?node
+}.
+#####################
+{   ?shape a sh:PropertyShape. 
+    ?shape sh:targetNode ?node
+} => {
+    ?shape :targets ?node. 
+    ?shape :Otargets ?node
+}.
+
+#---targetClass
+{   ?shape a sh:NodeShape. 
+    ?shape sh:targetClass ?class. 
+} => {
+    {   ?node a ?someClass. 
+        ?someClass rdfs:subClassOf ?otherClass
+    } => {
+        ?node a ?otherClass
+    }
+}. 
+
+{   ?shape a sh:NodeShape. 
+    ?shape sh:targetClass ?class. 
+} => {
+    {   ?node a ?class
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+###################
+{   ?shape a sh:PropertyShape. 
+    ?shape sh:targetClass ?class. 
+} => {
+    {   ?node a ?someClass. 
+        ?someClass rdfs:subClassOf ?otherClass
+    } => {
+        ?node a ?otherClass
+    }
+}. 
+
+{   ?shape a sh:PropertyShape. 
+    ?shape sh:targetClass ?class. 
+} => {
+    {   ?node a ?class
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#---implicit Class Targets
+{   ?shape  a   sh:NodeShape, 
+                rdfs:Class.
+} => {
+    {
+        ?node a ?shape 
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+##################
+{   ?shape a    sh:PropertyShape, 
+                rdfs:Class.
+} => {
+    {   ?node a ?shape 
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#---targetSubjectsOf
+{   ?shape a sh:NodeShape. 
+    ?shape sh:targetSubjectsOf ?predicate.
+} => {
+    {   ?node ?predicate _:egal
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+##################
+{   ?shape a sh:PropertyShape. 
+    ?shape sh:targetSubjectsOf ?predicate.
+} => {
+    {   ?node ?predicate _:egal
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#---targetObjectsOf
+{   ?shape a sh:NodeShape. 
+    ?shape sh:targetObjectsOf ?predicate.
+} => {
+    {   _:egal ?predicate ?node
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#################
+{   ?shape a sh:PropertyShape. 
+    ?shape sh:targetObjectsOf ?predicate.
+} => {
+    {   _:egal ?predicate ?node
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
