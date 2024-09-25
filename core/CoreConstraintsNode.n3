@@ -23,13 +23,11 @@
 
 #ResultSeverity can be overwritten, i just always give sh:Violation, should change that
 
-#since sh:not can give violations without the shape being violated: find a way to give out Validation Report sh:conforms false.
-
 #--------Core Constraint Components
 #------Value Type Constraints
 #---class
-{	?shape 	a 			sh:NodeShape; 
-			sh:class 	?class
+{	?shape 	sh:class 	?class.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Node does not have class " ?class) string:concatenation ?message. 
@@ -45,8 +43,8 @@
 	}
 }.	
 #---datatype 
-{	?shape 	a 			sh:NodeShape; 
-			sh:datatype ?type
+{	?shape 	sh:datatype ?type.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Node does not have datatype " ?type) string:concatenation ?message. 
@@ -82,8 +80,8 @@
 	}
 }.	
 #---nodeKind
-{	?shape 	a 			sh:NodeShape; 
-			sh:nodeKind ?kind
+{	?shape 	sh:nodeKind ?kind.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		?i log:rawType log:Literal
@@ -146,8 +144,8 @@
 }.
 #------Value Range Constraints
 #---minInclusive
-{	?shape 	a 				sh:NodeShape; 
-			sh:minInclusive ?value
+{	?shape 	sh:minInclusive ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Node is not >= " ?value) string:concatenation ?message. 
@@ -197,8 +195,8 @@
 	}
 }.	
 #---maxInclusive
-{	?shape 	a 				sh:NodeShape; 
-			sh:maxInclusive ?value
+{	?shape 	sh:maxInclusive ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Value is not <= " ?value) string:concatenation ?message. 
@@ -248,8 +246,8 @@
 	}
 }.	
 #---minExclusive
-{	?shape 	a 				sh:NodeShape; 
-			sh:minExclusive ?value. 
+{	?shape 	sh:minExclusive ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}.
 	(?value -1) math:sum ?result
 } => {
 	{	?shape :targets ?i. 
@@ -300,8 +298,8 @@
 	}
 }.	
 #---maxExclusive
-{	?shape 	a 				sh:NodeShape; 
-			sh:maxExclusive ?value. 
+{	?shape 	sh:maxExclusive ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}.
 	(?value -1) math:sum ?result
 } => {
 	{	?shape :targets ?i. 
@@ -353,8 +351,8 @@
 }.
 #------String-based Constraints
 #---minLength
-{	?shape 	a 			 sh:NodeShape; 
-			sh:minLength ?value. 
+{	?shape 	sh:minLength ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}.
 	(?value -1) math:sum ?acValue. 
 	("^.{0," ?acValue "}$") string:concatenation ?regex								# "^.{0,?acValue}$"
 } => {
@@ -372,8 +370,8 @@
 	}
 }.	 
 #---maxLength
-{	?shape 	a 				sh:NodeShape; 
-			sh:maxLength 	?value. 
+{	?shape 	sh:maxLength 	?value.
+	_:b log:notIncludes {?shape sh:path _:egal}.
 	(?value 1) math:sum ?acValue. 
 	("^.{" ?acValue ",}$") string:concatenation ?regex								# "^.{?acValue,}$"
 } => {
@@ -391,8 +389,8 @@
 	}
 }.	 
 #---pattern
-{	?shape 	a 			sh:NodeShape; 
-			sh:pattern 	?regex
+{	?shape 	sh:pattern 	?regex.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Value does not match pattern " ?regex) string:concatenation ?message. 
@@ -408,8 +406,8 @@
 	}
 }.	
 #---languageIn
-{	?shape 	a 				sh:NodeShape; 
-			sh:languageIn 	?list
+{	?shape 	sh:languageIn 	?list.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		(?egal ?tag) log:langlit ?i. 
@@ -435,8 +433,8 @@
 }.	
 #------Property Pair Constraints #makes no sense for nodeshapes/only checks for ?value being reflexive
 #---equals
-{	?shape 	a 			sh:NodeShape; 
-			sh:equals 	?value
+{	?shape 	sh:equals 	?value.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Must have the same values as " ?value) string:concatenation ?message. 
@@ -452,8 +450,8 @@
 	}
 }.	
 #---disjoint
-{	?shape 	a 			sh:NodeShape; 
-			sh:disjoint ?value
+{	?shape 	sh:disjoint ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		("Value node must not also be one of the values of " ?value) string:concatenation ?message. 
@@ -705,8 +703,8 @@
 #---qualified min/maxcount... need to look into this (valueshape not for NodeShapes per docs)
 
 #---hasValue														#makes no sense for nodeshapes
-{	?shape 	a 			sh:NodeShape; 
-			sh:hasValue ?value
+{	?shape 	sh:hasValue ?value.
+	_:b log:notIncludes {?shape sh:path _:egal}
 	} => {
 		{	?shape :targets ?i. 
 			("Value must be " ?value) string:concatenation ?message. 
@@ -721,8 +719,8 @@
 		}
 }.
 #---in
-{	?shape 	a 		sh:NodeShape; 
-			sh:in 	?list
+{	?shape 	sh:in 	?list.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		?i list:in ?list
@@ -745,8 +743,8 @@
 }.
 #------Logical Constraints
 #---and
-{	?shape 	a 		sh:NodeShape; 
-			sh:and 	?list
+{	?shape 	sh:and 	?list.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i. 
 		?list list:iterate (?index ?value). 
@@ -770,8 +768,8 @@
 
 
 #---or
-{	?shape 	a 		sh:NodeShape; 
-			sh:or 	?list
+{	?shape 	sh:or 	?list.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i.   
 		?list list:iterate (?index ?value).		 
@@ -802,8 +800,8 @@
 	}
 }.
 #---xone
-{	?shape 	a 		sh:NodeShape; 
-			sh:xone 	?list
+{	?shape 	sh:xone 	?list.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i.   
 		?list list:iterate (?index ?value).		 
@@ -849,8 +847,8 @@
 	}
 }.
 #---closed
-{	?shape 	a 				sh:NodeShape; 
-			sh:closed true.
+{	?shape 	sh:closed true.
+	_:b log:notIncludes {?shape sh:path _:egal}.
     _:b log:notIncludes {?shape sh:ignoredProperties ?list}.
     (?props {?shape	sh:property ?value.
              ?value	sh:path   	?props      } ?plist) log:collectAllIn ?scope.
@@ -874,10 +872,10 @@
 			sh:value 						?i]
    	}
 }.
-        
-{	?shape 	a 				sh:NodeShape; 
-			sh:closed true;
+################################################################
+{	?shape 	sh:closed true;
     		sh:ignoredProperties ?list.
+	_:b log:notIncludes {?shape sh:path _:egal}.
     (?props {?shape	sh:property ?value.
              ?value	sh:path   	?props      } ?vplist) log:collectAllIn ?scope.
     (?vplist ?list) list:append ?plist.

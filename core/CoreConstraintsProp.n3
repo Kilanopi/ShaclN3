@@ -13,7 +13,7 @@
 #eye GB.n3 targeting.n3 data.n3 shacl.n3 --pass-only-new --nope --quiet
 
 #TODO
-#datatype gives violation when no datatype is give to a literaly (e.g. :John :age 2 should be ok with sh:datatype xsd:integer for some reason)
+#datatype gives violation when no datatype is given to a literal (e.g. :John :age 2 should be ok with sh:datatype xsd:integer for some reason)
 
 
 
@@ -25,15 +25,10 @@
 
 #look into lessThan and lessThanOrEquals for accuracy
 
-#in Validation Report: the sh:sourceShape seems to to ?pShape instead of ?Shape in normal ShACL... idk why, mine seems more useful?
-#I also left out resultSeverity since idk
-
-
 #--------Core Constraint Components
 #------Value Type Constraints
 #---class
-{	?shape a 		sh:PropertyShape;
- 	 	   sh:path  ?prop; 
+{	?shape sh:path  ?prop; 
            sh:class ?class
 } => {
 	{	?shape :targets ?i.
@@ -50,8 +45,7 @@
 	}
 }.
 #---datatype
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:datatype ?type
 } => {
 	{	?shape  :targets 	?i.
@@ -93,8 +87,7 @@
 	}
 }.	
 #---nodeKind
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:nodeKind ?kind
 } => {
 	{	?shape	:targets ?i.
@@ -168,8 +161,7 @@
 
 #------Cardinality Constraints
 #---minCount
-{	?shape  a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape  sh:path 	?prop; 
 			sh:minCount ?amount
 } => {
 	{	?shape :targets ?i.
@@ -188,8 +180,7 @@
 	}
 }.	
 #---maxCount
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:maxCount ?amount
 } => {
 	{	?shape 	:targets ?i.
@@ -209,8 +200,7 @@
 }.
 #------Value Range Constraints
 #---minInclusive
-{	?shape a 				sh:PropertyShape; 
-		   sh:path 			?prop; 
+{	?shape sh:path 			?prop; 
 		   sh:minInclusive 	?value
 } => {
 	{	?shape :targets ?i.
@@ -268,8 +258,7 @@
 	}.
 }.	
 #---maxInclusive
-{	?shape a 				sh:PropertyShape; 
-		   sh:path 			?prop; 
+{	?shape sh:path 			?prop; 
 		   sh:maxInclusive 	?value
 } => {
 	{	?shape  :targets ?i.
@@ -327,8 +316,7 @@
 	}.
 }.
 #---minExclusive
-{	?shape 	a 				sh:PropertyShape; 
-			sh:path 		?prop; 
+{	?shape 	sh:path 		?prop; 
 			sh:minExclusive ?value. 
 	(?value -1) math:sum ?result
 } => {
@@ -387,8 +375,7 @@
 	}.
 }.
 #---maxExclusive
-{	?shape 	a 				sh:PropertyShape; 
-			sh:path 		?prop; 
+{	?shape 	sh:path 		?prop; 
 			sh:maxExclusive ?value. 
 	(?value -1) math:sum ?result
 } => {
@@ -449,8 +436,7 @@
 
 #------String-based Constraints
 #---minLength													#when ?value is 0, it just never gives a violation
-{	?shape 	a 				sh:PropertyShape; 
-			sh:path 		?prop; 
+{	?shape 	sh:path 		?prop; 
 			sh:minLength 	?value. 
 	(?value -1) math:sum ?acValue. 
 	("^.{0," ?acValue "}$") string:concatenation ?regex			# "^.{0,?acValue}$"
@@ -471,8 +457,7 @@
 	}
 }.	
 #---maxLength
-{	?shape  a 				sh:PropertyShape; 
-			sh:path 		?prop; 
+{	?shape  sh:path 		?prop; 
 			sh:maxLength 	?value. 
 	(?value 1) math:sum ?acValue. 
 	("^.{" ?acValue ",}$") string:concatenation ?regex				# "^.{?acValue,}$"
@@ -493,8 +478,7 @@
 	}
 }. 
 #---pattern
-{	?shape  a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape  sh:path 	?prop; 
 			sh:pattern  ?regex
 } => {
 	{	?shape  :targets ?i. 
@@ -513,8 +497,7 @@
 	}
 }.
 #---languageIn																			#i am of the impression that SHACL does this wrong/not as specified?
-{	?shape 	a 				sh:PropertyShape; 
-			sh:path 		?prop; 
+{	?shape 	sh:path 		?prop; 
 			sh:languageIn 	?list
 } => {
 	{	?shape  :targets ?i. 
@@ -543,8 +526,7 @@
 	}
 }.	
 #---uniqueLang
-{	?shape  a 				sh:PropertyShape; 
-			sh:path 		?prop; 
+{	?shape  sh:path 		?prop; 
 			sh:uniqueLang 	true
 } => {
 	{	?shape 	:targets ?i.
@@ -567,8 +549,7 @@
 }.	# hier gibt es 2 Messages, eins ist broken?
 #------Property Pair Constraints
 #---equals
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:equals 	?value
 } => {
 	{	?shape 	:targets ?i.
@@ -602,8 +583,7 @@
 	}
 }.	
 #---disjoint
-{	?shape	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape	sh:path 	?prop; 
 			sh:disjoint ?value
 } => {
 	{	?shape :targets ?i.
@@ -622,8 +602,7 @@
 	}
 }.	
 #---lessThan															#need to add language length comparisons
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:lessThan ?value
 } => {
 	{	?shape  :targets ?i.
@@ -691,8 +670,7 @@
 	}
 }.
 #---lessThanOrEquals
-{	?shape  a 					sh:PropertyShape; 
-			sh:path 			?prop; 
+{	?shape  sh:path 			?prop; 
 			sh:lessThanOrEquals ?value
 } => {
 	{	?shape  :targets ?i. 
@@ -993,8 +971,7 @@
 #---qualified min/maxcount... need to look into this
 
 #---hasValue
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:hasValue ?value
 } => {
 	{	?shape 	:targets ?i. 
@@ -1017,8 +994,7 @@
 	}
 }.	
 #---in
-{	?shape 	a 		sh:PropertyShape; 
-			sh:path ?prop; 
+{	?shape 	sh:path ?prop; 
 			sh:in 	?list
 } => {
 	{	?shape 	:targets ?i. 
@@ -1047,8 +1023,7 @@
 #------Logical Constraints
 
 #---and
-{	?shape 	a 		sh:PropertyShape; 
-			sh:path ?prop; 
+{	?shape 	sh:path ?prop; 
 			sh:and 	?list
 } => {
 	{	?shape 	:targets ?i.
@@ -1074,8 +1049,7 @@
 	}.
 }.
 #---or
-{	?shape 	a 		sh:PropertyShape; 
-			sh:path ?prop; 
+{	?shape 	sh:path ?prop; 
 			sh:or 	?list
 } => {
 	{	?shape :targets ?i.   
@@ -1111,8 +1085,7 @@
 	}.
 }.
 #---xone
-{	?shape 	a 			sh:PropertyShape; 
-			sh:path		?prop;
+{	?shape 	sh:path		?prop;
 			sh:xone 	?list
 } => {
 	{	?shape :targets ?i.
@@ -1163,8 +1136,7 @@
 	}
 }.
 #---closed
-{	?shape 	a 				sh:PropertyShape; 
-			sh:path  		?prop;
+{	?shape 	sh:path  		?prop;
 			sh:closed 		true.
     _:b log:notIncludes {?shape sh:ignoredProperties ?list}.
     (?props {?shape	sh:property ?value.
@@ -1191,9 +1163,8 @@
 			sh:value 						?toTest]
    	}
 }.
-        
-{	?shape 	a 				sh:PropertyShape;
-			sh:path  ?prop;
+############################################################
+{	?shape 	sh:path  ?prop;
 			sh:closed true;
     		sh:ignoredProperties ?list.
     (?props {?shape	sh:property ?value.

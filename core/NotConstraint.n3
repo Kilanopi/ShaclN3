@@ -12,8 +12,8 @@
 
 
 #---not
-{	?shape 	a 			sh:NodeShape;  
-			sh:not 		?vshape
+{	?shape 	sh:not 		?vshape.
+	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape 	:targets 	?i;
 				sh:not 		?vshape. 
@@ -39,8 +39,7 @@
 	}
 }.
 
-{	?shape 	a 			sh:PropertyShape;  
-			sh:path 	?prop; 
+{	?shape 	sh:path 	?prop; 
 			sh:not 		?vshape
 } => {
 	{	?shape :targets ?i;
