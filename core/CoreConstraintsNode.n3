@@ -525,6 +525,7 @@
 {	?shape 	sh:property ?pShape.
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
+	?pShape :wasPChildOf ?shape.
 	{	?shape 	:targets 	?i
 	} => {
 		?pShape :targets 	?i
@@ -591,18 +592,35 @@
 {	?shape 	sh:and 	?list.
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
-	{	?shape :targets ?i. 
-		?list list:iterate (?index ?value). 
-		?violation 	sh:focusNode 	?i; 
-					sh:sourceShape 	?value
+	{	?shape :targets ?i.   
+		?list list:iterate (?index ?value).		 
+		(?violation {?violation  sh:sourceShape ?value;
+                                 sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
 	} => {
-		[ 	a 								sh:ValidationResult; 
+		?nlist ?i ?list.
+	}.
+    #################################
+	{	?shape :targets ?i.   
+		?list list:iterate (?index ?value).		 
+		?pShape :wasPChildOf ?value.
+		(?violation {?i ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?i ?list.
+	}.
+	#################################
+    {   ?shape :targets ?i.   
+        (?flist {?nlist ?i ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?vlength math:greaterThan 0
+    } => {
+        [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
-	}.
+			sh:value 						?i;
+			sh:detail						?vlist]
+    }.
 	#####################
 	{	?shape :targets ?i.
 		?list list:iterate (?index ?value) 
@@ -621,11 +639,19 @@
 		(?violation {?violation  sh:sourceShape ?value;
                                  sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist :orcomp ?list.
+		?nlist ?i ?list.
+	}.
+	#################################
+	{	?shape :targets ?i.   
+		?list list:iterate (?index ?value).		 
+		?pShape :wasPChildOf ?value.
+		(?violation {?i ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?i ?list.
 	}.
     #################################
     {   ?shape :targets ?i.   
-        (?flist {?nlist :orcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?i ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -635,7 +661,8 @@
 			sh:sourceConstraintComponent 	sh:OrConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
+			sh:value 						?i;
+			sh:detail						?vlist]
     }.
 	#####################
 	{	?shape :targets ?i.
@@ -653,11 +680,19 @@
 		(?violation {?violation  sh:sourceShape ?value;
                                  sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist :xcomp ?list.
+		?nlist ?i ?list.
+	}.
+	#################################
+	{	?shape :targets ?i.   
+		?list list:iterate (?index ?value).		 
+		?pShape :wasPChildOf ?value.
+		(?violation {?i ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?i ?list.
 	}.
     #################################
     {   ?shape :targets ?i.   
-        (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?i ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -667,11 +702,12 @@
 			sh:sourceConstraintComponent 	sh:XoneConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
+			sh:value 						?i;
+			sh:detail						?vlist]
     }.
 	#################################
     {   ?shape :targets ?i.   
-        (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?i ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         (?llength -1) math:sum ?mllength.
@@ -682,7 +718,8 @@
 			sh:sourceConstraintComponent 	sh:XoneConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
+			sh:value 						?i;
+			sh:detail						?vlist]
     }.
 	#####################
 	{	?shape :targets ?i.

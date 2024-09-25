@@ -771,6 +771,7 @@
 {	?shape 	sh:path 	?prop; 
 			sh:property ?pShape.
 } => {
+	?pShape :wasPChildOf ?shape.
 	{	?shape 	:targets 	?i.
 		?i ?prop ?toTest.
 	} => {
@@ -847,32 +848,50 @@
 }.	
 
 #------Logical Constraints
-
 #---and
 {	?shape 	sh:path ?prop; 
 			sh:and 	?list
 } => {
-	{	?shape 	:targets ?i.
-		?i ?prop ?toTest. 
-		?list list:iterate (?index ?value). 
-		?violation 	sh:focusNode   ?toTest; 
-					sh:sourceShape ?value 
+	{	?shape :targets ?i.   
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).		 
+		(?violation {?violation  sh:sourceShape ?value;
+                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation;  
-			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
-			sh:sourceShape 					?shape; 		
-			sh:focusNode 					?i; 
-			sh:resultPath 					?prop; 
-			sh:value 						?toTest]
+		?nlist ?toTest ?list.
 	}.
-	###############################
-	{	?shape 	:targets ?i. 
+    #################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).		 
+		?pShape :wasPChildOf ?value.
+		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?toTest ?list.
+	}.
+	#################################
+    {   ?shape :targets ?i.
+		?i ?prop ?toTest.
+        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?vlength math:greaterThan 0
+    } => {
+        [ 	a 								sh:ValidationResult;
+			sh:resultSeverity 				sh:Violation;
+			sh:sourceConstraintComponent 	sh:AndConstraintComponent;
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:detail						?vlist]
+    }.
+	#####################
+	{	?shape :targets ?i.
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value) 
 	} => {
 		?value :targets ?toTest
-	}.
+	}
 }.
 #---or
 {	?shape 	sh:path ?prop; 
@@ -884,12 +903,21 @@
 		(?violation {?violation  sh:sourceShape ?value;
                                  sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist :orcomp ?list.
+		?nlist ?toTest ?list.
+	}.
+	#################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).		 
+		?pShape :wasPChildOf ?value.
+		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?toTest ?list.
 	}.
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
-        (?flist {?nlist :orcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -899,8 +927,9 @@
 			sh:sourceConstraintComponent 	sh:OrConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:resultPath 					?prop; 
-			sh:value 						?toTest]
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:detail						?vlist]
     }.
 	#################################
 	{	?shape 	:targets ?i. 
@@ -920,12 +949,21 @@
 		(?violation {?violation  sh:sourceShape ?value;
                                  sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist :xcomp ?list.
+		?nlist ?toTest ?list.
+	}.
+	#################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).		 
+		?pShape :wasPChildOf ?value.
+		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?toTest ?list.
 	}.
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.    
-        (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -934,13 +972,15 @@
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:XoneConstraintComponent; 
 			sh:sourceShape 					?shape; 
-			sh:focusNode 					?toTest; 
-			sh:value 						?toTest]
+			sh:focusNode 					?toTest;
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:detail						?vlist]
     }.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.    
-        (?flist {?nlist :xcomp ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         (?llength -1) math:sum ?mllength.
@@ -950,8 +990,10 @@
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:XoneConstraintComponent; 
 			sh:sourceShape 					?shape; 
-			sh:focusNode 					?toTest; 
-			sh:value 						?toTest]
+			sh:focusNode 					?toTest;
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:detail						?vlist]
     }.
 	#####################
 	{	?shape :targets ?i. 
