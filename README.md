@@ -1,11 +1,25 @@
-# Something something Shacl validator with N3 Logic (under construction)
+# SHACL validation with N3 Logic
 
-EYE Reasoner required for use (script for ease of use will follow)
+This is a project that aims to create a translation of SHACL into N3 Logic by reasoning on SHACL documents.
 
-command i use to execute: 
+The idea is that you can input a SHACL document into this and get a set of N3 rules that, when applied via a reasoner on a data graph, will output a SHACL validation report.
 
-```eye CoreConstraintsNode.n3 CoreConstraintsProp.n3 targeting.n3 NotConstraint.n3 data.n3 shacl.n3 --pass-only-new --nope --quiet```
+The EYE Reasoner required to use this.
+LINK: https://github.com/eyereasoner/eye
 
-with data.n3 being your data graph and shacl.n3 being your shacl shape graph (turtle files)
+HOW TO USE:
+You can use the shell script in the repository and call it with your SHACL document as (first) argument.
+Example:
+```./transl.sh MySHACLdocument.n3```
 
-Note: I will make the output more readable asap
+IMPORTANT NOTES:
+
+-I will make the output more readable asap
+-In case anyone looks at the code itself: change your tab size to 4 for readability
+-some functionality is still WIP and may currently not work correctly or at all, this includes but is not limited to:
+    -(self-)recursive Shapes
+    -Shapes with multiple logical constraints
+    -resultSeverity
+    -minor scope violations for multiple constraints (e.g sh:languageIn demanding literals)
+    -all cardinality constraints (i.e all "qualified" shapes)
+    -interaction with most propertypath types (e.g alternative path)

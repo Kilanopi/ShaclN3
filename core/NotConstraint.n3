@@ -15,55 +15,81 @@
 {	?shape 	sh:not 		?vshape.
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
-	{	?shape 	:targets 	?i;
-				sh:not 		?vshape. 
-		("Value does have shape " ?vshape) string:concatenation ?message.  
-		_:b log:notIncludes {?violation a 				sh:ValidationResult; 			#THIS DOESNT WORK; CHANGE TO WORK SIMMILAR TO AND notIncludes ASAP
-										sh:focusNode 	?i; 
-										sh:sourceShape 	?vshape}
+	{	?shape :targets ?i.   	 
+		(?violation {?violation  sh:sourceShape ?vshape;
+                                 sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
 	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation;
-			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
+		?nlist ?i ?list.
+	}.
+    #################################
+	{	?shape :targets ?i.   	 
+		?pShape :wasPChildOf ?value.
+		(?violation {?i ?vShape ?violation} ?nlist) log:collectAllIn ?scope. 
+	} => {
+		?nlist ?i ?list.
+	}.
+	#################################
+    {   ?shape :targets ?i.
+		("Value does have shape " ?vshape) string:concatenation ?message.
+        (?flist {?nlist ?i ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?vlength math:lessThan 1
+    } => {
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:resultPath 					?prop; 
 			sh:value 						?i;
-			sh:resultMessage 				?message]
-	}.
+			sh:detail						?vlist;
+			sh:resultMessage				?message]
+    }.
 	#####################
-	{	?shape 	:targets 	?i;
-				sh:not 		?vshape.
+	{	?shape	:targets ?i.
 	} => {
 		?vshape :targets ?i;
 	}
 }.
-
+####################################
 {	?shape 	sh:path 	?prop; 
 			sh:not 		?vshape
 } => {
-	{	?shape :targets ?i;
-			   sh:not 	?vshape.  
-		("Value does have shape " ?vshape) string:concatenation ?message. 
-		?i ?prop ?toTest. 
-		_:b log:notIncludes {?violation a 				sh:ValidationResult; 
-										sh:focusNode 	?toTest; 
-										sh:sourceShape 	?vshape}
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.	 
+		(?violation {?violation  sh:sourceShape ?vshape;
+                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation;
-			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
-			sh:sourceShape 					?shape ;
-			sh:focusNode 					?i; 
-			sh:resultPath 					?prop; 
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
+		?nlist ?toTest ?list.
 	}.
-	######################
-	{	?shape :targets 	?i;
-			   sh:not 		?vshape.  
-		?i ?prop ?toTest
+    #################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?pShape :wasPChildOf ?value.
+		(?violation {?toTest ?vShape ?violation} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?vshape :targets ?toTest
+		?nlist ?toTest ?list.
+	}.
+	#################################
+    {   ?shape :targets ?i.
+		?i ?prop ?toTest.
+		("Value does have shape " ?vshape) string:concatenation ?message.
+        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?vlength math:lessThan 1
+    } => {
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?toTest;
+			sh:detail						?vlist;
+			sh:resultMessage				?message]
+    }.
+	#####################
+	{	?shape	:targets ?i.
+		?i ?prop ?toTest.	
+	} => {
+		?vshape :targets ?toTest;
 	}
 }.
