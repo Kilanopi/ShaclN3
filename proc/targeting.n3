@@ -6,8 +6,11 @@
 #---targetNode
 {   ?shape sh:targetNode ?node
 } => {
-    ?shape :targets ?node. 
-    ?shape :Otargets ?node
+    {   ?node ?exists ?atALL
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
 }.
 #---targetClass
 {   ?shape sh:targetClass ?class. 
