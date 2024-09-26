@@ -8,13 +8,13 @@ The EYE Reasoner required to use this.
 LINK: https://github.com/eyereasoner/eye
 
 HOW TO USE:
-You can use the shell script transl.sh in the repository and call it with your SHACL document as (first) argument.
+You can use the shell script transl.sh in the repository and call it with your SHACL document as (first) argument. <br/>
 Example:
 ```./transl.sh MySHACLdocument.n3```
 <br/>
-I also provided a shell script for applying a translated SHACL document do a data graph cleanly via EYE.
-It takes a translated SHACL document (translated.n3) as its first argument and applies it to the datagraph it is given as a second argument.
-This wasn't tested on large datasets. Its purpose is to unclutter the output to get just the SHACL validationreport as you would from a SHACL validator.
+I also provided a shell script for applying a translated SHACL document do a data graph cleanly via EYE. <br/>
+It takes a translated SHACL document (translated.n3) as its first argument and applies it to the datagraph it is given as a second argument. <br/>
+This wasn't tested on large datasets. Its purpose is to unclutter the output to get just the SHACL validationreport as you would from a SHACL validator. <br/>
 EXAMPLE:
 ```./applyClean.sh translated.n3 MyDataGraph.n3```
 
