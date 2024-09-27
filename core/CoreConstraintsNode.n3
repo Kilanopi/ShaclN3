@@ -11,13 +11,15 @@
 
 #some weird interaction between targetclass and implicit class targets (testcase class002)
 
-#Max and Min Exclusive only work when the difference is above 0.00001... should change that
+#Max and Min Exclusive only work when the difference is above 0.00001... should change that, also check for non number literal
+
+#Min MAx length can check nunmbers for some reason... also check for notIRI and Blank
+
+
 
 #languageIn needs check for literal
 
 #pattern needs check for notBlankNode, and need to look into $flags
-
-#min,maxLength need checks for notBlankNode, also "string representation of IRI"?
 
 #look into lessThan and lessThanOrEquals for accuracy
 
@@ -248,7 +250,7 @@
 #---minExclusive
 {	?shape 	sh:minExclusive ?value.
 	_:b log:notIncludes {?shape sh:path _:egal}.
-	(?value -0.00001) math:sum ?result
+	(?value 0.00001) math:sum ?result
 } => {
 	{	?shape :targets ?i. 
 		("Value is not > " ?value) string:concatenation ?message. 

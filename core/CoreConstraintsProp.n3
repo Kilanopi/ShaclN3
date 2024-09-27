@@ -314,7 +314,7 @@
 #---minExclusive
 {	?shape 	sh:path 		?prop; 
 			sh:minExclusive ?value. 
-	(?value -0.00001) math:sum ?result
+	(?value 0.00001) math:sum ?result
 } => {
 	{	?shape :targets ?i.
 		("Value is not > " ?value) string:concatenation ?message. 
