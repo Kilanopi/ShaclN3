@@ -7,6 +7,11 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
 #TODO
+#I made a really crude fix for TargetNode targeting non existent Nodes... only "works" when people use applyClean.sh or have :please :apply :clean triple in their data
+
+#some weird interaction between targetclass and implicit class targets (testcase class002)
+
+
 #languageIn needs check for literal
 
 #pattern needs check for notBlankNode, and need to look into $flags

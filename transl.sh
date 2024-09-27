@@ -3,6 +3,7 @@
 # translating a SHACL file into N3 rules
 #
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+curr=$( pwd) 
 
 if [[ $1 ]] && [ -f $1 ]; then
     echo "Working with $1"
@@ -19,6 +20,8 @@ if [[ $1 ]] && [ -f $1 ]; then
     echo "--------------------------------------------------------"
     cat translated.n3
     echo "--------------------------------------------------------"
+    echo "DONE!"
+    echo "you can find your translated SHACL document under $curr/translated.n3"
 else
     echo "pass a SHACL document as the first argument"
 fi

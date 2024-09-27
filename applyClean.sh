@@ -7,7 +7,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 if [[ $1 ]] && [[ $2 ]] && [ -f $1 ] && [ -f $2 ]; then
     echo "Working with $1 and $2"
     echo "--------------------------------------------------------"
-    eye $1 $2 --pass-only-new --nope --quiet > output.n3
+    eye $1 $2 $SCRIPT_DIR/proc/applyclean.n3 --pass-only-new --nope --quiet > output.n3
     echo "output of $1 on $2 created under output.n3:"
     echo "--------------------------------------------------------"
     cat output.n3

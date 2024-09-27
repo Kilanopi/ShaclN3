@@ -1,3 +1,4 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix : <http://example.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
@@ -5,11 +6,22 @@
 #---targetNode
 {   ?shape sh:targetNode ?node
 } => {
+    {   ?node a ?someClass. 
+        ?someClass rdfs:subClassOf ?otherClass
+    } => {
+        ?node a ?otherClass
+    }.
     {   ?node ?exists ?atALL
     } => {
         ?shape :targets ?node. 
         ?shape :Otargets ?node
-    }
+    }.
+    {   _:b log:notIncludes {?node ?exists ?atALL}.
+        :please :apply :clean
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }.
 }.
 #---targetClass
 {   ?shape sh:targetClass ?class. 
@@ -18,11 +30,7 @@
         ?someClass rdfs:subClassOf ?otherClass
     } => {
         ?node a ?otherClass
-    }
-}. 
-##########
-{   ?shape sh:targetClass ?class. 
-} => {
+    }.
     {   ?node a ?class
     } => {
         ?shape :targets ?node. 
