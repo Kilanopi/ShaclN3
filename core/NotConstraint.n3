@@ -15,25 +15,25 @@
 		(?violation {?violation  sh:sourceShape ?vshape;
                                  sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist ?i ?list.
+		?nlist ?i ?vshape.
 	}.
     #################################
 	{	?shape :targets ?i.   	 
-		?pShape :wasPChildOf ?value.
-		(?violation {?i ?vShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?pShape :wasPChildOf ?vshape.
+		(?violation {?i ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist ?i ?list.
+		?nlist ?i ?vshape.
 	}.
 	#################################
     {   ?shape :targets ?i.
 		("Value does have shape " ?vshape) string:concatenation ?message.
-        (?flist {?nlist ?i ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?i ?vshape. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:lessThan 1
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
-			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
+			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i;
@@ -55,27 +55,27 @@
 		(?violation {?violation  sh:sourceShape ?vshape;
                                  sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist ?toTest ?list.
+		?nlist ?toTest ?vshape.
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
-		?pShape :wasPChildOf ?value.
-		(?violation {?toTest ?vShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?pShape :wasPChildOf ?vshape.
+		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
 	} => {
-		?nlist ?toTest ?list.
+		?nlist ?toTest ?vshape.
 	}.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does have shape " ?vshape) string:concatenation ?message.
-        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?flist {?nlist ?toTest ?vshape. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:lessThan 1
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
-			sh:sourceConstraintComponent 	sh:AndConstraintComponent; 
+			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?toTest;
