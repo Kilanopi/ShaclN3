@@ -446,7 +446,21 @@
 			sh:focusNode 					?i; 
 			sh:value 						?i;
 			sh:resultMessage 				?message]
-	}
+	}.
+	{	?shape :targets ?i. 
+		("Must have the same values as " ?value) string:concatenation ?message. 
+		?i ?value ?i.
+		?i ?value ?wasAnderes.
+		?wasAnderes log:notEqualTo ?i.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:EqualsConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
 }.	
 #---disjoint
 {	?shape 	sh:disjoint ?value.
