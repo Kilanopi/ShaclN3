@@ -735,22 +735,23 @@
              ?value	sh:path   	?props      } ?plist) log:collectAllIn ?scope.
 } => {
 	{	?shape :targets ?i.
-    	?i ?tprop _:egal.
+    	?i ?tprop ?egal.
     	?plist list:member ?tprop.
     }=>{
-      	?i ?plist ?tprop
+      	?plist ?i ?tprop
     }.
   ########################
   	{	?shape :targets ?i.
-    	?i ?tprop _:egal.
-    	_:b log:notIncludes {?i ?plist ?tprop}
+    	?i ?tprop ?egal.
+    	_:b log:notIncludes {?plist ?i ?tprop}
     }=>{
       	[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:ClosedConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
+			sh:value 						?egal;
+			sh:resultPath 					?tprop]
    	}
 }.
 ################################################################
@@ -762,21 +763,22 @@
     (?vplist ?list) list:append ?plist.
 } => {
 	{	?shape :targets ?i.
-    	?i ?tprop _:egal.
+    	?i ?tprop ?egal.
     	?plist list:member ?tprop.
     }=>{
-      	?i ?plist ?tprop
+      	?plist ?i ?tprop
     }.
   ########################
   	{	?shape :targets ?i.
-    	?i ?tprop _:egal.
-    	_:b log:notIncludes {?i ?plist ?tprop}
+    	?i ?tprop ?egal.
+    	_:b log:notIncludes {?plist ?i  ?tprop}
     }=>{
       	[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:ClosedConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
+			sh:value 						?egal;
+			sh:resultPath 					?tprop;]
    	} 
 }.
