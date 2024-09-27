@@ -11,6 +11,7 @@
 
 #some weird interaction between targetclass and implicit class targets (testcase class002)
 
+#Max and Min Exclusive only work when the difference is above 0.00001... should change that
 
 #languageIn needs check for literal
 
@@ -199,7 +200,7 @@
 } => {
 	{	?shape :targets ?i. 
 		("Value is not <= " ?value) string:concatenation ?message. 
-		?toTest math:greaterThan ?value.
+		?i math:greaterThan ?value.
 		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -213,7 +214,7 @@
 	###########################
 	{	?shape :targets ?i. 
 		("Value is not <= " ?value) string:concatenation ?message. 
-		?toTest string:greaterThan ?value.
+		?i string:greaterThan ?value.
 		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -247,11 +248,11 @@
 #---minExclusive
 {	?shape 	sh:minExclusive ?value.
 	_:b log:notIncludes {?shape sh:path _:egal}.
-	(?value -1) math:sum ?result
+	(?value -0.00001) math:sum ?result
 } => {
 	{	?shape :targets ?i. 
 		("Value is not > " ?value) string:concatenation ?message. 
-		?toTest math:lessThan ?result.
+		?i math:lessThan ?result.
 		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -265,7 +266,7 @@
 	#######################
 	{	?shape :targets ?i. 
 		("Value is not > " ?value) string:concatenation ?message. 
-		?toTest string:lessThan ?result.
+		?i string:lessThan ?result.
 		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -299,11 +300,11 @@
 #---maxExclusive
 {	?shape 	sh:maxExclusive ?value.
 	_:b log:notIncludes {?shape sh:path _:egal}.
-	(?value -1) math:sum ?result
+	(?value -0.00001) math:sum ?result
 } => {
 	{	?shape :targets ?i. 
 		("Value is not < " ?value) string:concatenation ?message. 
-		?toTest math:greaterThan ?result.
+		?i math:greaterThan ?result.
 		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -317,7 +318,7 @@
 	###########################
 	{	?shape :targets ?i. 
 		("Value is not < " ?value) string:concatenation ?message. 
-		?toTest string:greaterThan ?result.
+		?i string:greaterThan ?result.
 		?i :testDPos :lit
 	} => {
 		[ 	a 								sh:ValidationResult; 
