@@ -170,7 +170,8 @@
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:MinCountConstraintComponent;
 			sh:sourceShape 					?shape;
-			sh:focusNode 					?i; 
+			sh:focusNode 					?i;
+			sh:value 						?list; 
 			sh:resultPath 					?prop;
 			sh:resultMessage 				?message]
 	}
@@ -189,7 +190,8 @@
 			sh:resultSeverity 				sh:Violation;  
 			sh:sourceConstraintComponent 	sh:MaxCountConstraintComponent;
 			sh:sourceShape 					?shape;
-			sh:focusNode 					?i; 
+			sh:focusNode 					?i;
+			sh:value 						?list;
 			sh:resultPath 					?prop;
 			sh:resultMessage 				?message]
 	}
@@ -538,7 +540,8 @@
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:UniqueLangConstraintComponent; 
 			sh:sourceShape 					?shape;
-			sh:focusNode 					?i; 
+			sh:focusNode 					?i;
+			sh:value 						?toTest;
 			sh:resultPath 					?prop;
 			sh:resultMessage 				?message]
 	}
@@ -811,7 +814,8 @@
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:HasValueConstraintComponent; 
 			sh:sourceShape 					?shape;
-			sh:focusNode 					?i; 
+			sh:focusNode 					?i;
+			sh:value 						?i;
 			sh:resultPath 					?prop;
 			sh:resultMessage 				?message]
 	}
@@ -868,6 +872,7 @@
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
+		("Value does not have all the shapes in " ?list) string:concatenation ?message. 
         (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:greaterThan 0
@@ -879,7 +884,8 @@
 			sh:focusNode 					?i;
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist]
+			sh:detail						?vlist;
+			sh:resultMessage 				?message]
     }.
 	#####################
 	{	?shape :targets ?i.
@@ -913,6 +919,7 @@
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
+		("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
         (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
@@ -925,7 +932,8 @@
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist]
+			sh:detail						?vlist;
+			sh:resultMessage 				?message]
     }.
 	#################################
 	{	?shape 	:targets ?i. 
@@ -958,7 +966,8 @@
 	}.
     #################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.    
+		?i ?prop ?toTest.
+		("Value does not have only one of the shapes in " ?list) string:concatenation ?message. 
         (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
@@ -971,11 +980,13 @@
 			sh:focusNode 					?toTest;
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist]
+			sh:detail						?vlist;
+			sh:resultMessage 				?message]
     }.
 	#################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.    
+		?i ?prop ?toTest.  
+		("Value does not have only one of the shapes in " ?list) string:concatenation ?message.  
         (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
@@ -989,7 +1000,8 @@
 			sh:focusNode 					?toTest;
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist]
+			sh:detail						?vlist;
+			sh:resultMessage 				?message]
     }.
 	#####################
 	{	?shape :targets ?i. 
@@ -1016,6 +1028,7 @@
   ########################
   	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
+		("Value should be closed") string:concatenation ?message.
     	?toTest ?tprop ?egal.
     	_:b log:notIncludes {?plist ?toTest ?tprop}
     }=>{
@@ -1025,7 +1038,8 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?toTest; 
 			sh:value 						?egal;
-			sh:resultPath 					?tprop]
+			sh:resultPath 					?tprop;
+			sh:resultMessage 				?message]
    	}
 }.
 ############################################################
@@ -1046,6 +1060,7 @@
   ########################
   	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
+		("Value should be closed") string:concatenation ?message.
     	?toTest ?tprop ?egal.
     	_:b log:notIncludes {?plist ?toTest ?tprop}
     }=>{
@@ -1055,6 +1070,7 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?toTest; 
 			sh:value 						?egal;
-			sh:resultPath 					?tprop]
+			sh:resultPath 					?tprop;
+			sh:resultMessage 				?message]
    	} 
 }.

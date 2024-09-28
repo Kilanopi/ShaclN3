@@ -562,6 +562,52 @@
 	} => {
 		?i ?pShape ?violation
 	}.
+	#############################
+	{	?pShape :wasPChildOf ?shape.
+		?shape :targets ?i.
+		?i ?pShape ?violation.
+		?violation 	a 								?restype; 
+					sh:resultSeverity 				?resSev; 
+					sh:sourceConstraintComponent 	?resComp; 
+					sh:sourceShape 					?pShape; 
+					sh:focusNode 					?resNode;
+					sh:value 						?resVal;
+					sh:resultMessage 				?resMess;
+					sh:resultPath					?resPath.
+	} => {
+		?newViolation 	a 								?restype; 
+						sh:resultSeverity 				?resSev; 
+						sh:sourceConstraintComponent 	?resComp; 
+						sh:sourceShape 					?shape; 
+						sh:focusNode 					?resNode;
+						sh:value 						?resVal;
+						sh:resultMessage 				?resMess;
+						sh:resultPath					?resPath.
+	}.
+	############################
+	{	?pShape :wasPChildOf ?shape.
+		?shape :targets ?i.
+		?i ?pShape ?violation.
+		?violation 	a 								?restype; 
+					sh:resultSeverity 				?resSev; 
+					sh:sourceConstraintComponent 	?resComp; 
+					sh:sourceShape 					?pShape; 
+					sh:focusNode 					?resNode;
+					sh:value 						?resVal;
+					sh:resultMessage 				?resMess;
+					sh:resultPath					?resPath;
+					sh:detail						?resDet.
+		?newViolation 	a 								?restype; 
+						sh:resultSeverity 				?resSev; 
+						sh:sourceConstraintComponent 	?resComp; 
+						sh:sourceShape 					?shape; 
+						sh:focusNode 					?resNode;
+						sh:value 						?resVal;
+						sh:resultMessage 				?resMess;
+						sh:resultPath					?resPath.
+	} => {
+		?newViolation sh:detail ?resDet.
+	}.
 }.
 
 #---qualified min/maxcount... need to look into this (valueshape not for NodeShapes per docs)
