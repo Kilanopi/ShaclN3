@@ -16,13 +16,14 @@
 
 #Min MAx length can check nunmbers for some reason... also check for notIRI and Blank
 
+#NOT constraint order is messed up again
+
+#pattern needs check for notBlankNode, and need to look into $flags... also it should apply to integer literals too
+
+#logical constraints vList concept is wrong... we collect ALL violations against the shapes in the list and check... but we should collect one violation PER shape in the list if it exists, and check
 
 
 #languageIn needs check for literal
-
-#pattern needs check for notBlankNode, and need to look into $flags
-
-#look into lessThan and lessThanOrEquals for accuracy
 
 #ResultSeverity can be overwritten, i just always give sh:Violation, should change that
 

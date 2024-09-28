@@ -3,14 +3,17 @@
 @prefix : <http://example.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
-#---targetNode
-{   ?shape sh:targetNode ?node
+{
 } => {
     {   ?node a ?someClass. 
         ?someClass rdfs:subClassOf ?otherClass
     } => {
         ?node a ?otherClass
     }.
+}.
+#---targetNode
+{   ?shape sh:targetNode ?node
+} => {
     {   ?node ?exists ?atALL
     } => {
         ?shape :targets ?node. 
@@ -26,11 +29,6 @@
 #---targetClass
 {   ?shape sh:targetClass ?class. 
 } => {
-    {   ?node a ?someClass. 
-        ?someClass rdfs:subClassOf ?otherClass
-    } => {
-        ?node a ?otherClass
-    }.
     {   ?node a ?class
     } => {
         ?shape :targets ?node. 
