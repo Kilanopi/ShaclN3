@@ -570,7 +570,7 @@
 					sh:resultSeverity 				?resSev; 
 					sh:sourceConstraintComponent 	?resComp; 
 					sh:sourceShape 					?pShape; 
-					sh:focusNode 					?resNode;
+					sh:focusNode 					?i;
 					sh:value 						?resVal;
 					sh:resultMessage 				?resMess;
 					sh:resultPath					?resPath.
@@ -579,7 +579,7 @@
 						sh:resultSeverity 				?resSev; 
 						sh:sourceConstraintComponent 	?resComp; 
 						sh:sourceShape 					?shape; 
-						sh:focusNode 					?resNode;
+						sh:focusNode 					?i;
 						sh:value 						?resVal;
 						sh:resultMessage 				?resMess;
 						sh:resultPath					?resPath.
