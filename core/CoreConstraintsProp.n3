@@ -890,25 +890,25 @@
 	{	?shape :targets ?i.   
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
-		(?violation {?violation  sh:sourceShape ?value;
-                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
+		?violation  sh:sourceShape ?value;
+                    sh:focusNode   ?toTest. 
 	} => {
-		?nlist ?toTest ?list.
+		?value ?toTest ?list.
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
 		?pShape :wasPChildOf ?value.
-		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?toTest ?pShape ?violation. 
 	} => {
-		?nlist ?toTest ?list.
+		?value ?toTest ?list.
 	}.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does not have all the shapes in " ?list) string:concatenation ?message. 
-        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:greaterThan 0
     } => {
@@ -919,7 +919,6 @@
 			sh:focusNode 					?i;
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist;
 			sh:resultMessage 				?message]
     }.
 	#####################
@@ -937,25 +936,25 @@
 	{	?shape :targets ?i.   
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
-		(?violation {?violation  sh:sourceShape ?value;
-                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
+		?violation  sh:sourceShape ?value;
+                    sh:focusNode   ?toTest. 
 	} => {
-		?nlist ?toTest ?list.
+		?value ?toTest ?list.
 	}.
-	#################################
+    #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
 		?pShape :wasPChildOf ?value.
-		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?toTest ?pShape ?violation. 
 	} => {
-		?nlist ?toTest ?list.
+		?value ?toTest ?list.
 	}.
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
-        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -967,7 +966,6 @@
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist;
 			sh:resultMessage 				?message]
     }.
 	#################################
@@ -982,28 +980,28 @@
 {	?shape 	sh:path		?prop;
 			sh:xone 	?list
 } => {
-	{	?shape :targets ?i.
-		?i ?prop ?toTest.    
+	{	?shape :targets ?i.   
+		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
-		(?violation {?violation  sh:sourceShape ?value;
-                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
+		?violation  sh:sourceShape ?value;
+                    sh:focusNode   ?toTest. 
 	} => {
-		?nlist ?toTest ?list.
+		?value ?toTest ?list.
 	}.
-	#################################
+    #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
 		?pShape :wasPChildOf ?value.
-		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?toTest ?pShape ?violation. 
 	} => {
-		?nlist ?toTest ?list.
+		?value ?toTest ?list.
 	}.
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does not have only one of the shapes in " ?list) string:concatenation ?message. 
-        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -1015,14 +1013,13 @@
 			sh:focusNode 					?toTest;
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist;
 			sh:resultMessage 				?message]
     }.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.  
 		("Value does not have only one of the shapes in " ?list) string:concatenation ?message.  
-        (?flist {?nlist ?toTest ?list. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         (?llength -1) math:sum ?mllength.
@@ -1035,7 +1032,6 @@
 			sh:focusNode 					?toTest;
 			sh:resultPath 					?prop;
 			sh:value 						?toTest;
-			sh:detail						?vlist;
 			sh:resultMessage 				?message]
     }.
 	#####################

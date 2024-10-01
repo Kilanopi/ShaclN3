@@ -12,22 +12,22 @@
 	_:b log:notIncludes {?shape sh:path _:egal}
 } => {
 	{	?shape :targets ?i.   	 
-		(?violation {?violation  sh:sourceShape ?vshape;
-                                 sh:focusNode   ?i      } ?nlist) log:collectAllIn ?scope. 
+		?violation  sh:sourceShape ?vshape;
+                    sh:focusNode   ?i. 
 	} => {
-		?nlist ?i ?vshape.
+		?violation ?i ?vshape.
 	}.
     #################################
 	{	?shape :targets ?i.   	 
 		?pShape :wasPChildOf ?vshape.
-		(?violation {?i ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?i ?pShape ?violation. 
 	} => {
-		?nlist ?i ?vshape.
+		?violation ?i ?vshape.
 	}.
 	#################################
     {   ?shape :targets ?i.
 		("Value does have shape " ?vshape) string:concatenation ?message.
-        (?flist {?nlist ?i ?vshape. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?violation {?violation ?i ?vshape} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:lessThan 1
     } => {
@@ -52,24 +52,24 @@
 } => {
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.	 
-		(?violation {?violation  sh:sourceShape ?vshape;
-                                 sh:focusNode   ?toTest} ?nlist) log:collectAllIn ?scope. 
+		?violation  sh:sourceShape ?vshape;
+                    sh:focusNode   ?toTest. 
 	} => {
-		?nlist ?toTest ?vshape.
+		?violation ?toTest ?vshape.
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
 		?pShape :wasPChildOf ?vshape.
-		(?violation {?toTest ?pShape ?violation} ?nlist) log:collectAllIn ?scope. 
+		?toTest ?pShape ?violation. 
 	} => {
-		?nlist ?toTest ?vshape.
+		?violation ?toTest ?vshape.
 	}.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does have shape " ?vshape) string:concatenation ?message.
-        (?flist {?nlist ?toTest ?vshape. ?nlist list:first ?flist} ?vlist) log:collectAllIn ?scope. 
+        (?violation {?violation ?toTest ?vshape} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:lessThan 1
     } => {

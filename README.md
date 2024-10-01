@@ -19,6 +19,7 @@ EXAMPLE:
 ```./applyClean.sh translated.n3 MyDataGraph.n3```
 
 IMPORTANT NOTES:
+-This will not function properly if you do not seperate your data graph from your shacl graph!! <br/>
 -In case anyone looks at the code itself: change your tab size to 4 for readability <br/>
 -some functionality is still WIP and may currently not work correctly or at all, this includes but is not limited to: <br/>
     -(self-)recursive Shapes <br/>
