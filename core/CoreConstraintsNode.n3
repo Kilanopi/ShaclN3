@@ -376,6 +376,25 @@
 			sh:focusNode 					?i; 
 			sh:value 						?i;
 			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		?i log:rawType log:Literal
+	} => {
+		?i :testDPos :lit
+	}.
+	#########################
+	{	?shape :targets ?i. 
+		("Value has less than " ?value " characters") string:concatenation ?message. 
+		_:b log:notIncludes {?i :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinLengthConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
+			sh:resultMessage 				?message]
 	}
 }.	 
 #---maxLength
@@ -394,6 +413,25 @@
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i; 
 			sh:value 						?i;
+			sh:resultMessage 				?message]
+	}.
+	##########################
+	{	?shape :targets ?i. 
+		?i log:rawType log:Literal
+	} => {
+		?i :testDPos :lit
+	}.
+	#########################
+	{	?shape :targets ?i. 
+		("Value has more than " ?value " characters") string:concatenation ?message. 
+		_:b log:notIncludes {?i :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxLengthConstraintComponent;
+			sh:sourceShape 					?shape; 
+			sh:value 						?i;
+			sh:focusNode 					?i; 
 			sh:resultMessage 				?message]
 	}
 }.	 

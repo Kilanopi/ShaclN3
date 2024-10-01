@@ -437,7 +437,29 @@
 			sh:resultPath 					?prop; 
 			sh:value 						?toTest;
 			sh:resultMessage 				?message]
-	}
+	}.
+	###############
+ 	{	?shape :targets ?i. 
+  		?i ?prop ?toTest. 
+  		?toTest log:rawType log:Literal
+ 	} => {
+		?toTest :testDPos :lit
+	}.
+	###########################
+	{	?shape  :targets ?i.
+		("Value has less than " ?value " characters") string:concatenation ?message.
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinLengthConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
 }.	
 #---maxLength
 {	?shape  sh:path 		?prop; 
@@ -458,7 +480,29 @@
 			sh:resultPath 					?prop; 
 			sh:value 						?toTest;
 			sh:resultMessage 				?message]
-	}
+	}.
+	###############
+ 	{	?shape :targets ?i. 
+  		?i ?prop ?toTest. 
+  		?toTest log:rawType log:Literal
+ 	} => {
+		?toTest :testDPos :lit
+	}.
+	###########################
+	{	?shape  :targets ?i.
+		("Value has more than " ?value " characters") string:concatenation ?message.
+		?i ?prop ?toTest. 
+		_:b log:notIncludes {?toTest :testDPos :lit}
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MaxLengthConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i; 
+			sh:resultPath 					?prop;
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
 }. 
 #---pattern
 {	?shape  sh:path 	?prop; 
