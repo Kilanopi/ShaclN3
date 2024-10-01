@@ -7,6 +7,8 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
 #TODO
+#need to test sh:class, now that I fill class hierarchy
+
 #I made a really crude fix for TargetNode targeting non existent Nodes... only "works" when people use applyClean.sh or have :please :apply :clean triple in their data
 
 #some weird interaction between targetclass and implicit class targets (testcase class002)
@@ -22,10 +24,13 @@
 
 #logical constraints vList concept is wrong... we collect ALL violations against the shapes in the list and check... but we should collect one violation PER shape in the list if it exists, and check
 
+#for closed i need to shuffle around the "message triples", so ?i isnt at the front anymore
+
+#revert Property violation copy and add a new thing to reportMaker
 
 #languageIn needs check for literal
 
-#ResultSeverity can be overwritten, i just always give sh:Violation, should change that
+#ResultSeverity can be overwritten, i just always give sh:Violation, should change that, aswell as message actually
 
 #--------Core Constraint Components
 #------Value Type Constraints
@@ -562,51 +567,11 @@
 	} => {
 		?i ?pShape ?violation
 	}.
-	#############################
+	##############################
 	{	?pShape :wasPChildOf ?shape.
-		?shape :targets ?i.
-		?i ?pShape ?violation.
-		?violation 	a 								?restype; 
-					sh:resultSeverity 				?resSev; 
-					sh:sourceConstraintComponent 	?resComp; 
-					sh:sourceShape 					?pShape; 
-					sh:focusNode 					?i;
-					sh:value 						?resVal;
-					sh:resultMessage 				?resMess;
-					sh:resultPath					?resPath.
+		:please :apply :clean.
 	} => {
-		?newViolation 	a 								?restype; 
-						sh:resultSeverity 				?resSev; 
-						sh:sourceConstraintComponent 	?resComp; 
-						sh:sourceShape 					?shape; 
-						sh:focusNode 					?i;
-						sh:value 						?resVal;
-						sh:resultMessage 				?resMess;
-						sh:resultPath					?resPath.
-	}.
-	############################
-	{	?pShape :wasPChildOf ?shape.
-		?shape :targets ?i.
-		?i ?pShape ?violation.
-		?violation 	a 								?restype; 
-					sh:resultSeverity 				?resSev; 
-					sh:sourceConstraintComponent 	?resComp; 
-					sh:sourceShape 					?pShape; 
-					sh:focusNode 					?resNode;
-					sh:value 						?resVal;
-					sh:resultMessage 				?resMess;
-					sh:resultPath					?resPath;
-					sh:detail						?resDet.
-		?newViolation 	a 								?restype; 
-						sh:resultSeverity 				?resSev; 
-						sh:sourceConstraintComponent 	?resComp; 
-						sh:sourceShape 					?shape; 
-						sh:focusNode 					?resNode;
-						sh:value 						?resVal;
-						sh:resultMessage 				?resMess;
-						sh:resultPath					?resPath.
-	} => {
-		?newViolation sh:detail ?resDet.
+		?pShape :wasApplyPChildOf ?shape.
 	}.
 }.
 

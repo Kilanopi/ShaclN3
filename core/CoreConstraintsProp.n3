@@ -6,21 +6,6 @@
 @prefix : <http://example.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
-#eye GB.n3 targeting.n3 data.n3 shacl.n3 --pass-only-new --nope --quiet
-
-#TODO
-#datatype gives violation when no datatype is given to a literal (e.g. :John :age 2 should be ok with sh:datatype xsd:integer for some reason)
-
-
-
-#languageIn needs check for literal
-
-#pattern needs check for notBlankNode, and need to look into $flags
-
-#min,maxLength need checks for notBlankNode, also "string representation of IRI"?
-
-#look into lessThan and lessThanOrEquals for accuracy
-
 #--------Core Constraint Components
 #------Value Type Constraints
 #---class
@@ -794,51 +779,9 @@
 	}.
 	#############################
 	{	?pShape :wasPChildOf ?shape.
-		?shape :targets ?i.
-		?i ?prop ?toTest.
-		?toTest ?pShape ?violation.
-		?violation 	a 								?restype; 
-					sh:resultSeverity 				?resSev; 
-					sh:sourceConstraintComponent 	?resComp; 
-					sh:sourceShape 					?pShape; 
-					sh:focusNode 					?toTest;
-					sh:value 						?resVal;
-					sh:resultMessage 				?resMess;
-					sh:resultPath					?resPath.
+		:please :apply :clean.
 	} => {
-		?newViolation 	a 								?restype; 
-						sh:resultSeverity 				?resSev; 
-						sh:sourceConstraintComponent 	?resComp; 
-						sh:sourceShape 					?shape; 
-						sh:focusNode 					?toTest;
-						sh:value 						?resVal;
-						sh:resultMessage 				?resMess;
-						sh:resultPath					?resPath.
-	}.
-	############################
-	{	?pShape :wasPChildOf ?shape.
-		?shape :targets ?i.
-		?i ?prop ?toTest.
-		?toTest ?pShape ?violation.
-		?violation 	a 								?restype; 
-					sh:resultSeverity 				?resSev; 
-					sh:sourceConstraintComponent 	?resComp; 
-					sh:sourceShape 					?pShape; 
-					sh:focusNode 					?toTest;
-					sh:value 						?resVal;
-					sh:resultMessage 				?resMess;
-					sh:resultPath					?resPath;
-					sh:detail						?resDet.
-		?newViolation 	a 								?restype; 
-						sh:resultSeverity 				?resSev; 
-						sh:sourceConstraintComponent 	?resComp; 
-						sh:sourceShape 					?shape; 
-						sh:focusNode 					?toTest;
-						sh:value 						?resVal;
-						sh:resultMessage 				?resMess;
-						sh:resultPath					?resPath.
-	} => {
-		?newViolation sh:detail ?resDet.
+		?pShape :wasApplyPChildOf ?shape.
 	}.
 }.
 

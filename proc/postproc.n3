@@ -15,6 +15,17 @@ _:report a sh:ValidationReport.
 }.
 
 {	?report a sh:ValidationReport.
+    ?shape :Otargets ?i.
+    ?pShape :wasApplyPChildOf ?shape.
+    ?violation  a               sh:ValidationResult;
+                sh:sourceShape  ?pShape;
+                sh:focusNode    ?i.
+} => {
+	?report sh:conforms false;
+            sh:result ?violation.
+}.
+
+{	?report a sh:ValidationReport.
     _:b log:notIncludes {?report sh:conforms false}
 } => {
 	?report sh:conforms true.
