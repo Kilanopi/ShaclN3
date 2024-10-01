@@ -468,7 +468,7 @@
 			sh:sourceConstraintComponent 	sh:EqualsConstraintComponent; 
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i; 
-			sh:value 						?i;
+			sh:value 						?wasAnderes;
 			sh:resultMessage 				?message]
 	}.
 }.	
