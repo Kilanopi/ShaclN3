@@ -1,0 +1,82 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://example.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+{
+} => {
+    {   ?node a ?someClass. 
+        ?someClass rdfs:subClassOf ?otherClass
+    } => {
+        ?node a ?otherClass
+    }.
+}.
+#---targetNode
+{   ?shape sh:targetNode ?node
+} => {
+    {   ?node ?exists ?atALL.
+        :please :apply :clean.
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }.
+    {   _:b log:notIncludes {?node ?exists ?atALL}.
+        :please :apply :clean
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }.
+}.
+#---targetClass
+{   ?shape sh:targetClass ?class. 
+} => {
+    {   ?node a ?class.
+        :please :apply :clean.
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#---implicit Class Targets          #THESE ONLY WORK IN CASE THE SHAPE HAS THE OTHERWISE OPTIONAL DECLARATION a sh:NodeShape OR a sh:PropertyShape
+{   ?shape  a   sh:NodeShape, 
+                rdfs:Class.
+} => {
+    {
+        ?node a ?shape.
+        :please :apply :clean.
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+##################
+{   ?shape  a   sh:PropertyShape, 
+                rdfs:Class.
+} => {
+    {   ?node a ?shape.
+        :please :apply :clean.
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#---targetSubjectsOf
+{   ?shape sh:targetSubjectsOf ?predicate.
+} => {
+    {   ?node ?predicate _:egal.
+        :please :apply :clean.
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.
+#---targetObjectsOf
+{   ?shape sh:targetObjectsOf ?predicate.
+} => {
+    {   _:egal ?predicate ?node.
+        :please :apply :clean.
+    } => {
+        ?shape :targets ?node. 
+        ?shape :Otargets ?node
+    }
+}.

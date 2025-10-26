@@ -1,0 +1,27 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+{  ?something a sh:ValidationReport
+} => {
+    ?something a sh:ValidationReport
+}.
+
+{   ?something a sh:ValidationReport.
+    ?something sh:conforms ?egal
+} => {
+    ?something sh:conforms ?egal
+}.
+
+{   ?something a sh:ValidationReport.
+    ?egal a sh:ValidationResult.
+    ?something sh:result ?egal
+} => {
+    ?something sh:result ?egal
+}.
+
+{   ?something a sh:ValidationReport.
+    ?egal a sh:ValidationResult.
+    ?something sh:result ?egal.
+    ?egal ?pred ?obj.
+} => {
+    ?egal ?pred ?obj.
+}.

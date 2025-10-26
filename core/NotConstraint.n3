@@ -1,0 +1,93 @@
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <http://example.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+
+#---not
+{	?shape 	sh:not 		?vshape.
+	_:b log:notIncludes {?shape sh:path _:egal}
+} => {
+	{	?shape :targets ?i.   	 
+		?violation  sh:sourceShape ?vshape;
+                    sh:focusNode   ?i. 
+	} => {
+		?violation ?i ?vshape.
+	}.
+    #################################
+	{	?shape :targets ?i.   	 
+		?pShape :wasPChildOf ?vshape.
+		?i ?pShape ?violation. 
+	} => {
+		?violation ?i ?vshape.
+		:aaaaaaaaaaa ?violation ?i.
+	}.
+	#################################
+    {   ?shape :targets ?i.
+		("Value does have shape " ?vshape) string:concatenation ?message.
+        (?violation {?violation ?i ?vshape} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?vlength math:lessThan 1
+    } => {
+		?i :aaaaa ?vlist.
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?i;
+			sh:detail						?vlist;
+			sh:resultMessage				?message]
+    }.
+	#####################
+	{	?shape	:targets ?i.
+	} => {
+		?vshape :targets ?i;
+	}
+}.
+####################################
+{	?shape 	sh:path 	?prop; 
+			sh:not 		?vshape
+} => {
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.	 
+		?violation  sh:sourceShape ?vshape;
+                    sh:focusNode   ?toTest. 
+	} => {
+		?violation ?toTest ?vshape.
+	}.
+    #################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?pShape :wasPChildOf ?vshape.
+		?toTest ?pShape ?violation. 
+	} => {
+		?violation ?toTest ?vshape.
+	}.
+	#################################
+    {   ?shape :targets ?i.
+		?i ?prop ?toTest.
+		("Value does have shape " ?vshape) string:concatenation ?message.
+        (?violation {?violation ?toTest ?vshape} ?vlist) log:collectAllIn ?scope. 
+        ?vlist list:length ?vlength.
+        ?vlength math:lessThan 1
+    } => {
+        [ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?toTest;
+			sh:detail						?vlist;
+			sh:resultMessage				?message]
+    }.
+	#####################
+	{	?shape	:targets ?i.
+		?i ?prop ?toTest.	
+	} => {
+		?vshape :targets ?toTest;
+	}
+}.
