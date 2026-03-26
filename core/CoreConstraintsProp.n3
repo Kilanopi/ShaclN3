@@ -10,6 +10,7 @@
 } => {
 	{	?shape :needs :Nodekind;
 			   sh:path  ?prop. 
+		_:shac log:notIncludes {:please :apply :clean}
 	} => {
 		{	?shape :targets ?i.
 			?i ?prop ?toTest. 
@@ -275,7 +276,7 @@
 	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		("Node is not >= " ?value) string:concatenation ?message. 
-		?i math:lessThan ?value.
+		?toTest math:lessThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -327,7 +328,7 @@
 	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		("Node is not <= " ?value) string:concatenation ?message. 
-		?i math:greaterThan ?value.
+		?toTest math:greaterThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -587,7 +588,7 @@
 
 #---maxLength
 {	?shape 	sh:path 		?prop; 
-			sh:minLength 	?value. 
+			sh:maxLength 	?value. 
 } => {
 	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
@@ -732,7 +733,7 @@
 	}.
 	##########																
 	{	?shape  :targets ?i. 
-		("Language does not match any of " ?list) string:concatenation ?message. 
+		#("Language does not match any of " ?list) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :langPos ?list}
 	} => {
@@ -742,8 +743,8 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop; 
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
+			sh:value 						?toTest]
+			#sh:resultMessage 				?message]
 	}
 }.	
 #---uniqueLang
@@ -1061,7 +1062,7 @@
 	}.
 	###############################
 	{	?shape 	:targets ?i.
-		("Value is not in " ?list) string:concatenation ?message. 
+		#("Value is not in " ?list) string:concatenation ?message. 
 		?i ?prop ?toTest. 
 		_:b log:notIncludes {?toTest :lPos ?list}
 	} => {
@@ -1071,8 +1072,8 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop; 
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
+			sh:value 						?toTest]
+			#sh:resultMessage 				?message]
 	}
 }.	
 
@@ -1101,7 +1102,7 @@
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
-		("Value does not have all the shapes in " ?list) string:concatenation ?message. 
+		#("Value does not have all the shapes in " ?list) string:concatenation ?message. 
         (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:greaterThan 0
@@ -1112,8 +1113,8 @@
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i;
 			sh:resultPath 					?prop;
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
+			sh:value 						?toTest]
+			#sh:resultMessage 				?message]
     }.
 	#####################
 	{	?shape :targets ?i.
@@ -1147,7 +1148,7 @@
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
-		("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
+		#("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
         (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
@@ -1159,8 +1160,8 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop;
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
+			sh:value 						?toTest]
+			#sh:resultMessage 				?message]
     }.
 	#################################
 	{	?shape 	:targets ?i. 

@@ -23,7 +23,6 @@
 		?i ?pShape ?violation. 
 	} => {
 		?violation ?i ?vshape.
-		:aaaaaaaaaaa ?violation ?i.
 	}.
 	#################################
     {   ?shape :targets ?i.
@@ -32,7 +31,6 @@
         ?vlist list:length ?vlength.
         ?vlength math:lessThan 1
     } => {
-		?i :aaaaa ?vlist.
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:NotConstraintComponent; 

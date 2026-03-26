@@ -13,7 +13,7 @@ if [[ $1 ]] && [[ $2 ]] && [ -f $1 ] && [ -f $2 ]; then
     cat output.n3
     echo "--------------------------------------------------------"
     echo "creating clean SHACL report of the output:"
-    eye $SCRIPT_DIR/proc/postproc.n3 --turtle output.n3 --query $SCRIPT_DIR/proc/postquery.n3 --nope --quiet >report.n3
+    eye --turtle output.n3 $SCRIPT_DIR/proc/postproc.n3 --query $SCRIPT_DIR/proc/postquery.n3 --nope --quiet >report.n3
     echo "clean SHACL report created under report.n3:"
     echo "--------------------------------------------------------"
     cat report.n3

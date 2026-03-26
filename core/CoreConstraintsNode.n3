@@ -38,7 +38,8 @@
 
 } => {
 	{	?shape :needs :Nodekind.
-		_:shac log:notIncludes {?shape sh:path _:egal}
+		_:shac log:notIncludes {?shape sh:path _:egal}.
+		_:shac log:notIncludes {:please :apply :clean}
 	} => {
 		{	?shape :targets ?i.
 			?i log:rawType log:Literal
@@ -656,7 +657,7 @@
 	}.
 	##############################	
 	{	?shape :targets ?i. 
-		("Language does not match any of " ?list) string:concatenation ?message. 
+		#("Language does not match any of " ?list) string:concatenation ?message. 
 		_:b log:notIncludes {?i :langPos ?list}
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -664,8 +665,8 @@
 			sh:sourceConstraintComponent 	sh:LanguageInConstraintComponent; 
 			sh:sourceShape 					?shape ;
 			sh:focusNode 					?i; 
-			sh:value 						?i;
-			sh:resultMessage 				?message]
+			sh:value 						?i]
+			#sh:resultMessage 				?message]
 	}
 }.	
 #------Property Pair Constraints #makes no sense for nodeshapes/only checks for ?value being reflexive
