@@ -5,6 +5,8 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <http://example.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix func: <http://www.w3.org/2007/rif-builtin-function#>.
 
 {
 } => {
@@ -122,7 +124,98 @@
 			sh:resultPath 					?prop; 
 			sh:value						?toTest;
 			sh:resultMessage				?message]
-	}
+	}.
+	########################################## Taken from eye/reasoning/ill-formed-literals
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+  		?toTest log:rawType log:Literal.
+  		(?lex xsd:boolean) log:dtlit ?toTest.
+  		?lex string:notMatches "^(true|false|1|0)$".
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:resultPath 					?prop; 
+			sh:value						?toTest].
+	}.
+	##############
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+  		?toTest log:rawType log:Literal.
+  		(?lex ?dt) log:dtlit ?toTest.
+  		?dt list:in (
+      	xsd:integer
+      	xsd:long
+      	xsd:int
+      	xsd:short
+      	xsd:byte
+      	xsd:nonNegativeInteger
+      	xsd:positiveInteger
+      	xsd:nonPositiveInteger
+      	xsd:negativeInteger
+      	xsd:unsignedLong
+      	xsd:unsignedInt
+      	xsd:unsignedShort
+      	xsd:unsignedByte ).
+  		?lex string:notMatches "^[+-]?[0-9]+$".
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:resultPath 					?prop; 
+			sh:value						?toTest].
+	}.
+	##############
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+  		?toTest log:rawType log:Literal.
+		(?lex xsd:decimal) log:dtlit ?toTest.
+  		?lex string:notMatches "^[+-]?(?:[0-9]+\\.[0-9]*|\\.[0-9]+|[0-9]+)$".
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:resultPath 					?prop; 
+			sh:value						?toTest].
+	}.
+	##############
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+  		?toTest log:rawType log:Literal.
+		(?lex ?dt) log:dtlit ?toTest.
+  		?dt list:in ( xsd:float xsd:double ).
+  		?lex string:notMatches "^(?:NaN|INF|-INF|[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?)$".
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:resultPath 					?prop; 
+			sh:value						?toTest].
+	}.
+	##############
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+  		?toTest log:rawType log:Literal.
+		(?lex ?dt) log:dtlit ?toTest.
+  		?dt list:in ( xsd:date xsd:dateTime xsd:duration ).
+  		1 log:notIncludes { ?toTest math:equalTo ?toTest. }.
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:resultPath 					?prop; 
+			sh:value						?toTest].
+	}.
 }.	
 #---nodeKind
 {	?shape 	sh:path 	?prop; 
@@ -273,6 +366,22 @@
 {	?shape 	sh:path 			?prop; 
 		   	sh:minInclusive 	?value
 } => {
+	{	?shape :targets ?i. 
+		?i ?prop ?toTest. 
+		("Node is not >= " ?value) string:concatenation ?message. 
+		(?value ?toTest) func:subtract-dateTimes ?result.
+		?result string:startsWith "-".
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:MinInclusiveConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:value 						?toTest;
+			sh:resultPath 					?prop; 
+			sh:focusNode 					?i; 
+			sh:resultMessage 				?message]
+	}.
+	##########################
 	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		("Node is not >= " ?value) string:concatenation ?message. 
@@ -665,49 +774,55 @@
 }.
 #---pattern
 {	?shape 	sh:path 		?prop; 
-			sh:pattern 		?regex.
+			sh:pattern 		?regex;
 } => {
-	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
-		("Node does not match pattern " ?regex) string:concatenation ?message.
-		(?egal ?testType) log:dtlit ?toTest.
-		?testType log:localN3String ?typepe.
-		?typepe string:notContainsRoughly "string".
-		?toTest log:localN3String ?stringified.
-		?stringified string:notMatches ?regex.
-	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation; 
-			sh:sourceConstraintComponent 	sh:PatternConstraintComponent; 
-			sh:sourceShape 					?shape; 
-			sh:focusNode 					?i; 
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
-	}.
-	##############################
-	{	?shape :targets ?i.
-		?i ?prop ?toTest. 
-		("Node does not match pattern " ?regex) string:concatenation ?message. 
-		(?egal ?testType) log:dtlit ?toTest.
-		?testType log:localN3String ?typepe.
-		?typepe string:containsRoughly "string".
-		?toTest string:notMatches ?regex
-	} => {
-		[ 	a 								sh:ValidationResult; 
-			sh:resultSeverity 				sh:Violation; 
-			sh:sourceConstraintComponent 	sh:PatternConstraintComponent; 
-			sh:sourceShape 					?shape; 
-			sh:focusNode 					?i; 
-			sh:value 						?toTest;
-			sh:resultMessage 				?message]
-	}.
-	##############################
 	?shape :needs :Nodekind.
 	#########################
 	{	?shape :targets ?i. 
 		?i ?prop ?toTest.
 		("Node does not match pattern " ?regex) string:concatenation ?message.
 		:testNeg :literal ?toTest.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:PatternConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+}.
+{	?shape 	sh:path 		?prop; 
+			sh:pattern 		?regex.
+	_:shac log:notIncludes {?shape sh:flags _:flag}.
+} => {
+	{	?shape :targets ?i.
+		?i ?prop ?toTest. 
+		("Node does not match pattern " ?regex) string:concatenation ?message. 
+		(?data ?type) log:dtlit ?toTest.
+		?data string:notMatches ?regex
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:PatternConstraintComponent; 
+			sh:sourceShape 					?shape; 
+			sh:focusNode 					?i; 
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
+	}.
+}.	
+#####################################################
+{	?shape 	sh:path 		?prop; 
+			sh:pattern 		?regex;
+			sh:flags		"i".
+} => {
+	{	?shape :targets ?i.
+		?i ?prop ?toTest. 
+		("Node does not match pattern " ?regex) string:concatenation ?message. 
+		(?data ?type) log:dtlit ?toTest.
+		?data string:lowerCase ?ldata.
+		?regex string:lowerCase ?lregex.
+		?ldata string:notMatches ?lregex
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -749,7 +864,10 @@
 }.	
 #---uniqueLang
 {	?shape  sh:path 		?prop; 
-			sh:uniqueLang 	true
+			sh:uniqueLang 	?bool.
+	?bool log:rawType log:Literal.
+  	(?lex xsd:boolean) log:dtlit ?bool.
+  	?lex string:notMatches "^(true|false)$".
 } => {
 	{	?shape 	:targets ?i.
 		("Language " ?tag1 " has been used more than once") string:concatenation ?message. 
@@ -765,11 +883,11 @@
 			sh:sourceConstraintComponent 	sh:UniqueLangConstraintComponent; 
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i;
-			sh:value 						?toTest;
+			#sh:value 						?toTest;
 			sh:resultPath 					?prop;
 			sh:resultMessage 				?message]
 	}
-}.	# hier gibt es 2 Messages, eins ist broken?
+}.	
 #------Property Pair Constraints
 #---equals
 {	?shape 	sh:path 	?prop; 
@@ -945,15 +1063,22 @@
 		?violation 	sh:sourceShape 	?pShape; 
 					sh:focusNode 	?toTest
 	} => {
-		?toTest ?vshape ?violation
+		:PropShape :node (?toTest ?vshape ?violation)
+	}.
+	####################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		:NodeShape :prop (?toTest ?vShape ?violation)
+	} => {
+		:PropShape :node (?toTest ?vshape ?violation)
 	}.
 	####################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.   
 		?vshape sh:property ?pShape.
-		?toTest ?pShape ?violation
+		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
-		?toTest ?vshape ?violation
+		:PropShape :node (?toTest ?vshape ?violation)
 	}.
 	####################################
 	{	?shape :targets ?i. 
@@ -961,13 +1086,13 @@
 		?violation 	sh:sourceShape 	?vshape; 
 					sh:focusNode 	?toTest
 	} => {
-		?toTest ?vshape ?violation
+		:PropShape :node (?toTest ?vshape ?violation)
 	}.
 	###################################
 	{	?shape :targets ?i. 
 		?i ?prop ?toTest. 
 		("Value does not have shape " ?vshape) string:concatenation ?message. 
-		?toTest ?vshape ?anyViolation
+		:PropShape :node (?toTest ?vshape ?anyViolation)
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -985,7 +1110,7 @@
 		?result a 					sh:ValidationResult; 
 				sh:focusNode 		?i; 
 				sh:resultMessage 	?message. 
-		?toTest ?vshape ?violation
+		:PropShape :node (?toTest ?vshape ?violation)
 	} => {
 		?result sh:detail ?violation
 	}
@@ -993,8 +1118,9 @@
 #---property
 {	?shape 	sh:path 	?prop; 
 			sh:property ?pShape.
+	?pShape sh:path ?prop2.
 } => {
-	?pShape :wasPChildOf ?shape.
+	?shape :hasPChild (?pShape ?prop2).
 	{	?shape 	:targets 	?i.
 		?i ?prop ?toTest.
 	} => {
@@ -1006,21 +1132,21 @@
 		?violation 	sh:sourceShape 	?pShape; 
 					sh:focusNode 	?toTest
 	} => {
-		?toTest ?pShape ?violation
+		:PropShape :prop (?toTest ?pShape ?violation)
 	}.
 	#############################
 	{	?shape 	:targets 	?i.
 		?i ?prop ?toTest.
-		?pShape sh:property ?vShape. 
-		?toTest ?vShape ?violation
+		?pshape :hasPChild (?vShape ?prop3).
+		:PropShape :prop (?toTest ?vShape ?violation)
 	} => {
-		?toTest ?pShape ?violation
+		:PropShape :prop (?toTest ?pShape ?violation)
 	}.
 	#############################
-	{	?pShape :wasPChildOf ?shape.
+	{	?shape :hasPChild (?pShape ?prop2).
 		?as :apply :clean.
 	} => {
-		?pShape :wasApplyPChildOf ?shape.
+		?shape :hasApplyPChild (?pShape ?prop2).
 	}.
 }.
 
@@ -1088,22 +1214,31 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
 	} => {
-		?value ?toTest ?list.
+		:PropShape :and (?value ?toTest ?list).
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
 		?list list:iterate (?index ?value).		 
-		?pShape :wasPChildOf ?value.
-		?toTest ?pShape ?violation. 
+		?value :hasPChild (?pShape ?prop2).
+		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
-		?value ?toTest ?list.
+		:PropShape :and (?value ?toTest ?list).
+	}.
+	#################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).		 
+		?value :hasPChild (?pShape ?prop2).
+		:NodeShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :and (?value ?toTest ?list).
 	}.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
-		#("Value does not have all the shapes in " ?list) string:concatenation ?message. 
-        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
+		("Value does not have all the shapes in " ?list) string:concatenation ?message. 
+        (?value {:PropShape :and (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?vlength math:greaterThan 0
     } => {
@@ -1113,8 +1248,8 @@
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i;
 			sh:resultPath 					?prop;
-			sh:value 						?toTest]
-			#sh:resultMessage 				?message]
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
     }.
 	#####################
 	{	?shape :targets ?i.
@@ -1134,22 +1269,31 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
 	} => {
-		?value ?toTest ?list.
+		:PropShape :or (?value ?toTest ?list).
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
-		?list list:iterate (?index ?value).		 
-		?pShape :wasPChildOf ?value.
-		?toTest ?pShape ?violation. 
+		?list list:iterate (?index ?value).
+		?value :hasPChild (?pShape ?prop2).
+		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
-		?value ?toTest ?list.
+		:PropShape :or (?value ?toTest ?list).
+	}.
+	#################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).
+		?value :hasPChild (?pShape ?prop2).
+		:NodeShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :or (?value ?toTest ?list).
 	}.
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		#("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
-        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
+        (?value {:PropShape :or (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -1181,22 +1325,31 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
 	} => {
-		?value ?toTest ?list.
+		:PropShape :xone (?value ?toTest ?list).
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
-		?list list:iterate (?index ?value).		 
-		?pShape :wasPChildOf ?value.
-		?toTest ?pShape ?violation. 
+		?list list:iterate (?index ?value).	
+		?value :hasPChild (?pShape ?prop2).
+		:NodeShape :prop (?toTest ?pShape ?violation)
 	} => {
-		?value ?toTest ?list.
+		:PropShape :xone (?value ?toTest ?list).
+	}.
+	#################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?list list:iterate (?index ?value).	
+		?value :hasPChild (?pShape ?prop2).
+		:PropShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :xone (?value ?toTest ?list).
 	}.
     #################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does not have only one of the shapes in " ?list) string:concatenation ?message. 
-        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
+        (?value {:PropShape :xone (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         ?vlength math:equalTo ?llength
@@ -1214,7 +1367,7 @@
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.  
 		("Value does not have only one of the shapes in " ?list) string:concatenation ?message.  
-        (?value {?value ?toTest ?list.} ?vlist) log:collectAllIn ?scope. 
+        (?value {:PropShape :xone (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
         (?llength -1) math:sum ?mllength.
@@ -1299,4 +1452,32 @@
 			sh:resultPath 					?tprop;
 			sh:resultMessage 				?message]
    	} 
+}.
+#--------Misc Components
+#---deactivated
+{	?shape 	sh:path  ?prop; 
+    		sh:deactivated true.
+} => {
+	{	?shape :targets ?i.
+ 	} => {
+		:ShapeGot :Deactivated ?shape.
+	}
+}.
+#---message
+{	?shape 	sh:path  ?prop; 
+			sh:message ?message.
+} => {
+	{	?shape :targets ?i.
+ 	} => {
+		:ShapeGot :Message (?shape ?message).
+	}
+}.
+#---severity
+{	?shape 	sh:path  ?prop; 
+			sh:severity ?sev.
+} => {
+	{	?shape :targets ?i.
+ 	} => {
+		:ShapeGot :Severity (?shape ?sev).
+	}
 }.

@@ -1,3 +1,4 @@
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <http://example.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
@@ -6,6 +7,7 @@ _:report a sh:ValidationReport.
 
 {	?report a sh:ValidationReport.
     ?shape :Otargets ?i.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
     ?violation  a               sh:ValidationResult;
                 sh:sourceShape  ?shape;
                 sh:focusNode    ?i.
@@ -14,15 +16,57 @@ _:report a sh:ValidationReport.
             sh:result ?violation.
 }.
 
-{	?report a sh:ValidationReport.
+{   ?report a sh:ValidationReport.
     ?shape :Otargets ?i.
-    ?pShape :wasApplyPChildOf ?shape.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
+    ?shape :hasApplyPChild (?pShape ?prop).
+} => {
+	?shape :hasApplyPChildList (((?pShape ?prop)) ?pShape ?i ?i).
+}. 
+{   ?report a sh:ValidationReport.
+    ?shape :Otargets ?i.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
+    ?shape :hasApplyPChildList (?list ?pShape ?lastTest ?i).
+    ?pShape :hasApplyPChild (?vShape ?prop).
+    ?list list:last (?wShape ?vprop).
+    ?lastTest ?vprop ?toTest.
+    (?list ((?wShape ?vprop))) list:append ?newList
+} => {
+    ?shape :hasApplyPChildList (?newList ?vShape ?toTest ?i).
+}. 
+
+{   ?report a sh:ValidationReport.
+    ?shape :Otargets ?i.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
+    ?shape :hasApplyPChildList (?list ?pShape ?lastTest ?i).
     ?violation  a               sh:ValidationResult;
                 sh:sourceShape  ?pShape;
-                sh:focusNode    ?i.
+                sh:focusNode    ?lastTest.
 } => {
 	?report sh:conforms false;
             sh:result ?violation.
+}.
+
+{   ?report a sh:ValidationReport.
+    ?shape :targets ?i.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
+    :ShapeGot :Message (?shape ?message).
+    ?violation  a               sh:ValidationResult;
+                sh:sourceShape  ?shape;
+                sh:focusNode    ?i.
+} => {
+	?violation sh:resultMessage ?message.
+}.
+
+{   ?report a sh:ValidationReport.
+    ?shape :targets ?i.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
+    :ShapeGot :Severity (?shape ?sev).
+    ?violation  a               sh:ValidationResult;
+                sh:sourceShape  ?shape;
+                sh:focusNode    ?i.
+} => {
+	?violation sh:resultSeverity ?sev.
 }.
 
 {	?report a sh:ValidationReport.

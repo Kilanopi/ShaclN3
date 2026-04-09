@@ -15,21 +15,26 @@
 		?violation  sh:sourceShape ?vshape;
                     sh:focusNode   ?i. 
 	} => {
-		?violation ?i ?vshape.
+		:NodeShape :not (?violation ?i ?vshape).
 	}.
     #################################
 	{	?shape :targets ?i.   	 
-		?pShape :wasPChildOf ?vshape.
-		?i ?pShape ?violation. 
+		?vshape :hasPChild (?pShape ?prop).
+		:NodeShape :prop (?i ?pShape ?violation)
 	} => {
-		?violation ?i ?vshape.
+		:NodeShape :not (?violation ?i ?vshape).
+	}.
+	#################################
+	{	?shape :targets ?i.  
+		?vshape :hasPChild (?pShape ?prop).
+		:PropShape :prop (?i ?pShape ?violation)	 
+	} => {
+		:NodeShape :not (?violation ?i ?vshape).
 	}.
 	#################################
     {   ?shape :targets ?i.
-		("Value does have shape " ?vshape) string:concatenation ?message.
-        (?violation {?violation ?i ?vshape} ?vlist) log:collectAllIn ?scope. 
-        ?vlist list:length ?vlength.
-        ?vlength math:lessThan 1
+		("Node does have shape " ?vshape) string:concatenation ?message.
+		_:bse log:notIncludes {:NodeShape :not (?violation ?i ?vshape).}
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -37,7 +42,6 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?i;
-			sh:detail						?vlist;
 			sh:resultMessage				?message]
     }.
 	#####################
@@ -55,23 +59,29 @@
 		?violation  sh:sourceShape ?vshape;
                     sh:focusNode   ?toTest. 
 	} => {
-		?violation ?toTest ?vshape.
+		:PropShape :not (?violation ?toTest ?vshape).
 	}.
     #################################
 	{	?shape :targets ?i.
 		?i ?prop ?toTest.
-		?pShape :wasPChildOf ?vshape.
-		?toTest ?pShape ?violation. 
+		?vshape :hasPChild (?pShape ?prop2).
+		:NodeShape :prop (?toTest ?pShape ?violation)
 	} => {
-		?violation ?toTest ?vshape.
+		:PropShape :not (?violation ?toTest ?vshape).
+	}.
+	#################################
+	{	?shape :targets ?i.
+		?i ?prop ?toTest.
+		?vshape :hasPChild (?pShape ?prop2).
+		:PropShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :not (?violation ?toTest ?vshape).
 	}.
 	#################################
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does have shape " ?vshape) string:concatenation ?message.
-        (?violation {?violation ?toTest ?vshape} ?vlist) log:collectAllIn ?scope. 
-        ?vlist list:length ?vlength.
-        ?vlength math:lessThan 1
+		_:bse log:notIncludes {:PropShape :not (?violation ?toTest ?vshape).}.
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -79,7 +89,6 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:value 						?toTest;
-			sh:detail						?vlist;
 			sh:resultMessage				?message]
     }.
 	#####################
