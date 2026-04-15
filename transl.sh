@@ -15,7 +15,7 @@ if [[ $1 ]] && [ -f $1 ]; then
     echo "--------------------------------------------------------"
     echo "creating translation of $1 into N3"
     echo "..."
-    eye $SCRIPT_DIR/proc/targeting.n3 $SCRIPT_DIR/core/CoreConstraintsNode.n3 $SCRIPT_DIR/core/CoreConstraintsProp.n3 $SCRIPT_DIR/core/NotConstraint.n3 grounded.n3 --pass-only-new --nope --quiet > translated.n3
+    eye $SCRIPT_DIR/proc/targeting.n3 $SCRIPT_DIR/core/CoreConstraintsNode.n3 $SCRIPT_DIR/core/CoreConstraintsProp.n3 $SCRIPT_DIR/core/CoreConstraintsPath.n3 $SCRIPT_DIR/core/CoreConstraintsMisc.n3 $SCRIPT_DIR/core/NotConstraint.n3 grounded.n3 --pass-only-new --nope --quiet > translated.n3
     echo "translated version of $1 created under translated.n3:"
     echo "--------------------------------------------------------"
     cat translated.n3

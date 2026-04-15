@@ -327,7 +327,7 @@
 } => {
 	{	?shape :targets ?i.
 		("Less than " ?amount " values") string:concatenation ?message. 
-		(?smth {?i ?prop ?smth} ?list) log:collectAllIn ?scope. 
+		(?smth {:PropShape :Pathverarbeitung (?shape ?i ?smth ()).} ?list) log:collectAllIn ?scope. 				#?i ?prop ?smth
 		?list list:length ?llength. 
 		?llength math:lessThan ?amount
 	} => {
@@ -347,7 +347,7 @@
 } => {
 	{	?shape 	:targets ?i.
 		("More than " ?amount " values") string:concatenation ?message. 
-		(?smth {?i ?prop ?smth} ?list) log:collectAllIn ?scope. 
+		(?smth {:PropShape :Pathverarbeitung (?shape ?i ?smth ())} ?list) log:collectAllIn ?scope. 
 		?list list:length ?llength. 
 		?llength math:greaterThan ?amount
 	} => {
@@ -1452,32 +1452,4 @@
 			sh:resultPath 					?tprop;
 			sh:resultMessage 				?message]
    	} 
-}.
-#--------Misc Components
-#---deactivated
-{	?shape 	sh:path  ?prop; 
-    		sh:deactivated true.
-} => {
-	{	?shape :targets ?i.
- 	} => {
-		:ShapeGot :Deactivated ?shape.
-	}
-}.
-#---message
-{	?shape 	sh:path  ?prop; 
-			sh:message ?message.
-} => {
-	{	?shape :targets ?i.
- 	} => {
-		:ShapeGot :Message (?shape ?message).
-	}
-}.
-#---severity
-{	?shape 	sh:path  ?prop; 
-			sh:severity ?sev.
-} => {
-	{	?shape :targets ?i.
- 	} => {
-		:ShapeGot :Severity (?shape ?sev).
-	}
 }.

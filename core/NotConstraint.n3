@@ -34,7 +34,7 @@
 	#################################
     {   ?shape :targets ?i.
 		("Node does have shape " ?vshape) string:concatenation ?message.
-		_:bse log:notIncludes {:NodeShape :not (?violation ?i ?vshape).}
+		(_:bse 2) log:notIncludes {:NodeShape :not (?violation ?i ?vshape).}
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -81,7 +81,7 @@
     {   ?shape :targets ?i.
 		?i ?prop ?toTest.
 		("Value does have shape " ?vshape) string:concatenation ?message.
-		_:bse log:notIncludes {:PropShape :not (?violation ?toTest ?vshape).}.
+		(_:bse 2) log:notIncludes {:PropShape :not (?violation ?toTest ?vshape).}.
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 

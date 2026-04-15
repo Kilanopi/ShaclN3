@@ -1,0 +1,65 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <http://example.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix func: <http://www.w3.org/2007/rif-builtin-function#>.
+
+
+#--------Path Components
+#---Predicate (base case)
+{	?shape sh:path ?prop.
+    ?prop list:isList false.
+} => {
+	{	?shape  :targets 	?i.
+        ?i ?prop ?toTest.
+ 	} => {
+		:PropShape :Pathverarbeitung (?shape ?i ?toTest ())
+	}
+}.
+
+#---Sequence
+{	?shape sh:path ?proplist.
+    ?proplist list:isList true.
+} => {
+    ######### Base case
+	{	?shape  :targets 	?i.
+ 	} => {
+		:PropShape :Pathverarbeitung (?shape ?i ?i ?proplist).
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :Pathverarbeitung (?shape ?i ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        (_:dataScope 0) log:notIncludes {?prop list:isList true.}.
+        ?somenode ?prop ?lastnode.
+ 	} => {
+		:PropShape :Pathverarbeitung (?shape ?i ?lastnode ?rest)
+	}.
+    ######### Sequence Rekursion case
+    {	?shape  :targets 	?i.
+        :PropShape :Pathverarbeitung (?shape ?i ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        ?prop list:isList true.
+        (?prop ?rest) list:append ?newList.
+ 	} => {
+		:PropShape :Pathverarbeitung (?shape ?i ?somenode ?newList)
+	}.
+}.
+
+#---Alternative
+
+#---Inverse
+
+
+#---Zero-Or-More
+
+#---One-Or-More
+
+#---Zero-Or-One
+
+# :PropShape :Pathverarbeitung (?shape ?target ?target (full sequence list of paths))
+# :PropShape :Pathverarbeitung (?shape ?target ?lastnode (Rest of sequence list of paths minus first path that connected to lastnode from prevnode))

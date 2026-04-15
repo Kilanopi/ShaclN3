@@ -1133,31 +1133,3 @@
 			sh:resultPath 					?tprop;]
    	} 
 }.
-#--------Misc Components
-#---deactivated
-{	?shape sh:deactivated true.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
-} => {
-	{	?shape :targets ?i.
- 	} => {
-		:ShapeGot :Deactivated ?shape.
-	}
-}.
-#---message
-{	?shape sh:message ?message.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
-} => {
-	{	?shape :targets ?i.
- 	} => {
-		:ShapeGot :Message (?shape ?message).
-	}
-}.
-#---severity
-{	?shape sh:severity ?sev.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
-} => {
-	{	?shape :targets ?i.
- 	} => {
-		:ShapeGot :Severity (?shape ?sev).
-	}
-}.
