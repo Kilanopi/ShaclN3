@@ -8,23 +8,18 @@ The EYE Reasoner required to use this.
 LINK: https://github.com/eyereasoner/eye
 
 HOW TO USE:
-You can use the shell script transl.sh in the repository and call it with your SHACL document as (first) argument. <br/>
+You should use the shell script transl.sh in the repository and call it with your SHACL document as the (first) argument. <br/>
 Example:
 ```./transl.sh MySHACLdocument.n3```
 
-I also provided a shell script for applying a translated SHACL document do a data graph cleanly via EYE. <br/>
-It takes a translated SHACL document (translated.n3) as its first argument and applies it to the datagraph it is given as a second argument. <br/>
-This wasn't tested on large datasets. Its purpose is to unclutter the output to get just the SHACL validationreport as you would from a SHACL validator. <br/>
+The provided shell script for applying a translated SHACL document do a data graph cleanly via EYE is called applyClean.sh . <br/>
+Its purpose is to unclutter the output to get just the SHACL validationreport as you would from a SHACL validator. <br/>
+It takes a translated SHACL document (translated.n3) as its first argument and applies it to the datagraph that is given as a second argument. <br/>
+This was tested on large the [SHACL testsuite](https://github.com/w3c/data-shapes/tree/gh-pages/data-shapes-test-suite/tests) . 
 EXAMPLE:
 ```./applyClean.sh translated.n3 MyDataGraph.n3```
 
 IMPORTANT NOTES:
--This will not function properly if you do not seperate your data graph from your shacl graph!! <br/>
+-This may not function properly if you do not seperate your data graph from your shacl graph!! <br/>
 -In case anyone looks at the code itself: change your tab size to 4 for readability <br/>
--some functionality is still WIP and may currently not work correctly or at all, this includes but is not limited to: <br/>
-    -(self-)recursive Shapes <br/>
-    -Shapes with multiple logical constraints <br/>
-    -resultSeverity <br/>
-    -minor scope violations for multiple constraints (e.g sh:languageIn demanding literals) <br/>
-    -all cardinality constraints (i.e all "qualified" shapes) <br/>
-    -interaction with most propertypath types (e.g alternative path) <br/>
+-some functionality is still WIP and may currently not work correctly or at all. to see what components of shacl are fully operational, see [this table](https://docs.google.com/spreadsheets/d/1jUb_fHszuSZQYpAVdpspBHCITahNhvylPwVjMYi_dys) from the test suite evaluation <br/>
