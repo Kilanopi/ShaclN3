@@ -9,57 +9,718 @@
 @prefix func: <http://www.w3.org/2007/rif-builtin-function#>.
 
 
-#--------Path Components
-#---Predicate (base case)
+#------------------Pathvererbung rememberer
+#--------Base case
 {	?shape sh:path ?prop.
+} => {
+    :PropShape :PathVererbung (?shape ?prop ?prop 0) 
+}.
+
+#---Sequence
+{   :PropShape :PathVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:isList true.
+    ?proplist list:firstRest (?prop ?rest).
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?prop ?ndepth).
+    :PropShape :PathSeqVererbung (?shape ?parent ?rest ?ndepth)
+}.
+{   :PropShape :PathSeqVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:firstRest (?prop ?rest).
+    _:shaclScope log:notIncludes {?rest list:length 0}.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?prop ?depth).
+    :PropShape :PathSeqVererbung (?shape ?parent ?rest ?depth)
+}.
+{   :PropShape :PathSeqVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:firstRest (?prop ?rest).
+    ?rest list:length 0.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?prop ?depth).
+}.
+#---Alternative
+{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:alternativePath ?list.
+    ?list list:iterate (?index ?prop).
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?prop ?ndepth).
+}.
+#---Inverse
+{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:inversePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+}.
+
+#---Zero-Or-More
+{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrMorePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+}.
+
+#---One-Or-More
+{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:oneOrMorePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+}.
+#---Zero-Or-One
+{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrOnePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+}.
+##########################inverses
+#---Sequence
+{   :PropShape :PathIVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:isList true.
+    ?proplist list:firstRest (?prop ?rest).
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?prop ?ndepth).
+    :PropShape :PathSeqIVererbung (?shape ?parent ?rest ?ndepth)
+}.
+{   :PropShape :PathSeqIVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:firstRest (?prop ?rest).
+    _:shaclScope log:notIncludes {?rest list:length 0}.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?prop ?depth).
+    :PropShape :PathSeqIVererbung (?shape ?parent ?rest ?depth)
+}.
+{   :PropShape :PathSeqIVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:firstRest (?prop ?rest).
+    ?rest list:length 0.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?prop ?depth).
+}.
+#---Alternative
+{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:alternativePath ?list.
+    ?list list:iterate (?index ?prop).
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?prop ?ndepth).
+}.
+#---Inverse
+{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:inversePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+}.
+
+#---Zero-Or-More
+{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrMorePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+}.
+
+#---One-Or-More
+{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:oneOrMorePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+}.
+#---Zero-Or-One
+{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrOnePath ?path.
+    (?depth 1) math:sum ?ndepth.
+} => {
+    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+}.
+
+#------------------Pathverarbeitung
+#---Predicate
+{	:PropShape :PathVererbung (?shape ?parent ?prop 0).
     ?prop list:isList false.
+    _:shaclScope log:notIncludes {?prop sh:alternativePath _:egal},
+                                 {?prop sh:inversePath _:egal},
+                                 {?prop sh:zeroOrMorePath _:egal},
+                                 {?prop sh:oneOrMorePath _:egal},
+                                 {?prop sh:zeroOrOnePath _:egal}.
 } => {
 	{	?shape  :targets 	?i.
         ?i ?prop ?toTest.
  	} => {
-		:PropShape :Pathverarbeitung (?shape ?i ?toTest ())
+		:PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?prop ?toTest)
+	}.
+}.
+##############################
+{	:PropShape :PathVererbung (?shape ?parent ?prop ?depth).
+    ?depth math:greaterThan 0.
+    ?prop list:isList false.
+    _:shaclScope log:notIncludes {?prop sh:alternativePath _:egal},
+                                 {?prop sh:inversePath _:egal},
+                                 {?prop sh:zeroOrMorePath _:egal},
+                                 {?prop sh:oneOrMorePath _:egal},
+                                 {?prop sh:zeroOrOnePath _:egal}.
+} => {
+	{	?shape  :targets 	?i.
+        ?i ?prop ?toTest.
+ 	} => {
+		:PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest)
+	}.
+    ##########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+        ?toTest ?prop ?toTestTest.
+ 	} => {
+		:PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest)
 	}
 }.
-
+##############################inv
+{	:PropShape :PathIVererbung (?shape ?parent ?prop ?depth).
+    ?depth math:greaterThan 0.
+    ?prop list:isList false.
+    _:shaclScope log:notIncludes {?prop sh:alternativePath _:egal},
+                                 {?prop sh:inversePath _:egal},
+                                 {?prop sh:zeroOrMorePath _:egal},
+                                 {?prop sh:oneOrMorePath _:egal},
+                                 {?prop sh:zeroOrOnePath _:egal}.
+} => {
+    ######### case first
+	{	?shape  :targets 	?i.
+        ?toTest ?prop ?i.
+ 	} => {
+		:PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest)
+	}.
+    ########## case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+        ?toTestTest ?prop ?toTest.
+ 	} => {
+		:PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest)
+	}
+}.
 #---Sequence
-{	?shape sh:path ?proplist.
+{	:PropShape :PathVererbung (?shape ?parent ?proplist 0).
     ?proplist list:isList true.
 } => {
     ######### Base case
 	{	?shape  :targets 	?i.
  	} => {
-		:PropShape :Pathverarbeitung (?shape ?i ?i ?proplist).
+		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?i ?proplist).
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Pathverarbeitung (?shape ?i ?somenode ?somelist).
+        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
-        (_:dataScope 0) log:notIncludes {?prop list:isList true.}.
-        ?somenode ?prop ?lastnode.
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+        (_:dataScope 0) log:notIncludes {?rest list:length 0}.
+        
  	} => {
-		:PropShape :Pathverarbeitung (?shape ?i ?lastnode ?rest)
+		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?toTest ?rest)
 	}.
-    ######### Sequence Rekursion case
+    #####################
     {	?shape  :targets 	?i.
-        :PropShape :Pathverarbeitung (?shape ?i ?somenode ?somelist).
+        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
-        ?prop list:isList true.
-        (?prop ?rest) list:append ?newList.
+        ?rest list:length 0.
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
  	} => {
-		:PropShape :Pathverarbeitung (?shape ?i ?somenode ?newList)
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?proplist ?toTest).
+	}.
+}.
+#########################################
+{	:PropShape :PathVererbung (?shape ?parent ?proplist ?depth).
+    ?proplist list:isList true.
+    ?depth math:greaterThan 0.
+} => {
+    ######### case first
+	{	?shape  :targets 	?i.
+ 	} => {
+		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?i ?proplist).
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+        (_:dataScope 0) log:notIncludes {?rest list:length 0}
+        
+ 	} => {
+		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?toTest ?rest)
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        ?rest list:length 0.
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?proplist ?toTest).
+	}.
+    ########################
+    ######### case not first
+	{	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+ 	} => {
+		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?toTest ?toTest ?proplist).
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+        (_:dataScope 0) log:notIncludes {?rest list:length 0}
+        
+ 	} => {
+		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?toTest ?rest)
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        ?rest list:length 0.
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?proplist ?toTest).
 	}.
 }.
 
+#########################################inv
+{	:PropShape :PathIVererbung (?shape ?parent ?plist ?depth).
+    ?proplist list:isList true.
+    ?depth math:greaterThan 0.
+    ?plist list:reverse ?proplist.
+} => {
+    ######### case first
+	{	?shape  :targets 	?i.
+ 	} => {
+		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?i ?proplist).
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+        (_:dataScope 0) log:notIncludes {?rest list:length 0}
+        
+ 	} => {
+		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?toTest ?rest)
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        ?rest list:length 0.
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?plist ?toTest).
+	}.
+    ########################
+    ######### case not first
+	{	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+ 	} => {
+		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?toTest ?toTest ?proplist).
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+        (_:dataScope 0) log:notIncludes {?rest list:length 0}
+        
+ 	} => {
+		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?toTest ?rest)
+	}.
+    #####################
+    {	?shape  :targets 	?i.
+        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        ?somelist list:firstRest (?prop ?rest).
+        ?rest list:length 0.
+        :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?plist ?toTest).
+	}.
+}.
+
+
 #---Alternative
+{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+    ?propB sh:alternativePath ?list.
+} => {
+	{	?shape  :targets 	?i.
+        ?list list:iterate (?index ?prop).
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+}.
+############################
+{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:alternativePath ?list.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+	{	?shape  :targets 	?i.
+        ?list list:iterate (?index ?prop).
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    ######### case not first
+	{	?shape  :targets 	?i.
+        ?list list:iterate (?index ?prop).
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?propB ?toTestTest).
+	}.
+}.
+############################
+{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:alternativePath ?list.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+	{	?shape  :targets 	?i.
+        ?list list:iterate (?index ?prop).
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    ######### case not first
+	{	?shape  :targets 	?i.
+        ?list list:iterate (?index ?prop).
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?propB ?toTestTest).
+	}.
+}.
 
 #---Inverse
+{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+    ?propB sh:inversePath ?prop.
+} => {
+	{	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+}.
+############################
+{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:inversePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+     #######case first
+	{	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    ######### case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?propB ?toTestTest).
+	}.
+}.
+############################inv
+{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:inversePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+     #######case first
+	{	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    ######### case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?propB ?toTestTest).
+	}.
+}.
 
 
 #---Zero-Or-More
-
+{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+    ?propB sh:zeroOrMorePath ?prop.
+} => {
+    {	?shape  :targets 	?i.
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?i).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTestTest).
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+}.
+############################
+{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrMorePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+    {	?shape  :targets 	?i.
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?i).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+    #######case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?origin).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+}.
+############################inv
+{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrMorePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+    {	?shape  :targets 	?i.
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?i).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+    #######case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?origin).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+}.
 #---One-Or-More
-
+{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+    ?propB sh:oneOrMorePath ?prop.
+} => {
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTestTest).
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+}.
+############################
+{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:oneOrMorePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+    #######case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+}.
+############################inv
+{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:oneOrMorePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+    #######case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTest).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+        :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+	}.
+}.
 #---Zero-Or-One
-
-# :PropShape :Pathverarbeitung (?shape ?target ?target (full sequence list of paths))
-# :PropShape :Pathverarbeitung (?shape ?target ?lastnode (Rest of sequence list of paths minus first path that connected to lastnode from prevnode))
+{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+    ?propB sh:zeroOrOnePath ?prop.
+} => {
+    {	?shape  :targets 	?i.
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?i).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+}.
+############################
+{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrOnePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+    {	?shape  :targets 	?i.
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?i).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #######case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?origin).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTest).
+	}.
+}.
+############################inv
+{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+    ?propB sh:zeroOrOnePath ?prop.
+    ?depth math:greaterThan 0.
+} => {
+    #######case first
+    {	?shape  :targets 	?i.
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?i).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTest).
+	}.
+    #######case not first
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?origin).
+	}.
+    #########
+    {	?shape  :targets 	?i.
+        :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?origin).
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
+ 	} => {
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTest).
+	}.
+}.

@@ -15,7 +15,7 @@
 		_:shac log:notIncludes {:please :apply :clean}
 	} => {
 		{	?shape :targets ?i.
-			?i ?prop ?toTest. 
+			:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest). 
 			?toTest log:rawType log:Literal
 		} => {
 			:testPos :literal ?toTest.
@@ -24,7 +24,7 @@
 		}.
 		###############
 		{	?shape :targets ?i.
-			?i ?prop ?toTest. 
+			:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 			?toTest log:rawType log:Other
 		} => {
 			:testNeg :literal ?toTest.
@@ -33,7 +33,7 @@
 		}.
 		###############
 		{	?shape :targets ?i.
-			?i ?prop ?toTest. 
+			:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 			?toTest log:rawType log:UnlabeledBlankNode
 		} => {
 			:testNeg :literal ?toTest.
@@ -42,7 +42,7 @@
 		}.
 		###############
 		{	?shape :targets ?i.
-			?i ?prop ?toTest. 
+			:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 			?toTest log:rawType log:ForAll
 		} => {
 			:testNeg :literal ?toTest.
@@ -51,7 +51,7 @@
 		}.
 		###############
 		{	?shape :targets ?i.
-			?i ?prop ?toTest. 
+			:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 			?toTest log:rawType log:LabeledBlankNode
 		} => {
 			:testNeg :literal ?toTest.
@@ -60,7 +60,7 @@
 		}.
 		###############
 		{	?shape :targets ?i.
-			?i ?prop ?toTest. 
+			:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 			?toTest log:rawType log:SkolemIRI
 		} => {
 			:testNeg :literal ?toTest.
@@ -76,7 +76,7 @@
            sh:class ?class
 } => {
 	{	?shape :targets ?i.
-  	 	?i ?prop ?toTest. 
+  	 	:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		_:b log:notIncludes {?toTest rdf:type ?class}
  	} => {
 		[	a 								sh:ValidationResult;
@@ -94,7 +94,7 @@
 } => {
 	{	?shape  :targets 	?i.
   		("Value does not have datatype " ?type) string:concatenation ?message. 
-  		?i ?prop ?toTest. 
+  		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		(?egal ?testType) log:dtlit ?toTest. 
   		?testType log:notEqualTo ?type
  	} => {
@@ -112,7 +112,7 @@
 	?shape :needs :Nodekind.
 	##########################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value does not have datatype " ?type) string:concatenation ?message.
 		:testNeg :literal ?toTest.
 	} => {
@@ -127,7 +127,7 @@
 	}.
 	########################################## Taken from eye/reasoning/ill-formed-literals
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		?toTest log:rawType log:Literal.
   		(?lex xsd:boolean) log:dtlit ?toTest.
   		?lex string:notMatches "^(true|false|1|0)$".
@@ -142,7 +142,7 @@
 	}.
 	##############
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		?toTest log:rawType log:Literal.
   		(?lex ?dt) log:dtlit ?toTest.
   		?dt list:in (
@@ -171,7 +171,7 @@
 	}.
 	##############
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		?toTest log:rawType log:Literal.
 		(?lex xsd:decimal) log:dtlit ?toTest.
   		?lex string:notMatches "^[+-]?(?:[0-9]+\\.[0-9]*|\\.[0-9]+|[0-9]+)$".
@@ -186,7 +186,7 @@
 	}.
 	##############
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		?toTest log:rawType log:Literal.
 		(?lex ?dt) log:dtlit ?toTest.
   		?dt list:in ( xsd:float xsd:double ).
@@ -202,7 +202,7 @@
 	}.
 	##############
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
   		?toTest log:rawType log:Literal.
 		(?lex ?dt) log:dtlit ?toTest.
   		?dt list:in ( xsd:date xsd:dateTime xsd:duration ).
@@ -224,7 +224,7 @@
 	?shape :needs :Nodekind.
 	################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not have node kind " ?kind) string:concatenation ?message. 
 		?kind log:equalTo sh:Literal.
 		:testNeg :literal ?toTest
@@ -240,7 +240,7 @@
 	}.
 	################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not have node kind " ?kind) string:concatenation ?message. 
 		?kind log:equalTo sh:BlankNode.
 		:testNeg :blanknode ?toTest
@@ -256,7 +256,7 @@
 	}.
 	################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not have node kind " ?kind) string:concatenation ?message. 
 		?kind log:equalTo sh:IRI.
 		:testNeg :iri ?toTest
@@ -272,7 +272,7 @@
 	}.
 	################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not have node kind " ?kind) string:concatenation ?message. 
 		?kind log:equalTo sh:BlankNodeOrLiteral.
 		:testPos :iri ?toTest
@@ -288,7 +288,7 @@
 	}.
 	################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not have node kind " ?kind) string:concatenation ?message. 
 		?kind log:equalTo sh:IRIOrLiteral.
 		:testPos :blanknode ?toTest
@@ -304,7 +304,7 @@
 	}.
 	################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not have node kind " ?kind) string:concatenation ?message. 
 		?kind log:equalTo sh:BlankNodeOrIRI.
 		:testPos :literal ?toTest
@@ -327,7 +327,7 @@
 } => {
 	{	?shape :targets ?i.
 		("Less than " ?amount " values") string:concatenation ?message. 
-		(?smth {:PropShape :Pathverarbeitung (?shape ?i ?smth ()).} ?list) log:collectAllIn ?scope. 				#?i ?prop ?smth
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?list) log:collectAllIn ?scope. 	#:PropShape :Pathverarbeitung (?shape ?i ?prop ?toTest).
 		?list list:length ?llength. 
 		?llength math:lessThan ?amount
 	} => {
@@ -347,7 +347,7 @@
 } => {
 	{	?shape 	:targets ?i.
 		("More than " ?amount " values") string:concatenation ?message. 
-		(?smth {:PropShape :Pathverarbeitung (?shape ?i ?smth ())} ?list) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest)} ?list) log:collectAllIn ?scope. 
 		?list list:length ?llength. 
 		?llength math:greaterThan ?amount
 	} => {
@@ -367,7 +367,7 @@
 		   	sh:minInclusive 	?value
 } => {
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not >= " ?value) string:concatenation ?message. 
 		(?value ?toTest) func:subtract-dateTimes ?result.
 		?result string:startsWith "-".
@@ -383,7 +383,7 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not >= " ?value) string:concatenation ?message. 
 		?toTest math:lessThan ?value.
 	} => {
@@ -400,7 +400,7 @@
 	?shape :needs :Nodekind.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not >= " ?value) string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		_:scope log:notIncludes {?toTest math:equalTo ?toTest.}.
@@ -416,7 +416,7 @@
 	}.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not >= " ?value) string:concatenation ?message. 
 		:testNeg :literal ?toTest
 	} => {
@@ -435,7 +435,7 @@
 		   	sh:maxInclusive 	?value
 } => {
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not <= " ?value) string:concatenation ?message. 
 		?toTest math:greaterThan ?value.
 	} => {
@@ -452,7 +452,7 @@
 	?shape :needs :Nodekind.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not <= " ?value) string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		_:scope log:notIncludes {?toTest math:equalTo ?toTest.}.
@@ -468,7 +468,7 @@
 	}.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not <= " ?value) string:concatenation ?message. 
 		:testNeg :literal ?toTest
 	} => {
@@ -487,7 +487,7 @@
 			sh:minExclusive ?value. 
 } => {
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value is not > " ?value) string:concatenation ?message. 
 		?toTest math:lessThan ?value.
 	} => {
@@ -502,7 +502,7 @@
 	}.
 	#######################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value is not > " ?value) string:concatenation ?message. 
 		?toTest math:equalTo ?value.
 	} => {
@@ -519,7 +519,7 @@
 	?shape :needs :Nodekind.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testNeg :literal ?toTest
 	} => {
@@ -534,7 +534,7 @@
 	}.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		_:scope log:notIncludes {?toTest math:equalTo ?toTest.}.
@@ -554,7 +554,7 @@
 			sh:maxExclusive ?value. 
 } => {
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value is not > " ?value) string:concatenation ?message. 
 		?toTest math:greaterThan ?value.
 	} => {
@@ -569,7 +569,7 @@
 	}.
 	#######################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value is not > " ?value) string:concatenation ?message. 
 		?toTest math:equalTo ?value.
 	} => {
@@ -586,7 +586,7 @@
 	?shape :needs :Nodekind.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testNeg :literal ?toTest
 	} => {
@@ -601,7 +601,7 @@
 	}.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testPos :literal ?toTest. 
 		_:scope log:notIncludes {?toTest math:equalTo ?toTest.}.
@@ -622,7 +622,7 @@
 			sh:minLength 	?value. 
 } => {
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has less than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		(?egal ?testType) log:dtlit ?toTest.
@@ -641,7 +641,7 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has less than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		(?egal ?testType) log:dtlit ?toTest.
@@ -661,7 +661,7 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has less than " ?value " characters") string:concatenation ?message. 
 		:testPos :iri ?toTest.
 		?toTest log:uri ?testme.
@@ -680,7 +680,7 @@
 	?shape :needs :Nodekind.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has less than " ?value " characters") string:concatenation ?message. 
 		:testNeg :literal ?toTest.
 		:testNeg :iri ?toTest.
@@ -700,7 +700,7 @@
 			sh:maxLength 	?value. 
 } => {
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has more than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		(?egal ?testType) log:dtlit ?toTest.
@@ -719,7 +719,7 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has more than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?toTest.
 		(?egal ?testType) log:dtlit ?toTest.
@@ -739,7 +739,7 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has more than " ?value " characters") string:concatenation ?message. 
 		:testPos :iri ?toTest.
 		?toTest log:uri ?testme.
@@ -758,7 +758,7 @@
 	?shape :needs :Nodekind.
 	##########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value has more than " ?value " characters") string:concatenation ?message. 
 		:testNeg :literal ?toTest.
 		:testNeg :iri ?toTest.
@@ -779,7 +779,7 @@
 	?shape :needs :Nodekind.
 	#########################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not match pattern " ?regex) string:concatenation ?message.
 		:testNeg :literal ?toTest.
 	} => {
@@ -797,7 +797,7 @@
 	_:shac log:notIncludes {?shape sh:flags _:flag}.
 } => {
 	{	?shape :targets ?i.
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not match pattern " ?regex) string:concatenation ?message. 
 		(?data ?type) log:dtlit ?toTest.
 		?data string:notMatches ?regex
@@ -817,7 +817,7 @@
 			sh:flags		"i".
 } => {
 	{	?shape :targets ?i.
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Node does not match pattern " ?regex) string:concatenation ?message. 
 		(?data ?type) log:dtlit ?toTest.
 		?data string:lowerCase ?ldata.
@@ -838,7 +838,7 @@
 			sh:languageIn 	?list
 } => {
 	{	?shape  :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		(?egal ?tag) log:langlit ?toTest. 
 		?list list:iterate (?index ?value). 
 		("^(" ?value "-+.*)|(" ?value ")$") string:concatenation ?regex. 					# ^(?value-+.*)|(?value)$ 
@@ -848,8 +848,8 @@
 	}.
 	##########																
 	{	?shape  :targets ?i. 
-		#("Language does not match any of " ?list) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		("Language does not match any of " ?list) string:concatenation ?message. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		_:b log:notIncludes {?toTest :langPos ?list}
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -858,8 +858,8 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop; 
-			sh:value 						?toTest]
-			#sh:resultMessage 				?message]
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
 	}
 }.	
 #---uniqueLang
@@ -867,15 +867,15 @@
 			sh:uniqueLang 	?bool.
 	?bool log:rawType log:Literal.
   	(?lex xsd:boolean) log:dtlit ?bool.
-  	?lex string:notMatches "^(true|false)$".
+  	?lex string:notMatches "^(0|false)$".
 } => {
 	{	?shape 	:targets ?i.
 		("Language " ?tag1 " has been used more than once") string:concatenation ?message. 
-		?i ?prop ?toTest, 
-			 	 ?otherTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?otherTest).
 		?toTest log:notEqualTo ?otherTest.  
-		(?egal1 ?tag1) log:langlit ?toTest. 
-		(?egal2 ?tag2) log:langlit ?otherTest. 
+		(?str1 ?tag1) log:langlit ?toTest. 
+		(?str2 ?tag2) log:langlit ?otherTest. 
 		?tag1 string:equalIgnoringCase ?tag2
 	} => {
 		[ 	a 								sh:ValidationResult;
@@ -883,7 +883,6 @@
 			sh:sourceConstraintComponent 	sh:UniqueLangConstraintComponent; 
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i;
-			#sh:value 						?toTest;
 			sh:resultPath 					?prop;
 			sh:resultMessage 				?message]
 	}
@@ -895,7 +894,7 @@
 } => {
 	{	?shape 	:targets ?i.
 		("Must have the same values as " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		_:b log:notIncludes {?i ?value ?toTest}
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -911,7 +910,7 @@
 	{	?shape 	:targets ?i.
 		("Must have the same values as " ?value) string:concatenation ?message. 
 		?i ?value ?toTest. 
-		_:b log:notIncludes {?i ?prop ?toTest}
+		_:b log:notIncludes {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).}
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -929,7 +928,7 @@
 } => {
 	{	?shape :targets ?i.
 		("Property must not share any values with " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?toTest
 	} => {
 		[	a 								sh:ValidationResult; 
@@ -948,7 +947,7 @@
 } => {
 	{	?shape  :targets ?i.
 		("Value is not < value of " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?otherTest. 
 		?toTest math:greaterThan ?otherTest
 	} => {
@@ -964,7 +963,7 @@
 	#########################	
 	{	?shape 	:targets ?i. 
 		("Value is not < value of " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?otherTest. 
 		?toTest math:equalTo ?otherTest
 	} => {
@@ -980,7 +979,7 @@
 	##########################
 	{	?shape  :targets ?i. 
 		("Value is not < value of " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?otherTest. 
 		?toTest string:greaterThan ?otherTest
 	} => {
@@ -996,7 +995,7 @@
 	####################
 	{	?shape  :targets ?i. 
 		("Value is not < value of " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?otherTest. 
 		?toTest string:matches ?otherTest
 	} => {
@@ -1016,7 +1015,7 @@
 } => {
 	{	?shape  :targets ?i. 
 		("Value is not <= to the value of " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?otherTest. 
 		?toTest math:greaterThan ?otherTest
 	} => {
@@ -1032,7 +1031,7 @@
 	######################
 	{	?shape  :targets ?i. 
 		("Value is not <= to the value of " ?value) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?i ?value ?otherTest. 
 		?toTest string:greaterThan ?otherTest
 	} => {
@@ -1052,13 +1051,13 @@
 			sh:node ?vshape.
 } => {
 	{	?shape :targets ?i.
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 	} => {
 		?vshape :targets ?toTest
 	}.
 	####################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.  
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?vshape sh:property ?pShape.
 		?violation 	sh:sourceShape 	?pShape; 
 					sh:focusNode 	?toTest
@@ -1067,14 +1066,14 @@
 	}.
 	####################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		:NodeShape :prop (?toTest ?vShape ?violation)
 	} => {
 		:PropShape :node (?toTest ?vshape ?violation)
 	}.
 	####################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.   
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?vshape sh:property ?pShape.
 		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
@@ -1082,7 +1081,7 @@
 	}.
 	####################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?violation 	sh:sourceShape 	?vshape; 
 					sh:focusNode 	?toTest
 	} => {
@@ -1090,7 +1089,7 @@
 	}.
 	###################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value does not have shape " ?vshape) string:concatenation ?message. 
 		:PropShape :node (?toTest ?vshape ?anyViolation)
 	} => {
@@ -1105,7 +1104,7 @@
 	}.
 	##################################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value does not have shape " ?vshape) string:concatenation ?message. 
 		?result a 					sh:ValidationResult; 
 				sh:focusNode 		?i; 
@@ -1122,13 +1121,13 @@
 } => {
 	?shape :hasPChild (?pShape ?prop2).
 	{	?shape 	:targets 	?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 	} => {
 		?pShape :targets 	?toTest
 	}.
 	############################
 	{	?shape 	:targets 	?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?violation 	sh:sourceShape 	?pShape; 
 					sh:focusNode 	?toTest
 	} => {
@@ -1136,7 +1135,7 @@
 	}.
 	#############################
 	{	?shape 	:targets 	?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?pshape :hasPChild (?vShape ?prop3).
 		:PropShape :prop (?toTest ?vShape ?violation)
 	} => {
@@ -1150,14 +1149,277 @@
 	}.
 }.
 
-#---qualified min/maxcount... need to look into this
+#---qualified min/maxcount
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape
+} => {
+	{	?shape 	:targets 	?i.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
+	} => {
+		?qShape :targets 	?toTest
+	}.	
+########################
+	{	?shape :targets ?i.   
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest). 
+		?violation  sh:sourceShape ?qShape;
+					sh:focusNode   ?toTest. 
+	} => {
+		:PropShape :qShape (?i ?qShape ?toTest).
+	}.
+#################################
+	{	?shape :targets ?i.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).	 
+		?qShape :hasPChild (?pShape ?prop2).
+		:PropShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :qShape (?i ?qShape ?toTest).
+	}.
+#################################
+	{	?shape :targets ?i.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).	 
+		?qShape :hasPChild (?pShape ?prop2).
+		:NodeShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :qShape (?i ?qShape ?toTest).
+	}.
+}.
+########################
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedMinCount ?min.
+	_:shac log:notIncludes {?shape sh:qualifiedValueShapesDisjoint true}.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		("Less than " ?min " values have shape " ?qShape) string:concatenation ?message. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?plist) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :qShape (?i ?qShape ?toTest).} ?vlist) log:collectAllIn ?scope. 
+		?plist list:length ?lplist.
+		?vlist list:length ?lvlist.
+		?lvlist math:negation ?nlvlist.
+		(?lplist ?nlvlist) math:sum ?over.
+		?over math:lessThan ?min.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:QualifiedMinCountConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:value 						?plist;
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}.
+}.	
+########################
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedMaxCount ?max.
+	_:shac log:notIncludes {?shape sh:qualifiedValueShapesDisjoint true}.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		("More than " ?max " values have shape " ?qShape) string:concatenation ?message. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?plist) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :qShape (?i ?qShape ?toTest).} ?vlist) log:collectAllIn ?scope. 
+		?plist list:length ?lplist.
+		?vlist list:length ?lvlist.
+		?lvlist math:negation ?nlvlist.
+		(?lplist ?nlvlist) math:sum ?over.
+		?over math:greaterThan ?max.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:QualifiedMaxCountConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:value 						?plist;
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}.
+}.	
+##########################################disjoint
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedValueShapesDisjoint true.
+	?pShape sh:property ?shape.
+	(?otherShape {	?pShape sh:property ?otherqShape.
+					?otherqShape sh:qualifiedValueShape ?otherShape.
+					?qShape log:notEqualTo ?otherShape} ?siblist) log:collectAllIn ?scope. 
+	
+} => {
+	:PropShape :hasSiblings (?pShape ?qShape ?siblist)
+}.
+#########################case father
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedValueShapesDisjoint true.
+	?pShape sh:property ?shape.
+	:PropShape :hasSiblings (?pShape ?qShape ?siblist).
+	?siblist list:iterate (?index ?value).
+} => {
+	{	?shape :targets ?i.   
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest). 
+		?violation  sh:sourceShape ?value;
+					sh:focusNode   ?toTest. 
+	} => {
+		:PropShape :qDShape (?i ?qShape ?value ?toTest).
+	}.
+#################################
+	{	?shape :targets ?i.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).	 
+		?value :hasPChild (?pShape ?prop2).
+		:PropShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :qDShape (?i ?qShape ?value ?toTest).
+	}.
+#################################
+	{	?shape :targets ?i.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).	 
+		?value :hasPChild (?pShape ?prop2).
+		:NodeShape :prop (?toTest ?pShape ?violation)
+	} => {
+		:PropShape :qDShape (?i ?qShape ?value ?toTest).
+	}.
+}.
+
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedValueShapesDisjoint true.
+	?pShape sh:property ?shape.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
+		:PropShape :hasSiblings (?pShape ?qShape ?siblist).
+		?siblist list:iterate (?index ?value).
+		(?value {:PropShape :qDShape (?i ?qShape ?value ?toTest).} ?v2list) log:collectAllIn ?scope. 
+		?v2list list:length ?lv2list.
+		?siblist list:length ?lsiblist.
+		?lv2list math:lessThan ?lsiblist.
+	} =>{
+		:PropShape :qDVShape (?i ?qShape ?siblist ?toTest).
+	}
+}.
+
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedMinCount ?min;
+			sh:qualifiedValueShapesDisjoint true.
+	?pShape sh:property ?shape.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		("Less than " ?min " values have shape " ?qShape) string:concatenation ?message. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?plist) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :qShape (?i ?qShape ?toTest).} ?v1list) log:collectAllIn ?scope. 
+		:PropShape :hasSiblings (?pShape ?qShape ?siblist).
+		(?toTest {:PropShape :qDVShape (?i ?qShape ?siblist ?toTest).} ?v2list) log:collectAllIn ?scope. 
+		(?v1list ?v2list) list:append ?vdlist.
+		?vdlist list:removeDuplicates ?vlist.
+		?plist list:length ?lplist.
+		?vlist list:length ?lvlist.
+		?lvlist math:negation ?nlvlist.
+		(?lplist ?nlvlist) math:sum ?over.
+		?over math:lessThan ?min.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:QualifiedMinCountConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:value 						?plist;
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}.
+}.	
+########################
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedMaxCount ?max;
+			sh:qualifiedValueShapesDisjoint true.
+	?pShape sh:property ?shape.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		("More than " ?max " values have shape " ?qShape) string:concatenation ?message. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?plist) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :qShape (?i ?qShape ?toTest).} ?v1list) log:collectAllIn ?scope. 
+		:PropShape :hasSiblings (?pShape ?qShape ?siblist).
+		(?toTest {:PropShape :qDVShape (?i ?qShape ?siblist ?toTest).} ?v2list) log:collectAllIn ?scope. 
+		(?v1list ?v2list) list:append ?vdlist.
+		?vdlist list:removeDuplicates ?vlist.
+		?plist list:length ?lplist.
+		?vlist list:length ?lvlist.
+		?lvlist math:negation ?nlvlist.
+		(?lplist ?nlvlist) math:sum ?over.
+		?over math:greaterThan ?max.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:QualifiedMaxCountConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:value 						?plist;
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}.
+}.	
+###########################case no father
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedMinCount ?min;
+			sh:qualifiedValueShapesDisjoint true.
+	_:shac log:notIncludes {?pShape sh:property ?shape.}.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		("Less than " ?min " values have shape " ?qShape) string:concatenation ?message. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?plist) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :qShape (?i ?qShape ?toTest).} ?v1list) log:collectAllIn ?scope. 
+		?plist list:length ?lplist.
+		?vlist list:length ?lvlist.
+		?lvlist math:negation ?nlvlist.
+		(?lplist ?nlvlist) math:sum ?over.
+		?over math:lessThan ?min.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:QualifiedMinCountConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:value 						?plist;
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}.
+}.	
+########################
+{	?shape 	sh:path 	?prop; 
+			sh:qualifiedValueShape ?qShape;
+			sh:qualifiedMaxCount ?max;
+			sh:qualifiedValueShapesDisjoint true.
+	_:shac log:notIncludes {?pShape sh:property ?shape.}.
+} => {
+	{	(_:datascope 2) log:includes {?shape 	:targets 	?i.}.
+		("More than " ?max " values have shape " ?qShape) string:concatenation ?message. 
+		(?toTest {:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).} ?plist) log:collectAllIn ?scope. 
+		(?toTest {:PropShape :qShape (?i ?qShape ?toTest).} ?vlist) log:collectAllIn ?scope. 
+		?plist list:length ?lplist.
+		?vlist list:length ?lvlist.
+		?lvlist math:negation ?nlvlist.
+		(?lplist ?nlvlist) math:sum ?over.
+		?over math:greaterThan ?max.
+	} => {
+		[ 	a 								sh:ValidationResult; 
+			sh:resultSeverity 				sh:Violation; 
+			sh:sourceConstraintComponent 	sh:QualifiedMaxCountConstraintComponent; 
+			sh:sourceShape 					?shape;
+			sh:focusNode 					?i;
+			sh:value 						?plist;
+			sh:resultPath 					?prop;
+			sh:resultMessage 				?message]
+	}.
+}.	
 
 #---hasValue
 {	?shape 	sh:path 	?prop; 
 			sh:hasValue ?value
 } => {
 	{	?shape 	:targets ?i. 
-		?i ?prop ?value
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?value).
 	} => {
 		?i :hasV ?value
 	}.
@@ -1181,7 +1443,7 @@
 			sh:in 	?list
 } => {
 	{	?shape 	:targets ?i. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?toTest list:in ?list
 	} => {
 		?toTest :lPos ?list
@@ -1189,7 +1451,7 @@
 	###############################
 	{	?shape 	:targets ?i.
 		#("Value is not in " ?list) string:concatenation ?message. 
-		?i ?prop ?toTest. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		_:b log:notIncludes {?toTest :lPos ?list}
 	} => {
 		[ 	a 								sh:ValidationResult;
@@ -1209,7 +1471,7 @@
 			sh:and 	?list
 } => {
 	{	?shape :targets ?i.   
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).		 
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
@@ -1218,7 +1480,7 @@
 	}.
     #################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).		 
 		?value :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
@@ -1227,7 +1489,7 @@
 	}.
 	#################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).		 
 		?value :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
@@ -1236,7 +1498,7 @@
 	}.
 	#################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value does not have all the shapes in " ?list) string:concatenation ?message. 
         (?value {:PropShape :and (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
@@ -1253,7 +1515,7 @@
     }.
 	#####################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value) 
 	} => {
 		?value :targets ?toTest
@@ -1264,7 +1526,7 @@
 			sh:or 	?list
 } => {
 	{	?shape :targets ?i.   
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).		 
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
@@ -1273,7 +1535,7 @@
 	}.
     #################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).
 		?value :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
@@ -1282,7 +1544,7 @@
 	}.
 	#################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).
 		?value :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
@@ -1291,8 +1553,8 @@
 	}.
     #################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.
-		#("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
+		("Value does not have at least one of the shapes in " ?list) string:concatenation ?message. 
         (?value {:PropShape :or (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
         ?list list:length ?llength.
@@ -1304,12 +1566,12 @@
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
 			sh:resultPath 					?prop;
-			sh:value 						?toTest]
-			#sh:resultMessage 				?message]
+			sh:value 						?toTest;
+			sh:resultMessage 				?message]
     }.
 	#################################
 	{	?shape 	:targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value) 
 	} => {
 		?value :targets ?toTest
@@ -1320,7 +1582,7 @@
 			sh:xone 	?list
 } => {
 	{	?shape :targets ?i.   
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).		 
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
@@ -1329,7 +1591,7 @@
 	}.
     #################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).	
 		?value :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
@@ -1338,7 +1600,7 @@
 	}.
 	#################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value).	
 		?value :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
@@ -1347,7 +1609,7 @@
 	}.
     #################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value does not have only one of the shapes in " ?list) string:concatenation ?message. 
         (?value {:PropShape :xone (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
@@ -1365,7 +1627,7 @@
     }.
 	#################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.  
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value does not have only one of the shapes in " ?list) string:concatenation ?message.  
         (?value {:PropShape :xone (?value ?toTest ?list).} ?vlist) log:collectAllIn ?scope. 
         ?vlist list:length ?vlength.
@@ -1384,7 +1646,7 @@
     }.
 	#####################
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		?list list:iterate (?index ?value) 
 	} => {
 		?value :targets ?toTest
@@ -1398,7 +1660,7 @@
              ?value	sh:path   	?props      } ?plist) log:collectAllIn ?scope.
 } => {
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
     	?toTest ?tprop ?egal.
     	?plist list:member ?tprop.
     }=>{
@@ -1406,7 +1668,7 @@
     }.
   ########################
   	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value should be closed") string:concatenation ?message.
     	?toTest ?tprop ?egal.
     	_:b log:notIncludes {?plist ?toTest ?tprop}
@@ -1430,7 +1692,7 @@
     (?vplist ?list) list:append ?plist.
 } => {
 	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
     	?toTest ?tprop ?egal.
     	?plist list:member ?tprop.
     }=>{
@@ -1438,7 +1700,7 @@
     }.
   ########################
   	{	?shape :targets ?i. 
-		?i ?prop ?toTest.
+		:PropShape :Pathverarbeitung (?shape ?i ?prop ?egal1 ?egal2 ?toTest).
 		("Value should be closed") string:concatenation ?message.
     	?toTest ?tprop ?egal.
     	_:b log:notIncludes {?plist ?toTest ?tprop}
