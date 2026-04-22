@@ -1,12 +1,8 @@
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <http://example.org/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
-
 #--------Misc Components
 #---deactivated
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
-
 {	?shape sh:deactivated true.
 } => {
 	{	?shape :targets ?i.

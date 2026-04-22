@@ -9,7 +9,7 @@
 
 #---not
 {	?shape 	sh:not 		?vshape.
-	_:b log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i.   	 
 		?violation  sh:sourceShape ?vshape;
@@ -34,7 +34,7 @@
 	#################################
     {   ?shape :targets ?i.
 		("Node does have shape " ?vshape) string:concatenation ?message.
-		(_:bse 2) log:notIncludes {:NodeShape :not (?violation ?i ?vshape).}
+		(_:dataScope 2) log:notIncludes {:NodeShape :not (?violation ?i ?vshape).}
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -55,7 +55,7 @@
 			sh:not 		?vshape
 } => {
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.	 
+		:PropShape :PathCommunication (?shape ?i ?prop ?toTest). 
 		?violation  sh:sourceShape ?vshape;
                     sh:focusNode   ?toTest. 
 	} => {
@@ -63,7 +63,7 @@
 	}.
     #################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :PathCommunication (?shape ?i ?prop ?toTest).
 		?vshape :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
 	} => {
@@ -71,7 +71,7 @@
 	}.
 	#################################
 	{	?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :PathCommunication (?shape ?i ?prop ?toTest).
 		?vshape :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
@@ -79,9 +79,9 @@
 	}.
 	#################################
     {   ?shape :targets ?i.
-		?i ?prop ?toTest.
+		:PropShape :PathCommunication (?shape ?i ?prop ?toTest).
 		("Value does have shape " ?vshape) string:concatenation ?message.
-		(_:bse 2) log:notIncludes {:PropShape :not (?violation ?toTest ?vshape).}.
+		(_:dataScope 2) log:notIncludes {:PropShape :not (?violation ?toTest ?vshape).}.
     } => {
         [ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -93,7 +93,7 @@
     }.
 	#####################
 	{	?shape	:targets ?i.
-		?i ?prop ?toTest.	
+		:PropShape :PathCommunication (?shape ?i ?prop ?toTest).
 	} => {
 		?vshape :targets ?toTest;
 	}

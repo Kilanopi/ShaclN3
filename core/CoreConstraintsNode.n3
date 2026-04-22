@@ -8,11 +8,12 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix func: <http://www.w3.org/2007/rif-builtin-function#>.
 
+#---on-demand Nodekind determination 
 {
 } => {
 	{	?shape :needs :Nodekind.
-		_:shac log:notIncludes {?shape sh:path _:egal}.
-		_:shac log:notIncludes {:please :apply :clean}
+		_:shaclScope log:notIncludes {?shape sh:path _:something}.
+		_:shaclScope log:notIncludes {:please :apply :clean}
 	} => {
 		{	?shape :targets ?i.
 			?i log:rawType log:Literal
@@ -67,11 +68,11 @@
 #------Value Type Constraints
 #---class
 {	?shape	sh:class	?class.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i.
 		("Node does not have class " ?class) string:concatenation ?message.
-		_:bs log:notIncludes {?i rdf:type ?class}
+		_:dataScope log:notIncludes {?i rdf:type ?class}
 	} => {
 		[	a								sh:ValidationResult;
 			sh:resultSeverity				sh:Violation;
@@ -84,11 +85,11 @@
 }.
 #---datatype 
 {	?shape sh:datatype ?type.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i.
 		("Node does not have datatype " ?type) string:concatenation ?message.
-		(?egal ?testType) log:dtlit ?i.
+		(?data ?testType) log:dtlit ?i.
 		?testType log:notEqualTo ?type
 	} => {
 		[	a								sh:ValidationResult;
@@ -198,7 +199,7 @@
 }.
 #---nodeKind
 {	?shape 	sh:nodeKind ?kind.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	?shape :needs :Nodekind.
 	################################
@@ -289,7 +290,7 @@
 #------Value Range Constraints
 #---minInclusive
 {	?shape 	sh:minInclusive ?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i. 
 		("Node is not >= " ?value) string:concatenation ?message. 
@@ -323,7 +324,7 @@
 	{	?shape :targets ?i. 
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testPos :literal ?i.
-		_:scope log:notIncludes {?i math:equalTo ?i.}.
+		_:dataScope log:notIncludes {?i math:equalTo ?i.}.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -349,10 +350,10 @@
 }.
 #---maxInclusive
 {	?shape 	sh:maxInclusive ?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i. 
-		("Value is not <= " ?value) string:concatenation ?message. 
+		("Node is not <= " ?value) string:concatenation ?message. 
 		?i math:greaterThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -367,7 +368,7 @@
 	{	?shape :targets ?i. 
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testPos :literal ?i.
-		_:scope log:notIncludes {?i math:equalTo ?i.}.
+		_:dataScope log:notIncludes {?i math:equalTo ?i.}.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -395,10 +396,10 @@
 }.	
 #---minExclusive
 {	?shape 	sh:minExclusive ?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
 } => {
 	{	?shape :targets ?i. 
-		("Value is not > " ?value) string:concatenation ?message. 
+		("Node is not > " ?value) string:concatenation ?message. 
 		?i math:lessThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -411,7 +412,7 @@
 	}.
 	#######################
 	{	?shape :targets ?i. 
-		("Value is not > " ?value) string:concatenation ?message. 
+		("Node is not > " ?value) string:concatenation ?message. 
 		?i math:equalTo ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -441,7 +442,7 @@
 	{	?shape :targets ?i. 
 		("Node is not > " ?value) string:concatenation ?message. 
 		:testPos :literal ?i.
-		_:scope log:notIncludes {?i math:equalTo ?i.}.
+		_:dataScope log:notIncludes {?i math:equalTo ?i.}.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -454,10 +455,10 @@
 }.	
 #---maxExclusive
 {	?shape 	sh:maxExclusive ?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
 } => {
 	{	?shape :targets ?i. 
-		("Value is not < " ?value) string:concatenation ?message. 
+		("Node is not < " ?value) string:concatenation ?message. 
 		?i math:greaterThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -470,7 +471,7 @@
 	}.
 	#######################
 	{	?shape :targets ?i. 
-		("Value is not < " ?value) string:concatenation ?message. 
+		("Node is not < " ?value) string:concatenation ?message. 
 		?i math:equalTo ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -500,7 +501,7 @@
 	{	?shape :targets ?i. 
 		("Node is not < " ?value) string:concatenation ?message. 
 		:testPos :literal ?i.
-		_:scope log:notIncludes {?i math:equalTo ?i.}.
+		_:dataScope log:notIncludes {?i math:equalTo ?i.}.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -514,14 +515,14 @@
 #------String-based Constraints
 #---minLength
 {	?shape 	sh:minLength 	?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
 } => {
 	{	?shape :targets ?i.
-		("Value has less than " ?value " characters") string:concatenation ?message. 
+		("Node has less than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?i.
-		(?egal ?testType) log:dtlit ?i.
-		?testType log:localN3String ?typepe.
-		?typepe string:containsRoughly "string".
+		(?something ?testType) log:dtlit ?i.
+		?testType log:localN3String ?typeString.
+		?typeString string:containsRoughly "string".
 		?i string:length ?llength.
 		?llength math:lessThan ?value.
 	} => {
@@ -535,13 +536,13 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		("Value has less than " ?value " characters") string:concatenation ?message. 
+		("Node has less than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?i.
-		(?egal ?testType) log:dtlit ?i.
-		?testType log:localN3String ?typepe.
-		?typepe string:notContainsRoughly "string".
-		?i log:localN3String ?testme.
-		?testme string:length ?llength.
+		(?something ?testType) log:dtlit ?i.
+		?testType log:localN3String ?typeString.
+		?typeString string:notContainsRoughly "string".
+		?i log:localN3String ?testString.
+		?testString string:length ?llength.
 		?llength math:lessThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -554,10 +555,10 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		("Value has less than " ?value " characters") string:concatenation ?message. 
+		("Node has less than " ?value " characters") string:concatenation ?message. 
 		:testPos :iri ?i.
-		?i log:uri ?testme.
-		?testme string:length ?llength.
+		?i log:uri ?testString.
+		?testString string:length ?llength.
 		?llength math:lessThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -572,7 +573,7 @@
 	?shape :needs :Nodekind.
 	##########################
 	{	?shape :targets ?i. 
-		("Value has less than " ?value " characters") string:concatenation ?message. 
+		("Node has less than " ?value " characters") string:concatenation ?message. 
 		:testNeg :literal ?i.
 		:testNeg :iri ?i.
 	} => {
@@ -588,12 +589,12 @@
 
 #---maxLength
 {	?shape 	sh:maxLength 	?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
 } => {
 	{	?shape :targets ?i. 
-		("Value has more than " ?value " characters") string:concatenation ?message. 
+		("Node has more than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?i.
-		(?egal ?testType) log:dtlit ?i.
+		(?something ?testType) log:dtlit ?i.
 		?testType log:localN3String ?typepe.
 		?typepe string:containsRoughly "string".
 		?i string:length ?llength.
@@ -609,9 +610,9 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		("Value has more than " ?value " characters") string:concatenation ?message. 
+		("Node has more than " ?value " characters") string:concatenation ?message. 
 		:testPos :literal ?i.
-		(?egal ?testType) log:dtlit ?i.
+		(?something ?testType) log:dtlit ?i.
 		?testType log:localN3String ?typepe.
 		?typepe string:notContainsRoughly "string".
 		?i log:localN3String ?testme.
@@ -628,7 +629,7 @@
 	}.
 	##########################
 	{	?shape :targets ?i. 
-		("Value has more than " ?value " characters") string:concatenation ?message. 
+		("Node has more than " ?value " characters") string:concatenation ?message. 
 		:testPos :iri ?i.
 		?i log:uri ?testme.
 		?testme string:length ?llength.
@@ -646,7 +647,7 @@
 	?shape :needs :Nodekind.
 	##########################
 	{	?shape :targets ?i. 
-		("Value has more than " ?value " characters") string:concatenation ?message. 
+		("Node has more than " ?value " characters") string:concatenation ?message. 
 		:testNeg :literal ?i.
 		:testNeg :iri ?i.
 	} => {
@@ -661,7 +662,7 @@
 }.
 #---pattern
 {	?shape 	sh:pattern 	?regex.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	?shape :needs :Nodekind.
 	#########################
@@ -679,8 +680,8 @@
 	}.
 }.
 {	?shape 	sh:pattern 	?regex.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
-	_:shac log:notIncludes {?shape sh:flags _:flag}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
+	_:shaclScope log:notIncludes {?shape sh:flags _:flag}.
 } => {
 	{	?shape :targets ?i. 
 		("Node does not match pattern " ?regex) string:concatenation ?message.
@@ -698,7 +699,7 @@
 }.	
 {	?shape 	sh:pattern 	?regex;
 			sh:flags "i".
-	_:shac log:notIncludes {?shape sh:path _:egal}.
+	_:shaclScope log:notIncludes {?shape sh:path _:egal}.
 } => {
 	{	?shape :targets ?i. 
 		("Node does not match pattern " ?regex) string:concatenation ?message.
@@ -718,7 +719,7 @@
 }.	
 #---languageIn
 {	?shape 	sh:languageIn 	?list.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i. 
 		(?egal ?tag) log:langlit ?i. 
@@ -726,30 +727,30 @@
 		("^(" ?value "-+.*)|(" ?value ")$") string:concatenation ?regex.				# ^(?value-+.*)|(?value)$ 
 		?tag string:matches ?regex
 	} => {
-		?i :langPos ?list
+		:NodeShape :langPos (?i ?list)
 	}.
 	##############################	
 	{	?shape :targets ?i. 
-		#("Language does not match any of " ?list) string:concatenation ?message. 
-		_:b log:notIncludes {?i :langPos ?list}
+		("Language does not match any of " ?list) string:concatenation ?message. 
+		_:dataScope log:notIncludes {:NodeShape :langPos (?i ?list)}
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:LanguageInConstraintComponent; 
 			sh:sourceShape 					?shape ;
 			sh:focusNode 					?i; 
-			sh:value 						?i]
-			#sh:resultMessage 				?message]
+			sh:value 						?i;
+			sh:resultMessage 				?message]
 	}
 }.	
-#------Property Pair Constraints #makes no sense for nodeshapes/only checks for ?value being reflexive
+#------Property Pair Constraints
 #---equals
 {	?shape 	sh:equals 	?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i. 
 		("Must have the same values as " ?value) string:concatenation ?message. 
-		_:b log:notIncludes {?i ?value ?i}
+		_:dataScope log:notIncludes {?i ?value ?i}
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
@@ -762,24 +763,24 @@
 	{	?shape :targets ?i. 
 		("Must have the same values as " ?value) string:concatenation ?message. 
 		?i ?value ?i.
-		?i ?value ?wasAnderes.
-		?wasAnderes log:notEqualTo ?i.
+		?i ?value ?otherNode.
+		?otherNode log:notEqualTo ?i.
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:EqualsConstraintComponent; 
 			sh:sourceShape 					?shape;
 			sh:focusNode 					?i; 
-			sh:value 						?wasAnderes;
+			sh:value 						?otherNode;
 			sh:resultMessage 				?message]
 	}.
 }.	
 #---disjoint
 {	?shape 	sh:disjoint ?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i. 
-		("Value node must not also be one of the values of " ?value) string:concatenation ?message. 
+		("Node must not also be one of the values of " ?value) string:concatenation ?message. 
 		?i ?value ?i
 		} => {
 			[	a 								sh:ValidationResult; 
@@ -794,7 +795,7 @@
 #------Shape-based Constraints
 #---node
 {	?shape 	sh:node ?vshape.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i
 	} => {
@@ -849,7 +850,7 @@
 #---property
 {	?shape 	sh:property ?pShape.
     ?pShape sh:path ?prop.
-	_:shac log:notIncludes {?shape sh:path ?gg}
+	_:shaclScope log:notIncludes {?shape sh:path ?gg}
 } => {
 	?shape :hasPChild (?pShape ?prop).
 	{	?shape 	:targets 	?i
@@ -878,14 +879,12 @@
 	}.
 }.
 
-#---qualified min/maxcount... need to look into this (valueshape not for NodeShapes per docs)
-
-#---hasValue														#makes no sense for nodeshapes
+#---hasValue												
 {	?shape 	sh:hasValue ?value.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 	} => {
 		{	?shape :targets ?i. 
-			("Value must be " ?value) string:concatenation ?message. 
+			("Node must be " ?value) string:concatenation ?message. 
 			?i log:notEqualTo ?value
 		} => {
 			[ 	a 								sh:ValidationResult; 
@@ -898,31 +897,31 @@
 }.
 #---in
 {	?shape 	sh:in 	?list.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i. 
 		?i list:in ?list
 	} => {
-		?i :lPos ?list
+		:NodeShape :lPos (?i ?list)
 	}.
 	###########################
 	{	?shape :targets ?i. 
-		#("Value is not in " ?list) string:concatenation ?message. 
-		_:b log:notIncludes {?i :lPos ?list}
+		("Node is not in " ?list) string:concatenation ?message. 
+		_:dataScope log:notIncludes {:NodeShape :lPos (?i ?list)}
 	} => {
 		[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:InConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?i]
-			#sh:resultMessage 				?message]
+			sh:value 						?i;
+			sh:resultMessage 				?message]
 	}
 }.
 #------Logical Constraints
 #---and
 {	?shape 	sh:and 	?list.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i.   
 		?list list:iterate (?index ?value).		 
@@ -969,7 +968,7 @@
 }.
 #---or
 {	?shape 	sh:or 	?list.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i.   
 		?list list:iterate (?index ?value).		 
@@ -1017,7 +1016,7 @@
 }.
 #---xone
 {	?shape 	sh:xone 	?list.
-	_:shac log:notIncludes {?shape sh:path _:egal}
+	_:shaclScope log:notIncludes {?shape sh:path _:something}
 } => {
 	{	?shape :targets ?i.   
 		?list list:iterate (?index ?value).		 
@@ -1080,56 +1079,56 @@
 }.
 #---closed
 {	?shape 	sh:closed true.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
-    _:shac log:notIncludes {?shape sh:ignoredProperties ?list}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
+    _:shaclScope log:notIncludes {?shape sh:ignoredProperties ?list}.
     (?props {?shape	sh:property ?value.
              ?value	sh:path   	?props      } ?plist) log:collectAllIn ?scope.
 } => {
 	{	?shape :targets ?i.
-    	?i ?tprop ?egal.
+    	?i ?tprop ?something.
     	?plist list:member ?tprop.
     }=>{
-      	?plist ?i ?tprop
+      	:NodeShape :closed (?plist ?i ?tprop)
     }.
   ########################
   	{	?shape :targets ?i.
-    	?i ?tprop ?egal.
-    	_:b log:notIncludes {?plist ?i ?tprop}
+    	?i ?tprop ?something.
+    	_:dataScope log:notIncludes {:NodeShape :closed (?plist ?i ?tprop)}
     }=>{
       	[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:ClosedConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?egal;
+			sh:value 						?something;
 			sh:resultPath 					?tprop]
    	}
 }.
 ################################################################
 {	?shape 	sh:closed true;
     		sh:ignoredProperties ?list.
-	_:shac log:notIncludes {?shape sh:path _:egal}.
+	_:shaclScope log:notIncludes {?shape sh:path _:something}.
     (?props {?shape	sh:property ?value.
              ?value	sh:path   	?props      } ?vplist) log:collectAllIn ?scope.
     (?vplist ?list) list:append ?plist.
 } => {
 	{	?shape :targets ?i.
-    	?i ?tprop ?egal.
+    	?i ?tprop ?something.
     	?plist list:member ?tprop.
     }=>{
-      	?plist ?i ?tprop
+      	:NodeShape :closed (?plist ?i ?tprop)
     }.
   ########################
   	{	?shape :targets ?i.
-    	?i ?tprop ?egal.
-    	_:b log:notIncludes {?plist ?i  ?tprop}
+    	?i ?tprop ?something.
+    	_:dataScope log:notIncludes {:NodeShape :closed (?plist ?i ?tprop)}
     }=>{
       	[ 	a 								sh:ValidationResult; 
 			sh:resultSeverity 				sh:Violation; 
 			sh:sourceConstraintComponent 	sh:ClosedConstraintComponent; 
 			sh:sourceShape 					?shape; 
 			sh:focusNode 					?i; 
-			sh:value 						?egal;
+			sh:value 						?something;
 			sh:resultPath 					?tprop;]
    	} 
 }.

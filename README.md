@@ -8,18 +8,21 @@ The EYE Reasoner required to use this.
 LINK: https://github.com/eyereasoner/eye
 
 HOW TO USE:
-You should use the shell script transl.sh in the repository and call it with your SHACL document as the (first) argument. <br/>
+You should either use the shell script "transl.sh" in the repository and call it with your SHACL document as the (first) argument. <br/>
 Example:
 ```./transl.sh MySHACLdocument.n3```
 
-The provided shell script for applying a translated SHACL document do a data graph cleanly via EYE is called applyClean.sh . <br/>
-Its purpose is to unclutter the output to get just the SHACL validationreport as you would from a SHACL validator. <br/>
+And then call the provided shell script "applyClean.sh" for applying a translated SHACL document to a data graph cleanly via EYE. <br/>
+The purpose of "applyClean.sh" is to unclutter the output to get just the SHACL validationreport as you would from a SHACL validator. <br/>
 It takes a translated SHACL document (translated.n3) as its first argument and applies it to the datagraph that is given as a second argument. <br/>
 This was tested on large the [SHACL testsuite](https://github.com/w3c/data-shapes/tree/gh-pages/data-shapes-test-suite/tests) . <br/>
 EXAMPLE:
 ```./applyClean.sh translated.n3 MyDataGraph.n3```
 
+Or you can use the shell script "run.sh" with the SHACL Document file as the first argument and the data graph file as the second argument. <br/>
+This will simply run transl and applyClean back to back in one command. <br/>
+
 IMPORTANT NOTES: <br/>
 -This may not function properly if you do not seperate your data graph from your shacl graph!! <br/>
 -In case anyone looks at the code itself: change your tab size to 4 for readability <br/>
--some functionality is still WIP and may currently not work correctly or at all. to see what components of shacl are fully operational, see [this table](https://docs.google.com/spreadsheets/d/1jUb_fHszuSZQYpAVdpspBHCITahNhvylPwVjMYi_dys) from the test suite evaluation <br/>
+-some functionality is still WIP and may currently not work correctly or at all. <br/>

@@ -9,138 +9,138 @@
 @prefix func: <http://www.w3.org/2007/rif-builtin-function#>.
 
 
-#------------------Pathvererbung rememberer
+#------------------Pathinherit rememberer
 #--------Base case
 {	?shape sh:path ?prop.
 } => {
-    :PropShape :PathVererbung (?shape ?prop ?prop 0) 
+    :PropShape :Pathinherit (?shape ?prop ?prop 0) 
 }.
 
 #---Sequence
-{   :PropShape :PathVererbung (?shape ?parent ?proplist ?depth).
+{   :PropShape :Pathinherit (?shape ?parent ?proplist ?depth).
     ?proplist list:isList true.
     ?proplist list:firstRest (?prop ?rest).
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?prop ?ndepth).
-    :PropShape :PathSeqVererbung (?shape ?parent ?rest ?ndepth)
+    :PropShape :Pathinherit (?shape ?parent ?prop ?ndepth).
+    :PropShape :PathSeqInherit (?shape ?parent ?rest ?ndepth)
 }.
-{   :PropShape :PathSeqVererbung (?shape ?parent ?proplist ?depth).
+{   :PropShape :PathSeqInherit (?shape ?parent ?proplist ?depth).
     ?proplist list:firstRest (?prop ?rest).
     _:shaclScope log:notIncludes {?rest list:length 0}.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?prop ?depth).
-    :PropShape :PathSeqVererbung (?shape ?parent ?rest ?depth)
+    :PropShape :Pathinherit (?shape ?parent ?prop ?depth).
+    :PropShape :PathSeqInherit (?shape ?parent ?rest ?depth)
 }.
-{   :PropShape :PathSeqVererbung (?shape ?parent ?proplist ?depth).
+{   :PropShape :PathSeqInherit (?shape ?parent ?proplist ?depth).
     ?proplist list:firstRest (?prop ?rest).
     ?rest list:length 0.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?prop ?depth).
+    :PropShape :Pathinherit (?shape ?parent ?prop ?depth).
 }.
 #---Alternative
-{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:alternativePath ?list.
     ?list list:iterate (?index ?prop).
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?prop ?ndepth).
+    :PropShape :Pathinherit (?shape ?parent ?prop ?ndepth).
 }.
 #---Inverse
-{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:inversePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :PathINVinherit (?shape ?parent ?path ?ndepth).
 }.
 
 #---Zero-Or-More
-{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrMorePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :Pathinherit (?shape ?parent ?path ?ndepth).
 }.
 
 #---One-Or-More
-{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:oneOrMorePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :Pathinherit (?shape ?parent ?path ?ndepth).
 }.
 #---Zero-Or-One
-{   :PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrOnePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :Pathinherit (?shape ?parent ?path ?ndepth).
 }.
 ##########################inverses
 #---Sequence
-{   :PropShape :PathIVererbung (?shape ?parent ?proplist ?depth).
+{   :PropShape :PathINVinherit (?shape ?parent ?proplist ?depth).
     ?proplist list:isList true.
     ?proplist list:firstRest (?prop ?rest).
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?prop ?ndepth).
-    :PropShape :PathSeqIVererbung (?shape ?parent ?rest ?ndepth)
+    :PropShape :PathINVinherit (?shape ?parent ?prop ?ndepth).
+    :PropShape :PathSeqINVinherit (?shape ?parent ?rest ?ndepth)
 }.
-{   :PropShape :PathSeqIVererbung (?shape ?parent ?proplist ?depth).
+{   :PropShape :PathSeqINVinherit (?shape ?parent ?proplist ?depth).
     ?proplist list:firstRest (?prop ?rest).
     _:shaclScope log:notIncludes {?rest list:length 0}.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?prop ?depth).
-    :PropShape :PathSeqIVererbung (?shape ?parent ?rest ?depth)
+    :PropShape :PathINVinherit (?shape ?parent ?prop ?depth).
+    :PropShape :PathSeqINVinherit (?shape ?parent ?rest ?depth)
 }.
-{   :PropShape :PathSeqIVererbung (?shape ?parent ?proplist ?depth).
+{   :PropShape :PathSeqINVinherit (?shape ?parent ?proplist ?depth).
     ?proplist list:firstRest (?prop ?rest).
     ?rest list:length 0.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?prop ?depth).
+    :PropShape :PathINVinherit (?shape ?parent ?prop ?depth).
 }.
 #---Alternative
-{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:alternativePath ?list.
     ?list list:iterate (?index ?prop).
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?prop ?ndepth).
+    :PropShape :PathINVinherit (?shape ?parent ?prop ?ndepth).
 }.
 #---Inverse
-{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:inversePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :Pathinherit (?shape ?parent ?path ?ndepth).
 }.
 
 #---Zero-Or-More
-{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrMorePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :PathINVinherit (?shape ?parent ?path ?ndepth).
 }.
 
 #---One-Or-More
-{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:oneOrMorePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :PathINVinherit (?shape ?parent ?path ?ndepth).
 }.
 #---Zero-Or-One
-{   :PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{   :PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrOnePath ?path.
     (?depth 1) math:sum ?ndepth.
 } => {
-    :PropShape :PathIVererbung (?shape ?parent ?path ?ndepth).
+    :PropShape :PathINVinherit (?shape ?parent ?path ?ndepth).
 }.
 
-#------------------Pathverarbeitung
+#------------------PathCommunication
 #---Predicate
-{	:PropShape :PathVererbung (?shape ?parent ?prop 0).
+{	:PropShape :Pathinherit (?shape ?parent ?prop 0).
     ?prop list:isList false.
     _:shaclScope log:notIncludes {?prop sh:alternativePath _:egal},
                                  {?prop sh:inversePath _:egal},
@@ -151,11 +151,11 @@
 	{	?shape  :targets 	?i.
         ?i ?prop ?toTest.
  	} => {
-		:PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?prop ?toTest)
+		:PropShape :PathCommunication (?shape ?i ?parent ?toTest)
 	}.
 }.
 ##############################
-{	:PropShape :PathVererbung (?shape ?parent ?prop ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?prop ?depth).
     ?depth math:greaterThan 0.
     ?prop list:isList false.
     _:shaclScope log:notIncludes {?prop sh:alternativePath _:egal},
@@ -178,7 +178,7 @@
 	}
 }.
 ##############################inv
-{	:PropShape :PathIVererbung (?shape ?parent ?prop ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?prop ?depth).
     ?depth math:greaterThan 0.
     ?prop list:isList false.
     _:shaclScope log:notIncludes {?prop sh:alternativePath _:egal},
@@ -202,57 +202,57 @@
 	}
 }.
 #---Sequence
-{	:PropShape :PathVererbung (?shape ?parent ?proplist 0).
+{	:PropShape :Pathinherit (?shape ?parent ?proplist 0).
     ?proplist list:isList true.
 } => {
     ######### Base case
 	{	?shape  :targets 	?i.
  	} => {
-		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?i ?proplist).
+		:PropShape :SeqComm (?shape ?i ?proplist ?i ?proplist).
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        :PropShape :SeqComm (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
         (_:dataScope 0) log:notIncludes {?rest list:length 0}.
         
  	} => {
-		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?toTest ?rest)
+		:PropShape :SeqComm (?shape ?i ?proplist ?toTest ?rest)
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        :PropShape :SeqComm (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         ?rest list:length 0.
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?proplist ?toTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTest).
 	}.
 }.
 #########################################
-{	:PropShape :PathVererbung (?shape ?parent ?proplist ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?proplist ?depth).
     ?proplist list:isList true.
     ?depth math:greaterThan 0.
 } => {
     ######### case first
 	{	?shape  :targets 	?i.
  	} => {
-		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?i ?proplist).
+		:PropShape :SeqComm (?shape ?i ?proplist ?i ?proplist).
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        :PropShape :SeqComm (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
         (_:dataScope 0) log:notIncludes {?rest list:length 0}
         
  	} => {
-		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?toTest ?rest)
+		:PropShape :SeqComm (?shape ?i ?proplist ?toTest ?rest)
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        :PropShape :SeqComm (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         ?rest list:length 0.
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
@@ -264,21 +264,21 @@
 	{	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
  	} => {
-		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?toTest ?toTest ?proplist).
+		:PropShape :SeqNFComm (?shape ?i ?proplist ?toTest ?toTest ?proplist).
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        :PropShape :SeqNFComm (?shape ?i ?proplist ?origin ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
         (_:dataScope 0) log:notIncludes {?rest list:length 0}
         
  	} => {
-		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?toTest ?rest)
+		:PropShape :SeqNFComm (?shape ?i ?proplist ?origin ?toTest ?rest)
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        :PropShape :SeqNFComm (?shape ?i ?proplist ?origin ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         ?rest list:length 0.
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
@@ -288,7 +288,7 @@
 }.
 
 #########################################inv
-{	:PropShape :PathIVererbung (?shape ?parent ?plist ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?plist ?depth).
     ?proplist list:isList true.
     ?depth math:greaterThan 0.
     ?plist list:reverse ?proplist.
@@ -296,21 +296,21 @@
     ######### case first
 	{	?shape  :targets 	?i.
  	} => {
-		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?i ?proplist).
+		:PropShape :SeqComm (?shape ?i ?proplist ?i ?proplist).
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        :PropShape :SeqComm (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
         (_:dataScope 0) log:notIncludes {?rest list:length 0}
         
  	} => {
-		:PropShape :Seqverarbeitung (?shape ?i ?proplist ?toTest ?rest)
+		:PropShape :SeqComm (?shape ?i ?proplist ?toTest ?rest)
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :Seqverarbeitung (?shape ?i ?proplist ?somenode ?somelist).
+        :PropShape :SeqComm (?shape ?i ?proplist ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         ?rest list:length 0.
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
@@ -322,21 +322,21 @@
 	{	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?egal1 ?egal2 ?toTest).
  	} => {
-		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?toTest ?toTest ?proplist).
+		:PropShape :SeqNFComm (?shape ?i ?proplist ?toTest ?toTest ?proplist).
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        :PropShape :SeqNFComm (?shape ?i ?proplist ?origin ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
         (_:dataScope 0) log:notIncludes {?rest list:length 0}
         
  	} => {
-		:PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?toTest ?rest)
+		:PropShape :SeqNFComm (?shape ?i ?proplist ?origin ?toTest ?rest)
 	}.
     #####################
     {	?shape  :targets 	?i.
-        :PropShape :SeqNFverarbeitung (?shape ?i ?proplist ?origin ?somenode ?somelist).
+        :PropShape :SeqNFComm (?shape ?i ?proplist ?origin ?somenode ?somelist).
         ?somelist list:firstRest (?prop ?rest).
         ?rest list:length 0.
         :PropShape :Pathing (?shape ?i ?parent ?somenode ?prop ?toTest).
@@ -347,18 +347,18 @@
 
 
 #---Alternative
-{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+{	:PropShape :Pathinherit (?shape ?parent ?propB 0).
     ?propB sh:alternativePath ?list.
 } => {
 	{	?shape  :targets 	?i.
         ?list list:iterate (?index ?prop).
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTest).
 	}.
 }.
 ############################
-{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:alternativePath ?list.
     ?depth math:greaterThan 0.
 } => {
@@ -379,7 +379,7 @@
 	}.
 }.
 ############################
-{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:alternativePath ?list.
     ?depth math:greaterThan 0.
 } => {
@@ -401,17 +401,17 @@
 }.
 
 #---Inverse
-{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+{	:PropShape :Pathinherit (?shape ?parent ?propB 0).
     ?propB sh:inversePath ?prop.
 } => {
 	{	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTest).
 	}.
 }.
 ############################
-{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:inversePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -430,7 +430,7 @@
 	}.
 }.
 ############################inv
-{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:inversePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -451,30 +451,30 @@
 
 
 #---Zero-Or-More
-{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+{	:PropShape :Pathinherit (?shape ?parent ?propB 0).
     ?propB sh:zeroOrMorePath ?prop.
 } => {
     {	?shape  :targets 	?i.
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?i).
+        :PropShape :PathCommunication (?shape ?i ?parent ?i).
 	}.
     #########
     {	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTest).
 	}.
     #########
     {	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTestTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTestTest).
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
 	}.
 }.
 ############################
-{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrMorePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -519,7 +519,7 @@
 	}.
 }.
 ############################inv
-{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrMorePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -564,25 +564,25 @@
 	}.
 }.
 #---One-Or-More
-{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+{	:PropShape :Pathinherit (?shape ?parent ?propB 0).
     ?propB sh:oneOrMorePath ?prop.
 } => {
     {	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTest).
 	}.
     #########
     {	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTestTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTestTest).
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
 	}.
 }.
 ############################
-{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:oneOrMorePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -616,7 +616,7 @@
 	}.
 }.
 ############################inv
-{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:oneOrMorePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -650,22 +650,22 @@
 	}.
 }.
 #---Zero-Or-One
-{	:PropShape :PathVererbung (?shape ?parent ?propB 0).
+{	:PropShape :Pathinherit (?shape ?parent ?propB 0).
     ?propB sh:zeroOrOnePath ?prop.
 } => {
     {	?shape  :targets 	?i.
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?i).
+        :PropShape :PathCommunication (?shape ?i ?parent ?i).
 	}.
     #########
     {	?shape  :targets 	?i.
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
  	} => {
-        :PropShape :Pathverarbeitung (?shape ?i ?parent ?i ?propB ?toTest).
+        :PropShape :PathCommunication (?shape ?i ?parent ?toTest).
 	}.
 }.
 ############################
-{	:PropShape :PathVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :Pathinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrOnePath ?prop.
     ?depth math:greaterThan 0.
 } => {
@@ -695,7 +695,7 @@
 	}.
 }.
 ############################inv
-{	:PropShape :PathIVererbung (?shape ?parent ?propB ?depth).
+{	:PropShape :PathINVinherit (?shape ?parent ?propB ?depth).
     ?propB sh:zeroOrOnePath ?prop.
     ?depth math:greaterThan 0.
 } => {
