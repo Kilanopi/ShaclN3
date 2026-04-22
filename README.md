@@ -21,6 +21,8 @@ EXAMPLE:
 
 Or you can use the shell script "run.sh" with the SHACL Document file as the first argument and the data graph file as the second argument. <br/>
 This will simply run transl and applyClean back to back in one command. <br/>
+EXAMPLE:
+```./run.sh MySHACLdocument.n3 MyDataGraph.n3```
 
 IMPORTANT NOTES: <br/>
 -This may not function properly if you do not seperate your data graph from your shacl graph!! <br/>
