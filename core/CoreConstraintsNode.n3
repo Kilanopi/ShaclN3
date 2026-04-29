@@ -137,7 +137,6 @@
       	xsd:long
       	xsd:int
       	xsd:short
-      	xsd:byte
       	xsd:nonNegativeInteger
       	xsd:positiveInteger
       	xsd:nonPositiveInteger
@@ -147,6 +146,19 @@
       	xsd:unsignedShort
       	xsd:unsignedByte ).
   		?lex string:notMatches "^[+-]?[0-9]+$".
+	} => {
+		[	a 								sh:ValidationResult;
+			sh:resultSeverity				sh:Violation;
+			sh:sourceConstraintComponent	sh:DatatypeConstraintComponent;
+			sh:sourceShape					?shape;
+			sh:focusNode					?i;
+			sh:value						?i].
+	}.
+		##############
+	{	?shape :targets ?i.
+  		?i log:rawType log:Literal.
+  		(?lex xsd:byte) log:dtlit ?i.
+  		?lex string:notMatches "^(-128|-?(12[0-7]|1[01][0-9]|[1-9]?[0-9]|0))$".
 	} => {
 		[	a 								sh:ValidationResult;
 			sh:resultSeverity				sh:Violation;
