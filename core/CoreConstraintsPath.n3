@@ -494,7 +494,7 @@
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTestTest)
 	}.
     #######case not first
     {	?shape  :targets 	?i.
@@ -515,7 +515,7 @@
         :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+        :PropShape :Pathing (?shape ?i ?parent ?origin ?propB ?toTestTest)
 	}.
 }.
 ############################inv
@@ -539,7 +539,7 @@
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTestTest)
 	}.
     #######case not first
     {	?shape  :targets 	?i.
@@ -560,7 +560,7 @@
         :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTestTest)
 	}.
 }.
 #---One-Or-More
@@ -597,7 +597,7 @@
         :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTestTest)
 	}.
     #######case not first
     {	?shape  :targets 	?i.
@@ -612,7 +612,7 @@
         :PropShape :Pathing (?shape ?i ?parent ?origin ?prop ?toTest).
         :PropShape :Pathing (?shape ?i ?parent ?toTest ?prop ?toTestTest).
  	} => {
-        :PropShape :Pathing (?shape ?i ?parent ?i ?prop ?toTestTest)
+        :PropShape :Pathing (?shape ?i ?parent ?i ?propB ?toTestTest)
 	}.
 }.
 ############################inv
