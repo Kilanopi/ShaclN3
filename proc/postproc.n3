@@ -19,7 +19,16 @@ _:report a sh:ValidationReport.
 {   ?report a sh:ValidationReport.
     ?shape :Otargets ?i.
     _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
-    ?shape :hasApplyPChild (?pShape ?prop).
+    ?shape :hasApplyPChild (?pShape ?prop1).
+    :PropShape :PathCommunication (?shape ?i ?prop ?toTest).
+} => {
+	?shape :hasApplyPChildList (((?pShape ?prop)) ?pShape ?toTest ?i).
+}. 
+{   ?report a sh:ValidationReport.
+    ?shape :Otargets ?i.
+    _:b log:notIncludes {:ShapeGot :Deactivated ?shape.}.
+    ?shape :hasApplyPChild (?pShape ?prop1).
+    :PropShape :PathCommunication (?pShape ?i ?prop ?toTest).
 } => {
 	?shape :hasApplyPChildList (((?pShape ?prop)) ?pShape ?i ?i).
 }. 
