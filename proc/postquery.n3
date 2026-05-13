@@ -1,6 +1,7 @@
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <http://example.org/> .
 
 {  ?something a sh:ValidationReport
 } => {
@@ -34,9 +35,9 @@
     ?egal a sh:ValidationResult.
     ?something sh:result ?egal.
     ?egal ?pred ?message.
+    ?egal sh:sourceShape ?shape.
     ?pred log:equalTo sh:resultMessage.
-    :ShapeGot :Message ?list. #(?shape ?message)
-    ?list list:last ?message.
+    :ShapeGot :Message (?shape ?message). 
 } => {
     ?egal ?pred ?message.
 }.
@@ -45,8 +46,9 @@
     ?egal a sh:ValidationResult.
     ?something sh:result ?egal.
     ?egal ?pred ?obj.
+    ?egal sh:sourceShape ?shape.
     ?pred log:equalTo sh:resultMessage.
-    _:b log:notIncludes {:ShapeGot :Message ?list.}.
+    _:b log:notIncludes {:ShapeGot :Message (?shape ?message).}.
 } => {
     ?egal ?pred ?obj.
 }.
@@ -56,9 +58,9 @@
     ?egal a sh:ValidationResult.
     ?something sh:result ?egal.
     ?egal ?pred ?sev.
+    ?egal sh:sourceShape ?shape.
     ?pred log:equalTo sh:resultSeverity.
-    :ShapeGot :Severity ?list. #(?shape ?sev)
-    ?list list:last ?sev.
+    :ShapeGot :Severity (?shape ?sev). 
 } => {
     ?egal ?pred ?sev.
 }.
@@ -67,8 +69,9 @@
     ?egal a sh:ValidationResult.
     ?something sh:result ?egal.
     ?egal ?pred ?obj.
+    ?egal sh:sourceShape ?shape.
     ?pred log:equalTo sh:resultSeverity.
-    _:b log:notIncludes {:ShapeGot :Severity ?list.}.
+    _:b log:notIncludes {:ShapeGot :Severity (?shape ?sev).}.
 } => {
     ?egal ?pred ?obj.
 }.

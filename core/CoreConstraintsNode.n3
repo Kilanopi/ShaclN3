@@ -306,7 +306,9 @@
 } => {
 	{	?shape :targets ?i. 
 		("Node is not >= " ?value) string:concatenation ?message. 
-		(?value ?i) func:subtract-dateTimes ?result.
+		?i log:rawType log:Literal.
+  		(?lex xsd:dateTime) log:dtlit ?i.
+		(?i ?value) func:subtract-dateTimes ?result.
 		?result string:startsWith "-".
 	} => {
 		[ 	a 								sh:ValidationResult; 
@@ -320,6 +322,8 @@
 	##########################
 	{	?shape :targets ?i. 
 		("Node is not >= " ?value) string:concatenation ?message. 
+		?i log:rawType log:Literal.
+  		_:dataScope log:notIncludes {(?lex xsd:dateTime) log:dtlit ?i}.
 		?i math:lessThan ?value.
 	} => {
 		[ 	a 								sh:ValidationResult; 
