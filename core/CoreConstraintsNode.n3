@@ -944,7 +944,7 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?i. 
 	} => {
-		:NodeShape :and (?value ?i ?list).
+		:NodeShape :and (?index ?i ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.   
@@ -952,7 +952,7 @@
 		?value :hasPChild (?pShape ?prop).
 		:PropShape :prop (?i ?pShape ?violation)
 	} => {
-		:NodeShape :and (?value ?i ?list).
+		:NodeShape :and (?index ?i ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.   
@@ -960,7 +960,7 @@
 		?value :hasPChild (?pShape ?prop).
 		:NodeShape :prop (?i ?pShape ?violation) 
 	} => {
-		:NodeShape :and (?value ?i ?list).
+		:NodeShape :and (?index ?i ?list).
 	}.
 	#################################
     {   ?shape :targets ?i.   
@@ -991,7 +991,7 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?i. 
 	} => {
-		:NodeShape :or (?value ?i ?list).
+		:NodeShape :or (?index ?i ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.   
@@ -999,7 +999,7 @@
 		?value :hasPChild (?pShape ?prop).
 		:NodeShape :prop (?i ?pShape ?violation)
 	} => {
-		:NodeShape :or (?value ?i ?list).
+		:NodeShape :or (?index ?i ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.   
@@ -1007,7 +1007,7 @@
 		?value :hasPChild (?pShape ?prop).
 		:PropShape :prop (?i ?pShape ?violation) 	 
 	} => {
-		:NodeShape :or (?value ?i ?list).
+		:NodeShape :or (?index ?i ?list).
 	}.
     #################################
     {   ?shape :targets ?i.   
@@ -1047,7 +1047,7 @@
 		?value :hasPChild (?pShape ?prop).
 		:PropShape :prop (?i ?pShape ?violation) 
 	} => {
-		:NodeShape :xone (?value ?i ?list).
+		:NodeShape :xone (?index ?i ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.   
@@ -1055,7 +1055,7 @@
 		?value :hasPChild (?pShape ?prop).
 		:NodeShape :prop (?i ?pShape ?violation).
 	} => {
-		:NodeShape :xone (?value ?i ?list).
+		:NodeShape :xone (?index ?i ?list).
 	}.
     #################################
     {   ?shape :targets ?i.   

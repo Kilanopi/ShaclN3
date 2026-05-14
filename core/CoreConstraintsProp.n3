@@ -1492,7 +1492,7 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
 	} => {
-		:PropShape :and (?value ?toTest ?list).
+		:PropShape :and (?index ?toTest ?list).
 	}.
     #################################
 	{	?shape :targets ?i.
@@ -1501,7 +1501,7 @@
 		?value :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
-		:PropShape :and (?value ?toTest ?list).
+		:PropShape :and (?index ?toTest ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.
@@ -1510,7 +1510,7 @@
 		?value :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
 	} => {
-		:PropShape :and (?value ?toTest ?list).
+		:PropShape :and (?index ?toTest ?list).
 	}.
 	#################################
     {   ?shape :targets ?i.
@@ -1547,7 +1547,7 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
 	} => {
-		:PropShape :or (?value ?toTest ?list).
+		:PropShape :or (?index ?toTest ?list).
 	}.
     #################################
 	{	?shape :targets ?i.
@@ -1556,7 +1556,7 @@
 		?value :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
-		:PropShape :or (?value ?toTest ?list).
+		:PropShape :or (?index ?toTest ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.
@@ -1565,7 +1565,7 @@
 		?value :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
 	} => {
-		:PropShape :or (?value ?toTest ?list).
+		:PropShape :or (?index ?toTest ?list).
 	}.
     #################################
     {   ?shape :targets ?i.
@@ -1603,7 +1603,7 @@
 		?violation  sh:sourceShape ?value;
                     sh:focusNode   ?toTest. 
 	} => {
-		:PropShape :xone (?value ?toTest ?list).
+		:PropShape :xone (?index ?toTest ?list).
 	}.
     #################################
 	{	?shape :targets ?i.
@@ -1612,7 +1612,7 @@
 		?value :hasPChild (?pShape ?prop2).
 		:NodeShape :prop (?toTest ?pShape ?violation)
 	} => {
-		:PropShape :xone (?value ?toTest ?list).
+		:PropShape :xone (?index ?toTest ?list).
 	}.
 	#################################
 	{	?shape :targets ?i.
@@ -1621,7 +1621,7 @@
 		?value :hasPChild (?pShape ?prop2).
 		:PropShape :prop (?toTest ?pShape ?violation)
 	} => {
-		:PropShape :xone (?value ?toTest ?list).
+		:PropShape :xone (?index ?toTest ?list).
 	}.
     #################################
     {   ?shape :targets ?i.
