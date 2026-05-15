@@ -4,8 +4,7 @@ This is a project that aims to create a translation of SHACL into N3 Logic.
 
 You can input a SHACL document and get a set of N3 rules that, when applied via a reasoner on a data graph, will output a SHACL validation report.
 
-The EYE Reasoner required to use this.
-LINK: https://github.com/eyereasoner/eye
+The [EYE Reasoner](https://github.com/eyereasoner/eye) is required to use this.
 
 HOW TO USE:
 You should either use the shell script "transl.sh" in the repository and call it with your SHACL document as the (first) argument. <br/>
@@ -27,4 +26,4 @@ EXAMPLE:
 IMPORTANT NOTES: <br/>
 -This may not always function properly if you do not seperate your data graph from your shacl graph! <br/>
 -Change your tab size to 4 before looking at the code <br/>
--The extend of the functionality of the translated rule document does not cover 100% of the Shacl specifications. For further information on this, consult the paper. <br/>
+-The extent of the functionality of the translated rule document does not cover 100% of the Shacl specifications. For further information on this, consult the paper, or the PDF present in this repository. <br/>
